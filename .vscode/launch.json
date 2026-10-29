@@ -1,0 +1,70 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "[DEV] POS App",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "debug",
+      "program": "lib/main.dart",
+      "args": [
+        "--flavor",
+        "development",
+        "--dart-define-from-file=config.dev.json"
+      ],
+      "env": {
+        "FLAVOR": "development"
+      }
+    },
+    {
+      "name": "[DEV_DEMO_WEB] restauran_menu",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "debug",
+      "program": "lib/main.dart",
+      "args": [
+        "development",
+        "chrome",
+        "--dart-define-from-file=config.dev.json",
+        "--web-browser-flag '--disable-web-security'"
+      ],
+      "env": {
+        "FLAVOR": "development"
+      }
+    },
+    {
+      "name": "[PROD_DEMO_WEB] Pikoelan Nusantara",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "debug",
+      "program": "lib/main.dart",
+      "args": [
+        "development",
+        "chrome",
+        "--dart-define-from-file=config.prod.json",
+        "--web-browser-flag '--disable-web-security'"
+      ],
+      "env": {
+        "FLAVOR": "production"
+      }
+    },
+    {
+      "name": "Pikoelan Nusantara",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release",
+      "program": "lib/main.dart",
+      "args": [
+        "--flavor",
+        "production",
+        "--dart-define-from-file=config.prod.json"
+      ],
+      "env": {
+        "FLAVOR": "production"
+      }
+    }
+  ]
+}

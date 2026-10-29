@@ -1,0 +1,27 @@
+flavors:
+  development:
+    app:
+      name: "[DEV] Pikoelan Nusantara"
+    android:
+      applicationId: "com.apps.pikoelan_nusantara_dev"
+      icon: "assets/images/favicon.png"
+      adaptiveIcon:
+        foreground: "assets/images/favicon.png"
+        background: "assets/images/favicon.png"
+        monochrome: "assets/images/favicon.png"
+    ios:
+      bundleId: "com.apps.pikoelan_nusantara_dev"
+      icon: "assets/images/favicon.png"
+  production:
+    app:
+      name: "Pikoelan Nusantara"
+    android:
+      applicationId: "com.apps.pikoelan_nusantara"
+      icon: "assets/images/favicon.png"
+      adaptiveIcon:
+        foreground: "assets/images/favicon.png"
+        background: "assets/images/favicon.png"
+        monochrome: "assets/images/favicon.png"
+    ios:
+      bundleId: "com.apps.pikoelan_nusantara"
+      icon: "assets/images/favicon.png"

@@ -1,0 +1,61 @@
+Analyzing restauran_app...                                      
+
+   info - Method invocation or property access on a 'dynamic' target. Try giving the target a type - lib\features\admin\data\models\menu_items_response.dart:14:41 - avoid_dynamic_calls
+   info - Method invocation or property access on a 'dynamic' target. Try giving the target a type - lib\features\admin\data\models\orders_response.dart:14:41 - avoid_dynamic_calls
+warning - The declaration '_togglePreference' isn't referenced. Try removing the declaration of '_togglePreference' - lib\features\admin\presentation\pages\admin_pengaturan_screen.dart:415:16 - unused_element
+   info - Too many newlines at the end of the file. Try removing the extra newlines at the end of the file - lib\features\customers\domain\usecases\cancel_public_order_usecase.dart:10:2 - eol_at_end_of_file
+   info - Too many newlines at the end of the file. Try removing the extra newlines at the end of the file - lib\features\customers\domain\usecases\get_public_order_usecase.dart:13:2 - eol_at_end_of_file
+   info - 'dart:html' is deprecated and shouldn't be used. Use package:web and dart:js_interop instead. Try replacing the use of the deprecated member with the replacement - lib\features\kasir\presentation\pages\export_csv_web.dart:3:1 - deprecated_member_use
+   info - Don't use web-only libraries outside Flutter web plugins. Try finding a different library for your needs - lib\features\kasir\presentation\pages\export_csv_web.dart:3:1 - avoid_web_libraries_in_flutter
+warning - The value of the field '_newOrderNotif' isn't used. Try removing the field, or using it - lib\features\kasir\presentation\pages\kasir_pengaturan_screen.dart:46:13 - unused_field
+warning - The value of the field '_webImageBytes' isn't used. Try removing the field, or using it - lib\features\kasir\presentation\pages\kasir_pengaturan_screen.dart:53:14 - unused_field
+warning - The declaration '_pickImage' isn't referenced. Try removing the declaration of '_pickImage' - lib\features\kasir\presentation\pages\kasir_pengaturan_screen.dart:107:16 - unused_element
+warning - The declaration '_inputDecoration' isn't referenced. Try removing the declaration of '_inputDecoration' - lib\features\kasir\presentation\pages\kasir_pengaturan_screen.dart:304:19 - unused_element
+   info - Don't use 'BuildContext's across async gaps, guarded by an unrelated 'mounted' check. Guard a 'State.context' use with a 'mounted' check on the State, and other BuildContext use with a 'mounted' check on the BuildContext - lib\features\kasir\presentation\widgets\payment_panel.dart:212:46 - use_build_context_synchronously
+   info - Method invocation or property access on a 'dynamic' target. Try giving the target a type - lib\features\menu\data\models\categories_response.dart:14:11 - avoid_dynamic_calls
+   info - Method invocation or property access on a 'dynamic' target. Try giving the target a type - lib\features\menu\data\models\category_response.dart:13:44 - avoid_dynamic_calls
+   info - Method invocation or property access on a 'dynamic' target. Try giving the target a type - lib\features\menu\data\models\menu_item_response.dart:13:45 - avoid_dynamic_calls
+   info - Method invocation or property access on a 'dynamic' target. Try giving the target a type - lib\features\menu\data\models\menu_items_response.dart:13:41 - avoid_dynamic_calls
+warning - The declaration '_confirmDeleteItem' isn't referenced. Try removing the declaration of '_confirmDeleteItem' - lib\features\menu\presentation\pages\kelola_menu_screen.dart:46:16 - unused_element
+warning - The declaration '_showCategoryActions' isn't referenced. Try removing the declaration of '_showCategoryActions' - lib\features\menu\presentation\pages\kelola_menu_screen.dart:449:8 - unused_element
+warning - This class (or a class that this class inherits from) is marked as '@immutable', but one or more of its instance fields aren't final: _MenuRow.showAction - lib\features\menu\presentation\pages\kelola_menu_screen.dart:526:7 - must_be_immutable
+   info - Method invocation or property access on a 'dynamic' target. Try giving the target a type - lib\features\orders\data\models\menu_items_response.dart:13:41 - avoid_dynamic_calls
+   info - Method invocation or property access on a 'dynamic' target. Try giving the target a type - lib\features\orders\data\models\orders_response.dart:13:41 - avoid_dynamic_calls
+  error - Expected a method, getter, setter or operator declaration. This appears to be incomplete code. Try removing it or completing it - lib\features\permissions\presentation\provider\permission_provider.dart:244:11 - expected_executable
+   info - An uninitialized variable should have an explicit type annotation. Try adding a type annotation - lib\features\permissions\presentation\provider\permission_provider.dart:244:12 - prefer_typing_uninitialized_variables
+   info - Missing type annotation. Try adding a type annotation - lib\features\permissions\presentation\provider\permission_provider.dart:244:12 - strict_top_level_inference
+  error - Expected to find ';' - lib\features\permissions\presentation\provider\permission_provider.dart:244:12 - expected_token
+  error - Variables must be declared using the keywords 'const', 'final', 'var' or a type name. Try adding the name of the type of the variable or the keyword 'var' - lib\features\permissions\presentation\provider\permission_provider.dart:244:12 - missing_const_final_var_or_type
+  error - Expected a method, getter, setter or operator declaration. This appears to be incomplete code. Try removing it or completing it - lib\features\permissions\presentation\provider\permission_provider.dart:244:25 - expected_executable
+   info - An uninitialized variable should have an explicit type annotation. Try adding a type annotation - lib\features\permissions\presentation\provider\permission_provider.dart:244:28 - prefer_typing_uninitialized_variables
+   info - Missing type annotation. Try adding a type annotation - lib\features\permissions\presentation\provider\permission_provider.dart:244:28 - strict_top_level_inference
+  error - 'null' can't be used as an identifier because it's a keyword. Try renaming this to be an identifier that isn't a keyword - lib\features\permissions\presentation\provider\permission_provider.dart:244:28 - expected_identifier_but_got_keyword
+  error - Expected to find ';' - lib\features\permissions\presentation\provider\permission_provider.dart:244:28 - expected_token
+  error - Variables must be declared using the keywords 'const', 'final', 'var' or a type name. Try adding the name of the type of the variable or the keyword 'var' - lib\features\permissions\presentation\provider\permission_provider.dart:244:28 - missing_const_final_var_or_type
+  error - Expected a method, getter, setter or operator declaration. This appears to be incomplete code. Try removing it or completing it - lib\features\permissions\presentation\provider\permission_provider.dart:244:33 - expected_executable
+  error - Expected a method, getter, setter or operator declaration. This appears to be incomplete code. Try removing it or completing it - lib\features\permissions\presentation\provider\permission_provider.dart:244:36 - expected_executable
+   info - Missing type annotation. Try adding a type annotation - lib\features\permissions\presentation\provider\permission_provider.dart:244:37 - strict_top_level_inference
+  error - Functions must have an explicit list of parameters. Try adding a parameter list - lib\features\permissions\presentation\provider\permission_provider.dart:244:37 - missing_function_parameters
+  error - A function body must be provided. Try adding a function body - lib\features\permissions\presentation\provider\permission_provider.dart:244:46 - missing_function_body
+  error - Expected a method, getter, setter or operator declaration. This appears to be incomplete code. Try removing it or completing it - lib\features\permissions\presentation\provider\permission_provider.dart:244:46 - expected_executable
+   info - Missing type annotation. Try adding a type annotation - lib\features\permissions\presentation\provider\permission_provider.dart:244:47 - strict_top_level_inference
+   info - Missing type annotation. Try adding a type annotation - lib\features\permissions\presentation\provider\permission_provider.dart:244:56 - strict_top_level_inference
+  error - A function body must be provided. Try adding a function body - lib\features\permissions\presentation\provider\permission_provider.dart:244:69 - missing_function_body
+  error - Expected a method, getter, setter or operator declaration. This appears to be incomplete code. Try removing it or completing it - lib\features\permissions\presentation\provider\permission_provider.dart:244:69 - expected_executable
+  error - Expected a method, getter, setter or operator declaration. This appears to be incomplete code. Try removing it or completing it - lib\features\permissions\presentation\provider\permission_provider.dart:244:70 - expected_executable
+  error - Expected a method, getter, setter or operator declaration. This appears to be incomplete code. Try removing it or completing it - lib\features\permissions\presentation\provider\permission_provider.dart:244:72 - expected_executable
+  error - Variables must be declared using the keywords 'const', 'final', 'var' or a type name. Try adding the name of the type of the variable or the keyword 'var' - lib\features\permissions\presentation\provider\permission_provider.dart:248:7 - missing_const_final_var_or_type
+  error - Expected a method, getter, setter or operator declaration. This appears to be incomplete code. Try removing it or completing it - lib\features\permissions\presentation\provider\permission_provider.dart:249:5 - expected_executable
+   info - Missing type annotation. Try adding a type annotation - lib\features\permissions\presentation\provider\permission_provider.dart:249:7 - strict_top_level_inference
+  error - 'catch' can't be used as an identifier because it's a keyword. Try renaming this to be an identifier that isn't a keyword - lib\features\permissions\presentation\provider\permission_provider.dart:249:7 - expected_identifier_but_got_keyword
+   info - Missing type annotation. Try adding a type annotation - lib\features\permissions\presentation\provider\permission_provider.dart:249:14 - strict_top_level_inference
+  error - Undefined name 'errorMessage'. Try correcting the name to one that is defined, or defining the name - lib\features\permissions\presentation\provider\permission_provider.dart:250:7 - undefined_identifier
+  error - The function '_message' isn't defined. Try importing the library that defines '_message', correcting the name to the name of an existing function, or defining a function named '_message' - lib\features\permissions\presentation\provider\permission_provider.dart:250:22 - undefined_function
+   info - Missing type annotation. Try adding a type annotation - lib\features\permissions\presentation\provider\permission_provider.dart:253:5 - strict_top_level_inference
+  error - A function body must be provided. Try adding a function body - lib\features\permissions\presentation\provider\permission_provider.dart:253:22 - missing_function_body
+  error - Expected a method, getter, setter or operator declaration. This appears to be incomplete code. Try removing it or completing it - lib\features\permissions\presentation\provider\permission_provider.dart:254:3 - expected_executable
+   info - Method invocation or property access on a 'dynamic' target. Try giving the target a type - lib\features\staff\data\models\staff_list_response.dart:8:41 - avoid_dynamic_calls
+   info - Method invocation or property access on a 'dynamic' target. Try giving the target a type - lib\features\staff\data\models\staff_response.dart:8:45 - avoid_dynamic_calls
+   info - Missing an 'await' for the 'Future' computed by this expression. Try adding an 'await' or wrapping the expression with 'unawaited' - lib\main.dart:33:20 - unawaited_futures
+
+57 issues found. (ran in 14.8s)
