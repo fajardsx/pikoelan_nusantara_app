@@ -37,6 +37,10 @@ class ApiKeys {
   static String menuPublicOrder(String slug) => 'api/public/menu/$slug/order';
   static String menuPublicMyOrder(String slug) =>
       'api/public/menu/$slug/my_orders';
+  static String menuPublicPromoValidate(String slug) =>
+      'api/public/menu/$slug/promo/validate';
+  static String menuPublicMember(String slug) =>
+      'api/public/menu/$slug/member/lookup';
 
   // NOTIFICATION STREAM
   static String orderStream(String jwt) =>
@@ -51,4 +55,19 @@ class ApiKeys {
   // TENANT PAYMENT
   static const String tenantPayment = 'api/payments';
   static String tenantPaymentById(String id) => 'api/payments/$id';
+
+  // PROMO
+  static const String promos = 'api/promos/';
+  static const String statPromo = 'api/promos/stats';
+  static const String validatePromo = 'api/promos/validate';
+  static String promoById(String id) => 'api/promos/$id';
+  static String toggleStatusPromoById(String id) => 'api/promos/$id/toggle';
+
+  // MEMBER
+  static const String member = 'api/members';
+  static const String statsMember = 'api/members/stats';
+  static const String lookupMember = 'api/members/lookup';
+  static String memberById(String id) => 'api/members/$id';
+  static String memberPointById(String id) => 'api/members/$id/points';
+  static String memberHistoryById(String id) => 'api/members/$id/history';
 }

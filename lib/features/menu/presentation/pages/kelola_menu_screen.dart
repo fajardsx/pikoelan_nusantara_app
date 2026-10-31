@@ -17,7 +17,9 @@ import 'package:restauran_menu/features/menu/presentation/pages/kelola_kategori_
 import 'package:restauran_menu/features/menu/presentation/provider/menu_provider.dart';
 import 'package:restauran_menu/shared/utils/currency_formatter.dart';
 import 'package:restauran_menu/shared/widgets/app_image_loader.dart';
-import 'package:restauran_menu/web/html_real.dart' as html;
+import 'package:restauran_menu/web/html_stub.dart'
+    if (dart.library.html) 'package:restauran_menu/web/html_real.dart'
+    as html;
 import 'package:share_plus/share_plus.dart';
 
 import '../../../../core/di/injector.dart';

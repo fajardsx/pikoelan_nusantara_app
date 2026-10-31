@@ -38,6 +38,14 @@ import 'package:restauran_menu/features/home/domain/usecases/get_all_users_useca
 import 'package:restauran_menu/features/home/presentation/provider/home_provider.dart';
 import 'package:restauran_menu/features/kasir/presentation/provider/kasir_provider.dart';
 import 'package:restauran_menu/features/kitchen/presentation/provider/kitchen_provider.dart';
+import 'package:restauran_menu/features/members/data/datasources/member_remote_datasource.dart';
+import 'package:restauran_menu/features/members/data/repositories/member_repository_impl.dart';
+import 'package:restauran_menu/features/members/domain/repositories/member_repository.dart';
+import 'package:restauran_menu/features/members/domain/usecases/create_member_usecase.dart';
+import 'package:restauran_menu/features/members/domain/usecases/delete_member_usecase.dart';
+import 'package:restauran_menu/features/members/domain/usecases/get_members_usecase.dart';
+import 'package:restauran_menu/features/members/domain/usecases/update_member_usecase.dart';
+import 'package:restauran_menu/features/members/presentation/provider/member_provider.dart';
 import 'package:restauran_menu/features/menu/data/datasources/menu_remote_datasource.dart';
 import 'package:restauran_menu/features/menu/data/repositories/menu_repository_impl.dart';
 import 'package:restauran_menu/features/menu/domain/repositories/menu_repositories.dart';
@@ -72,6 +80,17 @@ import 'package:restauran_menu/features/permissions/domain/usecases/get_permissi
 import 'package:restauran_menu/features/permissions/domain/usecases/reset_role_permissions_usecase.dart';
 import 'package:restauran_menu/features/permissions/domain/usecases/update_role_permissions_usecase.dart';
 import 'package:restauran_menu/features/permissions/presentation/provider/permission_provider.dart';
+import 'package:restauran_menu/features/promos/data/datasources/promo_remote_datasource.dart';
+import 'package:restauran_menu/features/promos/data/repositories/promo_repository_impl.dart';
+import 'package:restauran_menu/features/promos/domain/repositories/promo_repository.dart';
+import 'package:restauran_menu/features/promos/domain/usecases/create_promo_usecase.dart';
+import 'package:restauran_menu/features/promos/domain/usecases/delete_promo_usecase.dart';
+import 'package:restauran_menu/features/promos/domain/usecases/get_promo_stats_usecase.dart';
+import 'package:restauran_menu/features/promos/domain/usecases/get_promos_usecase.dart';
+import 'package:restauran_menu/features/promos/domain/usecases/toggle_promo_status_usecase.dart';
+import 'package:restauran_menu/features/promos/domain/usecases/update_promo_usecase.dart';
+import 'package:restauran_menu/features/promos/domain/usecases/validate_promo_usecase.dart';
+import 'package:restauran_menu/features/promos/presentation/provider/promo_provider.dart';
 import 'package:restauran_menu/features/staff/data/datasources/staff_remote_datasource.dart';
 import 'package:restauran_menu/features/staff/data/repositories/staff_repository_impl.dart';
 import 'package:restauran_menu/features/staff/domain/repositories/staff_repositories.dart';
@@ -301,10 +320,66 @@ Future<void> initDependencies() async {
   sl.registerLazySingleton<PublicMenuRepository>(
     () => PublicMenuRepositoryImpl(sl()),
   );
-  sl.registerLazySingleton(() => GetPublicMenuUsecase(sl()));
-  sl.registerLazySingleton(() => CreatePublicOrderUsecase(sl()));
-  sl.registerLazySingleton(() => GetPublicOrderUsecase(sl()));
-  sl.registerLazySingleton(() => CancelPublicOrderUsecase(sl()));
-  sl.registerLazySingleton(() => PublicMenuProvider(sl(), sl(), sl(), sl()));
+  sl.registerLazySingleton<GetPublicMenuUsecase>(
+    () => GetPublicMenuUsecase(sl()),
+  );
+  sl.registerLazySingleton<CreatePublicOrderUsecase>(
+    () => CreatePublicOrderUsecase(sl()),
+  );
+  sl.registerLazySingleton<GetPublicOrderUsecase>(
+    () => GetPublicOrderUsecase(sl()),
+  );
+  sl.registerLazySingleton<CancelPublicOrderUsecase>(
+    () => CancelPublicOrderUsecase(sl()),
+  );
+  sl.registerLazySingleton<PublicMenuProvider>(
+    () => PublicMenuProvider(sl(), sl(), sl(), sl()),
+  );
   // ---------------------------
+
+  // ------------ datasource ---------------
+  sl.registerLazySingleton<PromoRemoteDataSource>(
+    () => PromoRemoteDataSourceImpl(),
+  );
+  sl.registerLazySingleton<MemberRemoteDataSource>(
+    () => MemberRemoteDataSourceImpl(),
+  );
+  // ------------ repository ---------------
+  sl.registerLazySingleton<PromoRepository>(() => PromoRepositoryImpl(sl()));
+  sl.registerLazySingleton<MemberRepository>(() => MemberRepositoryImpl(sl()));
+
+  // ------------ usecase ---------------
+  sl.registerLazySingleton<GetPromosUsecase>(() => GetPromosUsecase(sl()));
+  sl.registerLazySingleton<CreatePromoUsecase>(() => CreatePromoUsecase(sl()));
+  sl.registerLazySingleton<UpdatePromoUsecase>(() => UpdatePromoUsecase(sl()));
+  sl.registerLazySingleton<DeletePromoUsecase>(() => DeletePromoUsecase(sl()));
+  sl.registerLazySingleton<TogglePromoStatusUsecase>(
+    () => TogglePromoStatusUsecase(sl()),
+  );
+  sl.registerLazySingleton<GetPromoStatsUsecase>(
+    () => GetPromoStatsUsecase(sl()),
+  );
+  sl.registerLazySingleton<ValidatePromoUsecase>(
+    () => ValidatePromoUsecase(sl()),
+  );
+  // ------------ provider ---------------
+  sl.registerFactory<PromoProvider>(
+    () => PromoProvider(sl(), sl(), sl(), sl(), sl(), sl(), sl()),
+  );
+
+  // Member usecases
+  sl.registerLazySingleton<GetMembersUsecase>(() => GetMembersUsecase(sl()));
+  sl.registerLazySingleton<CreateMemberUsecase>(
+    () => CreateMemberUsecase(sl()),
+  );
+  sl.registerLazySingleton<UpdateMemberUsecase>(
+    () => UpdateMemberUsecase(sl()),
+  );
+  sl.registerLazySingleton<DeleteMemberUsecase>(
+    () => DeleteMemberUsecase(sl()),
+  );
+  // Member provider
+  sl.registerFactory<MemberProvider>(
+    () => MemberProvider(sl(), sl(), sl(), sl()),
+  );
 }

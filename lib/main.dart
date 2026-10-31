@@ -36,7 +36,7 @@ void main() async {
       WidgetsFlutterBinding.ensureInitialized();
       // Fix bottom nav tertutup soft navigation Android (edge-to-edge / gesture & 3-button)
       // Aktifkan edge-to-edge dan buat navigation bar transparan agar viewPadding.bottom akurat
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+      await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
       SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,

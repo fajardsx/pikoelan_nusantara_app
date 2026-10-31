@@ -261,6 +261,32 @@ class DioClient {
     }
   }
 
+  Future<Response> patch(
+    String url, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    bool forceRefresh = false,
+  }) async {
+    try {
+      return await dio.patch(
+        url,
+        data: data,
+        queryParameters: queryParameters,
+        options: buildCacheOptions(
+          const Duration(minutes: 2), // cache duration for PATCH requests
+          forceRefresh: forceRefresh,
+        ),
+      );
+    } on DioException catch (e) {
+      final responseData = e.response?.data;
+      await checkStatuscode(
+        e.response?.statusCode,
+        response: responseData is Map ? responseData : null,
+      );
+      rethrow;
+    }
+  }
+
   // Example method to get Dio instance
   Dio get client => dio;
 

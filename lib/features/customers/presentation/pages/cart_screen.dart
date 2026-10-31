@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:restauran_menu/core/services/app_log.dart';
 import 'package:restauran_menu/features/orders/domain/entities/order_entity.dart';
 
 import '../../../../core/themes/restaurant_colors.dart';
@@ -29,6 +30,10 @@ class _CartScreenState extends State<CartScreen> {
   late final TextEditingController _notesController;
   late final TextEditingController _addressController;
   late final TextEditingController _phoneDeliveryController;
+  late final TextEditingController _promoCodeController;
+  late final TextEditingController _memberController;
+  late final TextEditingController _redeemPointsController;
+
   late String _orderType;
 
   @override
@@ -40,6 +45,9 @@ class _CartScreenState extends State<CartScreen> {
     _notesController = TextEditingController(text: cart.notes ?? '');
     _addressController = TextEditingController(text: cart.address ?? '');
     _phoneDeliveryController = TextEditingController(text: cart.phone ?? '');
+    _promoCodeController = TextEditingController();
+    _memberController = TextEditingController();
+    _redeemPointsController = TextEditingController();
     if (widget.table != null) {
       _tableController.text = widget.table ?? "";
       _orderType = cart.orderType;
@@ -55,10 +63,87 @@ class _CartScreenState extends State<CartScreen> {
     _notesController.dispose();
     _addressController.dispose();
     _phoneDeliveryController.dispose();
+    _memberController.dispose();
+    _redeemPointsController.dispose();
     super.dispose();
   }
 
-  void _proceedToPayment() {
+  Future<bool> validatePromoCode(String code) async {
+    // TODO: replace with real backend validation
+    await Future.delayed(const Duration(milliseconds: 200));
+    return code.isNotEmpty && code.length >= 4;
+  }
+
+  // void _showPromoDialog() {
+  //   final TextEditingController dialogController = TextEditingController();
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       return AlertDialog(
+  //         title: const Text('Pilih Promo'),
+  //         content: Column(
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: [
+  //             TextField(
+  //               controller: dialogController,
+  //               decoration: const InputDecoration(
+  //                 hintText: 'Masukkan kode promo',
+  //               ),
+  //             ),
+  //             const SizedBox(height: 12),
+  //             // -------------------------------------------------------
+  //             //  Fixed‑height list of promo codes
+  //             // -------------------------------------------------------
+  //             SizedBox(
+  //               height: 200,
+  //               child: SingleChildScrollView(
+  //                 child: Column(
+  //                   children: context
+  //                       .read<CartProvider>()
+  //                       .availablePromos
+  //                       .map(
+  //                         (promo) => ListTile(
+  //                           title: Text(promo),
+  //                           trailing: IconButton(
+  //                             icon: const Icon(Icons.copy),
+  //                             onPressed: () {
+  //                               Clipboard.setData(ClipboardData(text: promo));
+  //                               ScaffoldMessenger.of(context).showSnackBar(
+  //                                 const SnackBar(content: Text('Promo copied')),
+  //                               );
+  //                             },
+  //                           ),
+  //                           onTap: () {
+  //                             _promoCodeController.text = promo;
+  //                             Navigator.of(context).pop();
+  //                           },
+  //                         ),
+  //                       )
+  //                       .toList(),
+  //                 ),
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //         actions: [
+  //           TextButton(
+  //             onPressed: () => Navigator.of(context).pop(),
+  //             child: const Text('Batal'),
+  //           ),
+  //           ElevatedButton(
+  //             onPressed: () {
+  //               _promoCodeController.text = dialogController.text;
+  //               Navigator.of(context).pop();
+  //             },
+  //             child: const Text('Gunakan'),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
+
+  void _proceedToPayment() async {
     final cart = context.read<CartProvider>();
     if (cart.isEmpty) {
       ScaffoldMessenger.of(
@@ -113,6 +198,15 @@ class _CartScreenState extends State<CartScreen> {
       }
     }
 
+    final promo = _promoCodeController.text.trim();
+    if (promo.isNotEmpty) {
+      final ok = await validatePromoCode(promo);
+      if (!ok) {
+        AppLog.instance.logWarning('Promo code tidak valid.');
+        return;
+      }
+    }
+
     cart.setCustomerInfo(
       tableNumber: table.isNotEmpty ? table : null,
       customerName: name.isNotEmpty ? name : null,
@@ -124,6 +218,10 @@ class _CartScreenState extends State<CartScreen> {
           ? phone
           : null,
       orderType: _orderType,
+      promoCode: promo.isNotEmpty ? promo : null,
+      redeemPoints: _redeemPointsController.text.isNotEmpty
+          ? int.tryParse(_redeemPointsController.text)
+          : null,
     );
 
     Navigator.pushNamed(context, NameRoute.paymentMethod);
@@ -162,6 +260,7 @@ class _CartScreenState extends State<CartScreen> {
                     _notesController.clear();
                     _addressController.clear();
                     _phoneDeliveryController.clear();
+                    _redeemPointsController.clear();
                   },
                 ),
               ],
@@ -238,6 +337,7 @@ class _CartScreenState extends State<CartScreen> {
                             _notesController.clear();
                             _addressController.clear();
                             _phoneDeliveryController.clear();
+                            _redeemPointsController.clear();
                           },
                           icon: const Icon(
                             Icons.delete_outline,
@@ -280,6 +380,7 @@ class _CartScreenState extends State<CartScreen> {
                               cart.decrementQuantity(cartItem.menuItem.id),
                         );
                       }),
+
                       const SizedBox(height: 16),
 
                       // ── Customer & Order Info Form ──
@@ -652,9 +753,18 @@ class _CartScreenState extends State<CartScreen> {
                                 ),
                               ),
                             ),
+
+                            if (_orderType == OrderEntity.typeDelivery ||
+                                widget.isDelivery == true ||
+                                widget.table != null)
+                              ...[],
                           ],
                         ),
                       ),
+                      const SizedBox(height: 14),
+                      promosCard(),
+                      const SizedBox(height: 14),
+                      memberCard(),
                     ],
                   ),
                 ),
@@ -664,6 +774,197 @@ class _CartScreenState extends State<CartScreen> {
             );
           },
         ),
+      ),
+    );
+  }
+
+  Container promosCard() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: RestaurantColors.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: RestaurantColors.cardBorder),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Row(
+            children: [
+              Icon(
+                Icons.local_offer_outlined,
+                size: 20,
+                color: RestaurantColors.primaryBrown,
+              ),
+              SizedBox(width: 8),
+              Text(
+                'Informasi Promo',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: RestaurantColors.textPrimary,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          const Text(
+            'Kode Promo',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: RestaurantColors.textSecondary,
+            ),
+          ),
+          const SizedBox(height: 6),
+          TextField(
+            controller: _promoCodeController,
+            decoration: InputDecoration(
+              hintText: 'Masukkan kode promo',
+              prefixIcon: const Icon(
+                Icons.local_offer_outlined,
+                size: 20,
+                color: RestaurantColors.textSecondary,
+              ),
+              // suffixIcon: IconButton(
+              //   icon: const Icon(Icons.list),
+              //   onPressed: _showPromoDialog,
+              // ),
+              filled: true,
+              fillColor: RestaurantColors.background,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 14,
+                vertical: 12,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(
+                  color: RestaurantColors.cardBorder,
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(
+                  color: RestaurantColors.cardBorder,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container memberCard() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: RestaurantColors.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: RestaurantColors.cardBorder),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Row(
+            children: [
+              Icon(
+                Icons.perm_identity,
+                size: 20,
+                color: RestaurantColors.primaryBrown,
+              ),
+              SizedBox(width: 8),
+              Text(
+                'Informasi Member',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: RestaurantColors.textPrimary,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          const Text(
+            'Member ID',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: RestaurantColors.textSecondary,
+            ),
+          ),
+          const SizedBox(height: 6),
+          TextField(
+            controller: _memberController,
+            keyboardType: TextInputType.text,
+            decoration: InputDecoration(
+              hintText: 'Masukkan Nomor Telepon Member',
+              prefixIcon: const Icon(
+                Icons.perm_identity,
+                size: 20,
+                color: RestaurantColors.textSecondary,
+              ),
+              filled: true,
+              fillColor: RestaurantColors.background,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 14,
+                vertical: 12,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(
+                  color: RestaurantColors.cardBorder,
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(
+                  color: RestaurantColors.cardBorder,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 14),
+          const Text(
+            'Redeem Points',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: RestaurantColors.textSecondary,
+            ),
+          ),
+          const SizedBox(height: 6),
+          TextField(
+            controller: _redeemPointsController,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              hintText: 'Jumlah poin yang ingin ditebus',
+              prefixIcon: const Icon(
+                Icons.star,
+                size: 20,
+                color: RestaurantColors.textSecondary,
+              ),
+              filled: true,
+              fillColor: RestaurantColors.background,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 14,
+                vertical: 12,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(
+                  color: RestaurantColors.cardBorder,
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(
+                  color: RestaurantColors.cardBorder,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

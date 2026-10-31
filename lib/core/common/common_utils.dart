@@ -164,13 +164,14 @@ bool isToday(DateTime date) {
 }
 
 Future<void> initLocalMyTenant(TenantEntity tenant) async {
+  debugPrint("tenant : $tenant");
   final prefs = SharedPrefServices.pref;
   await prefs.setString(SettingsKeys.restaurantName, tenant.name.trim());
   await prefs.setString(SettingsKeys.restaurantAddress, tenant.address!.trim());
   await prefs.setString(SettingsKeys.restaurantPhone, tenant.phone!.trim());
   await prefs.setString(SettingsKeys.restaurantLogo, tenant.logoUrl ?? "");
   await prefs.setString(SettingsKeys.restaurantQris, tenant.qrisUrl ?? "");
-  await prefs.setString(SettingsKeys.restaurantRekening, tenant.rekening ?? "");
+
   if (tenant.tenantPayment != null) {
     await prefs.setString(
       SettingsKeys.bankAccountName,
@@ -184,5 +185,16 @@ Future<void> initLocalMyTenant(TenantEntity tenant) async {
       SettingsKeys.deliveryDescription,
       tenant.tenantPayment!.deliveryDescription ?? "",
     );
+    await prefs.setString(
+      SettingsKeys.restaurantRekening,
+      tenant.tenantPayment!.bankAccountNumber ?? "",
+    );
   }
+}
+
+double toDouble(dynamic value, {double fallback = 0.0}) {
+  if (value == null) return fallback;
+  if (value is num) return value.toDouble();
+  if (value is String) return double.tryParse(value) ?? fallback;
+  return fallback; // tipe tak dikenali
 }

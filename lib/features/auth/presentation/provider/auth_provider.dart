@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:restauran_menu/core/services/app_log.dart';
 import 'package:restauran_menu/core/services/shared_pref_services.dart';
+import 'package:restauran_menu/core/common/common_utils.dart';
 import 'package:restauran_menu/features/admin/domain/entities/tenant_entity.dart';
 import 'package:restauran_menu/features/admin/domain/usecases/get_my_tenant_usecase.dart';
 import 'package:restauran_menu/features/admin/presentation/pages/admin_pengaturan_screen.dart';
@@ -217,29 +218,29 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> initLocalMyTenant(TenantEntity myTenant) async {
-    tenant = myTenant;
-    final prefs = SharedPrefServices.pref;
-    await prefs.setString(SettingsKeys.restaurantName, tenant!.name.trim());
-    // address/phone/logo boleh null dari server — jangan pakai `!`
-    // supaya tidak lempar _TypeError yang nyangkut di loading.
-    await prefs.setString(
-      SettingsKeys.restaurantAddress,
-      (tenant!.address ?? '').trim(),
-    );
-    await prefs.setString(
-      SettingsKeys.restaurantPhone,
-      (tenant!.phone ?? '').trim(),
-    );
-    final logo = (tenant!.logoUrl ?? '').trim();
-    if (logo.isNotEmpty) {
-      await prefs.setString(SettingsKeys.restaurantLogo, logo);
-    }
-    final qris = (tenant!.qrisUrl ?? '').trim();
-    //if (qris.isNotEmpty) {
-    await prefs.setString(SettingsKeys.restaurantQris, qris);
-    //}
-  }
+  // Future<void> initLocalMyTenant(TenantEntity myTenant) async {
+  //   tenant = myTenant;
+  //   final prefs = SharedPrefServices.pref;
+  //   await prefs.setString(SettingsKeys.restaurantName, tenant!.name.trim());
+  //   // address/phone/logo boleh null dari server — jangan pakai `!`
+  //   // supaya tidak lempar _TypeError yang nyangkut di loading.
+  //   await prefs.setString(
+  //     SettingsKeys.restaurantAddress,
+  //     (tenant!.address ?? '').trim(),
+  //   );
+  //   await prefs.setString(
+  //     SettingsKeys.restaurantPhone,
+  //     (tenant!.phone ?? '').trim(),
+  //   );
+  //   final logo = (tenant!.logoUrl ?? '').trim();
+  //   if (logo.isNotEmpty) {
+  //     await prefs.setString(SettingsKeys.restaurantLogo, logo);
+  //   }
+  //   final qris = (tenant!.qrisUrl ?? '').trim();
+  //   //if (qris.isNotEmpty) {
+  //   await prefs.setString(SettingsKeys.restaurantQris, qris);
+  //   //}
+  // }
 
   Future<void> logOut() async {
     try {

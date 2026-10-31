@@ -16,7 +16,7 @@ class StaffScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => sl<StaffProvider>()..load(),
+      create: (context) => sl<StaffProvider>()..refresh(),
       child: const _StaffView(),
     );
   }
@@ -91,8 +91,7 @@ class _StaffView extends StatelessWidget {
                           ),
                           const SizedBox(height: 16),
                           ElevatedButton(
-                            onPressed: () =>
-                                provider.load(forceRefresh: true),
+                            onPressed: () => provider.load(forceRefresh: true),
                             child: const Text('Coba Lagi'),
                           ),
                         ],
@@ -115,7 +114,7 @@ class _StaffView extends StatelessWidget {
                 }
 
                 return RefreshIndicator(
-                  onRefresh: () => provider.load(forceRefresh: true),
+                  onRefresh: () async => provider.refresh(),
                   child: ListView.separated(
                     padding: const EdgeInsets.fromLTRB(16, 14, 16, 90),
                     itemCount: provider.staff.length,

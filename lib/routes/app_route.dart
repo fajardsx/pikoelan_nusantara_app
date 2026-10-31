@@ -14,7 +14,9 @@ import 'package:restauran_menu/features/customers/presentation/pages/transfer_pa
 import 'package:restauran_menu/features/home/presentation/pages/home_screen.dart';
 import 'package:restauran_menu/features/kasir/presentation/pages/kasir_shell_screen.dart';
 import 'package:restauran_menu/features/kitchen/presentation/pages/kitchen_display_screen.dart';
+import 'package:restauran_menu/features/members/presentation/pages/member_screen.dart';
 import 'package:restauran_menu/features/onBoarding/presentation/pages/splash_screen.dart';
+import 'package:restauran_menu/features/promos/presentation/pages/promo_screen.dart';
 import 'package:restauran_menu/features/restaurant/presentation/pages/role_selection_screen.dart';
 import 'package:restauran_menu/features/waiters/presentation/pages/waiter_shell_screen.dart';
 import 'package:restauran_menu/features/waiters/presentation/pages/waiter_take_order_screen.dart';
@@ -56,6 +58,8 @@ class AppRoute {
       return OrdersHistoryScreen(orderNumber: args['orderNumber'] as String?);
     },
     NameRoute.adminDashboard: (context) => const AdminShellScreen(),
+    NameRoute.adminPromos: (context) => const PromoScreen(),
+    NameRoute.adminMembers: (context) => const MemberScreen(),
     NameRoute.kasirDashboard: (context) => const KasirShellScreen(),
     NameRoute.kitchenDisplay: (context) => const KitchenDisplayScreen(),
     NameRoute.waiterDashboard: (context) => const WaiterShellScreen(),
@@ -65,14 +69,5 @@ class AppRoute {
           {};
       return WaiterTakeOrderScreen(tableNumber: args['tableNumber']);
     },
-    // NameRoute.profile: (context) => const ProfilePage(),
-    // NameRoute.profileEdit: (context) => const ProfileEditPage(),
-    // NameRoute.profilePassword: (context) => const ProfilePasswordPage(),
-    // NameRoute.chat: (context) {
-    //   final args =
-    //       ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>? ??
-    //       {};
-    //   return ChatScreen(userId: args['userId'], userName: args['userName']);
-    // },
   };
 }

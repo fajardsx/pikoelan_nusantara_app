@@ -6,6 +6,9 @@ import 'package:restauran_menu/features/orders/data/models/order_item_payload.da
 import 'package:restauran_menu/features/orders/domain/entities/order_entity.dart';
 import 'package:restauran_menu/features/orders/domain/usecases/create_order_usecase.dart';
 
+// TODO: import actual getPromo usecase when available
+// import 'package:restauran_menu/features/promos/domain/usecases/get_promo_usecase.dart';
+
 import '../../domain/entities/cart_item.dart';
 
 class CartProvider extends ChangeNotifier {
@@ -24,10 +27,16 @@ class CartProvider extends ChangeNotifier {
   String? customerName;
   String? address;
   String? phone;
+  String? memberInfo;
+
   String? notes;
+  String? promoCode;
+  int? redeemPoints;
   String orderType = OrderEntity.typeDineIn;
 
   CartProvider(this.createOrderUsecase);
+
+  /// Fetch promos from usecase and update list
 
   int get subtotal => items.fold(0, (sum, item) => sum + item.subtotal);
   int get tax => (subtotal * taxRate).round();
@@ -89,6 +98,11 @@ class CartProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setPromoCode(String? value) {
+    promoCode = value;
+    notifyListeners();
+  }
+
   void setCustomerInfo({
     String? tableNumber,
     String? customerName,
@@ -96,12 +110,18 @@ class CartProvider extends ChangeNotifier {
     String? phone,
     String? notes,
     String? orderType,
+    String? promoCode,
+    int? redeemPoints,
+    String? memberInfo,
   }) {
     this.tableNumber = tableNumber;
     this.customerName = customerName;
     this.address = address;
     this.phone = phone;
     this.notes = notes;
+    this.promoCode = promoCode;
+    this.redeemPoints = redeemPoints;
+    this.memberInfo = memberInfo;
     if (orderType != null) this.orderType = orderType;
     notifyListeners();
   }
@@ -131,8 +151,8 @@ class CartProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setOrderType(String value) {
-    orderType = value;
+  void setRedeemPoints(int? points) {
+    redeemPoints = points;
     notifyListeners();
   }
 
@@ -145,6 +165,7 @@ class CartProvider extends ChangeNotifier {
     address = null;
     phone = null;
     notes = null;
+    promoCode = null;
     orderType = OrderEntity.typeDineIn;
     notifyListeners();
   }

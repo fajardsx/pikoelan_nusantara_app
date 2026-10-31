@@ -27,6 +27,8 @@ class NameRoute {
   static const ordersHistory = "/restaurant/customer/orders-history";
 
   static const adminDashboard = "/restaurant/admin/dashboard";
+  static const adminPromos = "/restaurant/admin/promos";
+  static const adminMembers = "/restaurant/admin/members";
   static const kasirDashboard = "/restaurant/kasir/dashboard";
   static const kitchenDisplay = "/restaurant/kitchen/display";
   static const waiterDashboard = "/restaurant/waiter/dashboard";

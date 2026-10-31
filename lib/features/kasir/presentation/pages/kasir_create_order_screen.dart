@@ -47,7 +47,7 @@ class _KasirCreateOrderViewState extends State<_KasirCreateOrderView> {
   static const _options = [
     (type: OrderEntity.typeDineIn, label: 'Dine In'),
     (type: OrderEntity.typeTakeaway, label: 'Take Away'),
-    (type: OrderEntity.typeDelivery, label: 'Delivery'),
+    //(type: OrderEntity.typeDelivery, label: 'Delivery'),
   ];
 
   @override

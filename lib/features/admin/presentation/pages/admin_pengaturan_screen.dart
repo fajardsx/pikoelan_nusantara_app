@@ -627,7 +627,7 @@ class _AdminPengaturanScreenState extends State<AdminPengaturanScreen> {
                   TextField(
                     controller: _rekeningController,
                     keyboardType: TextInputType.number,
-                    decoration: _inputDecoration('123-456-7890'),
+                    decoration: _inputDecoration('contoh : 123-456-7890'),
                   ),
                   const SizedBox(height: 14),
                   const FieldLabel('Nama Rekening'),

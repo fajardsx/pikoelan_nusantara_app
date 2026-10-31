@@ -7,8 +7,10 @@ import 'package:restauran_menu/features/admin/presentation/widgets/admin_sidebar
 import 'package:restauran_menu/features/kasir/presentation/pages/kasir_laporan_screen.dart';
 import 'package:restauran_menu/features/kasir/presentation/pages/transaction_history_screen.dart';
 import 'package:restauran_menu/features/kasir/presentation/provider/kasir_provider.dart';
+import 'package:restauran_menu/features/members/presentation/pages/member_screen.dart';
 import 'package:restauran_menu/features/menu/presentation/pages/kelola_menu_screen.dart';
 import 'package:restauran_menu/features/permissions/presentation/pages/permission_config_screen.dart';
+import 'package:restauran_menu/features/promos/presentation/pages/promo_screen.dart';
 import 'package:restauran_menu/features/staff/presentation/pages/staff_screen.dart';
 import 'package:restauran_menu/shared/utils/logout_helper.dart';
 
@@ -45,13 +47,16 @@ class _AdminShellScreenState extends State<AdminShellScreen> {
       case 1:
         return const KelolaMenuScreen();
       case 2:
-        //return const StaffManagementScreen();
         return const StaffScreen();
       case 3:
         return const PermissionConfigScreen();
       case 4:
         return const TransactionHistoryScreen();
       case 5:
+        return const PromoScreen();
+      case 6:
+        return const MemberScreen();
+      case 7:
         return const AdminPengaturanScreen();
       default:
         return const SizedBox.shrink();
