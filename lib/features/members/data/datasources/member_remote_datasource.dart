@@ -1,6 +1,7 @@
 import 'package:restauran_menu/core/configs/api_keys.dart';
 import 'package:restauran_menu/core/network/dio_client.dart';
 import 'package:restauran_menu/features/members/data/models/member_payload.dart';
+import 'package:restauran_menu/features/members/data/models/validate_member_response.dart';
 
 import '../models/member_response.dart';
 
@@ -9,6 +10,7 @@ abstract class MemberRemoteDataSource {
   Future<MemberResponse> createMember(MemberPayload payload);
   Future<MemberResponse> updateMember(int id, MemberPayload payload);
   Future<void> deleteMember(int id);
+  Future<ValidateMemberResponse> validateMemberByPhone(String phone);
 }
 
 class MemberRemoteDataSourceImpl implements MemberRemoteDataSource {
@@ -42,5 +44,15 @@ class MemberRemoteDataSourceImpl implements MemberRemoteDataSource {
   @override
   Future<void> deleteMember(int id) async {
     await DioClient.instance.delete(ApiKeys.memberById(id.toString()));
+  }
+
+  @override
+  Future<ValidateMemberResponse> validateMemberByPhone(String phone) async {
+    final res = await DioClient.instance.post(
+      ApiKeys.validateMemberByPhone,
+      data: {'phone': phone},
+    );
+
+    return ValidateMemberResponse.fromJson(res.data);
   }
 }

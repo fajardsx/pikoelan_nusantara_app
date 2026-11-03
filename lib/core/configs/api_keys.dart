@@ -67,6 +67,7 @@ class ApiKeys {
   static const String member = 'api/members';
   static const String statsMember = 'api/members/stats';
   static const String lookupMember = 'api/members/lookup';
+  static const String validateMemberByPhone = 'api/members/validate-phone';
   static String memberById(String id) => 'api/members/$id';
   static String memberPointById(String id) => 'api/members/$id/points';
   static String memberHistoryById(String id) => 'api/members/$id/history';

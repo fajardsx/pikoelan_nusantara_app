@@ -4,7 +4,8 @@ import '../../domain/entities/role_permission_entity.dart';
 /// Response untuk `GET api/permissions/me`, `PUT api/permissions/:role`,
 /// dan `DELETE api/permissions/:role`.
 /// Ketiganya mengembalikan `data.permissions` dengan bentuk yang sama.
-class RolePermissionsResponse extends AppBaseResponse<List<RolePermissionEntity>> {
+class RolePermissionsResponse
+    extends AppBaseResponse<List<RolePermissionEntity>> {
   RolePermissionsResponse({
     required super.code,
     required super.message,
@@ -24,8 +25,9 @@ class RolePermissionsResponse extends AppBaseResponse<List<RolePermissionEntity>
           rawList
               ?.whereType<Map>()
               .map(
-                (item) =>
-                    RolePermissionEntity.fromJson(Map<String, dynamic>.from(item)),
+                (item) => RolePermissionEntity.fromJson(
+                  Map<String, dynamic>.from(item),
+                ),
               )
               .toList() ??
           const [],

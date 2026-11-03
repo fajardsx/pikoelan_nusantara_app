@@ -63,24 +63,43 @@ class PermissionProvider extends ChangeNotifier {
 
   /// Muat matriks privilege semua role.
   /// [tenantId] hanya diperlukan kalau user login sebagai superadmin.
+  Future<void> loadMyPermission({
+    bool forceRefresh = false,
+    int? tenantId,
+  }) async {
+    status = PermissionStatus.loading;
+    errorMessage = null;
+    notifyListeners();
+
+    try {
+      final resultPermission = await getMyPermissionsUsecase(
+        forceRefresh: forceRefresh,
+      );
+      myPermissions = resultPermission;
+
+      status = PermissionStatus.loaded;
+    } catch (e) {
+      errorMessage = _message(e);
+      status = PermissionStatus.error;
+    }
+    notifyListeners();
+  }
+
   Future<void> load({bool forceRefresh = false, int? tenantId}) async {
     status = PermissionStatus.loading;
     errorMessage = null;
     notifyListeners();
 
     try {
-      final results = await Future.wait([
-        getPermissionMatrixUsecase(
-          forceRefresh: forceRefresh,
-          tenantId: tenantId,
-        ),
-        getMyPermissionsUsecase(forceRefresh: forceRefresh),
-      ]);
-
-      final result = results[0] as PermissionMatrixEntity;
+      final result = await getPermissionMatrixUsecase(
+        forceRefresh: forceRefresh,
+        tenantId: tenantId,
+      );
+      final resultPermission = await getMyPermissionsUsecase(
+        forceRefresh: forceRefresh,
+      );
       matrix = result;
-      myPermissions = results[1] as List<RolePermissionEntity>;
-
+      myPermissions = resultPermission;
       _saved.clear();
       for (final role in result.roles) {
         _saved[role.role] = List<RolePermissionEntity>.from(role.permissions);
@@ -209,7 +228,7 @@ class PermissionProvider extends ChangeNotifier {
   /// Kalau data belum dimuat, dianggap boleh (jangan sembunyikan menu
   /// hanya karena request privilege gagal).
   bool can(String menuKey, String action) {
-    if (myPermissions.isEmpty) return true;
+    if (myPermissions.isEmpty) return false;
     for (final permission in myPermissions) {
       if (permission.menuKey == menuKey) return permission.flagFor(action);
     }

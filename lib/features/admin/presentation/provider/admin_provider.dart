@@ -103,6 +103,7 @@ class AdminProvider extends ChangeNotifier {
       );
       //recentOrders = allOrders.take(6).toList();
       //activeMenuCount = menuItems.length;
+      debugPrint("adminProvider : $tenant!");
       await initLocalMyTenant(tenant!);
       status = DashboardStatus.loaded;
     } catch (e) {

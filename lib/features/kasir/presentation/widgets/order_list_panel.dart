@@ -17,7 +17,7 @@ class OrderListPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 320,
+      width: 310,
       color: RestaurantColors.background,
       child: Consumer<KasirProvider>(
         builder: (context, kasir, _) {

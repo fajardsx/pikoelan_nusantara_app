@@ -81,6 +81,7 @@ class PublicMenuProvider extends ChangeNotifier {
       categories = data.categories;
       items = data.items.where((e) => e.isAvailable).toList();
       //debugPrint("items ${data.items.length}");
+      debugPrint("public_menu_provider.load : $tenant!");
       await initLocalMyTenant(tenant!);
       status = PublicMenuStatus.loaded;
     } catch (e) {
@@ -111,12 +112,11 @@ class PublicMenuProvider extends ChangeNotifier {
         s,
         forceRefresh: forceRefresh,
       );
-      debugPrint("public menu : $data");
+      // debugPrint("public menu : $data");
       tenant = data.tenant;
       categories = data.categories;
       items = data.items.where((e) => e.isAvailable).toList();
-      //debugPrint("items ${data.items.length}");
-      await initLocalMyTenant(tenant!);
+      //await initLocalMyTenant(tenant!);
       status = PublicMenuStatus.loaded;
     } catch (e) {
       errorMessage = e.toString().replaceFirst('Exception: ', '');

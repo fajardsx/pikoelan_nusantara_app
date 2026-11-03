@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 import 'order_item_entity.dart';
 
@@ -129,8 +130,9 @@ class OrderEntity extends Equatable {
     DateTime toDate(dynamic v) {
       if (v is DateTime) return v;
       if (v is String) {
+        debugPrint("from string date : $v");
         final parsed = DateTime.tryParse(v);
-        if (parsed != null) return parsed;
+        if (parsed != null) return parsed.toUtc().add(const Duration(hours: 7));
       }
       return DateTime.now();
     }

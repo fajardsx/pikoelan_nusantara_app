@@ -113,6 +113,7 @@ class DioClient {
     dynamic data,
     Map<String, dynamic>? queryParameters,
     bool forceRefresh = false,
+    Duration? cacheDuration,
   }) async {
     try {
       // final connectivityService = sl.get<ConnectivityService>(
@@ -126,6 +127,7 @@ class DioClient {
       return await dio.get(
         url,
         queryParameters: queryParameters,
+        //options: cacheOpts,
         options: Options(extra: {'no-cache': forceRefresh}),
       );
     } on DioException catch (e) {

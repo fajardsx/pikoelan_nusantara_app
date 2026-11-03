@@ -48,11 +48,7 @@ class _PromoValidateDialogState extends State<PromoValidateDialog> {
       _resultMessage = null;
     });
 
-    final ok = await widget.provider.validate(
-      code,
-      amount,
-      memberId: memberId,
-    );
+    final ok = await widget.provider.validate(code, amount, memberId: memberId);
 
     if (mounted) {
       setState(() {
@@ -238,4 +234,3 @@ class _PromoValidateDialogState extends State<PromoValidateDialog> {
     );
   }
 }
-

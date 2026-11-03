@@ -50,6 +50,7 @@ class KelolaKategoriScreen extends StatelessWidget {
     );
     if (confirmed == true) {
       await sl<CategoryRepository>().deleteCategory(category.id);
+      await sl<MenuProvider>().deleteCategory(category.id);
     }
   }
 

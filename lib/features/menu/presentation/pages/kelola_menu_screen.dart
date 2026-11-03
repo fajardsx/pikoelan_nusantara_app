@@ -46,12 +46,27 @@ class MenuDashboard extends StatefulWidget {
 }
 
 class _MenuDashboardState extends State<MenuDashboard> {
+  late final TextEditingController _searchController;
+  String _searchQuery = '';
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<MenuProvider>().load();
+      context.read<MenuProvider>().load(refresh: true);
     });
+    _searchController = TextEditingController();
+    _searchController.addListener(() {
+      setState(() {
+        _searchQuery = _searchController.text;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   Future<void> _confirmDeleteItem(
@@ -298,17 +313,18 @@ class _MenuDashboardState extends State<MenuDashboard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const Text(
+              'Kelola Menu',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: RestaurantColors.textPrimary,
+              ),
+            ),
             Row(
+              mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'Kelola Menu',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: RestaurantColors.textPrimary,
-                  ),
-                ),
                 Row(
                   children: [
                     OutlinedButton.icon(
@@ -317,7 +333,7 @@ class _MenuDashboardState extends State<MenuDashboard> {
                         await exportMenu(context, provider.items);
                       },
                       icon: const Icon(Icons.file_download, size: 18),
-                      label: const Text('Export CSV'),
+                      label: const Text('Export'),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: RestaurantColors.primaryBrown,
                         side: const BorderSide(
@@ -335,7 +351,7 @@ class _MenuDashboardState extends State<MenuDashboard> {
                         await importMenu(context);
                       },
                       icon: const Icon(Icons.file_upload, size: 18),
-                      label: const Text('Import CSV'),
+                      label: const Text('Import'),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: RestaurantColors.primaryBrown,
                         side: const BorderSide(
@@ -380,7 +396,20 @@ class _MenuDashboardState extends State<MenuDashboard> {
                 ),
               ],
             ),
-            const SizedBox(height: 18),
+            // Search bar untuk filter menu berdasarkan nama
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  hintText: 'Cari menu...',
+                  prefixIcon: const Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
+              ),
+            ),
             if (provider.categories.isNotEmpty)
               SizedBox(
                 height: 46,
@@ -420,7 +449,7 @@ class _MenuDashboardState extends State<MenuDashboard> {
             const SizedBox(height: 18),
             Expanded(
               child: RefreshIndicator(
-                onRefresh: () => provider.load(),
+                onRefresh: () async => provider.refresh(),
                 child: StreamBuilder<List<MenuCategoryEntity>>(
                   stream: sl<CategoryRepository>().watchAll(),
                   builder: (context, catSnapshot) {
@@ -436,15 +465,25 @@ class _MenuDashboardState extends State<MenuDashboard> {
                       ),
                       builder: (context, snapshot) {
                         final items = snapshot.data ?? [];
+                        // Apply search filter on menu name
+                        final filteredItems = _searchQuery.isEmpty
+                            ? items
+                            : items
+                                  .where(
+                                    (i) => i.name.toLowerCase().contains(
+                                      _searchQuery.toLowerCase(),
+                                    ),
+                                  )
+                                  .toList();
                         if (!snapshot.hasData) {
                           return const Center(
                             child: CircularProgressIndicator(),
                           );
                         }
-                        if (items.isEmpty) {
+                        if (filteredItems.isEmpty) {
                           return const Center(
                             child: Text(
-                              'Belum ada menu. Tambahkan menu pertamamu.',
+                              'Tidak ada menu yang cocok.',
                               style: TextStyle(
                                 color: RestaurantColors.textSecondary,
                               ),
@@ -452,13 +491,13 @@ class _MenuDashboardState extends State<MenuDashboard> {
                           );
                         }
                         return ListView.separated(
-                          itemCount: items.length,
+                          itemCount: filteredItems.length,
                           separatorBuilder: (_, _) =>
                               const SizedBox(height: 10),
                           itemBuilder: (context, index) => _MenuRow(
-                            item: items[index],
+                            item: filteredItems[index],
                             categoryName:
-                                categoryNames[items[index].categoryId],
+                                categoryNames[filteredItems[index].categoryId],
                             showAction: true,
                           ),
                         );
@@ -744,6 +783,7 @@ class _MenuRow extends StatelessWidget {
     );
     if (confirmed == true) {
       await sl<MenuRepository>().deleteItem(item);
+      await sl<MenuProvider>().deleteMenuItem(item.id);
     }
   }
 

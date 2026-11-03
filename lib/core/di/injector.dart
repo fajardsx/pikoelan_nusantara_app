@@ -45,6 +45,7 @@ import 'package:restauran_menu/features/members/domain/usecases/create_member_us
 import 'package:restauran_menu/features/members/domain/usecases/delete_member_usecase.dart';
 import 'package:restauran_menu/features/members/domain/usecases/get_members_usecase.dart';
 import 'package:restauran_menu/features/members/domain/usecases/update_member_usecase.dart';
+import 'package:restauran_menu/features/members/domain/usecases/validate_member_by_phone_usecase.dart';
 import 'package:restauran_menu/features/members/presentation/provider/member_provider.dart';
 import 'package:restauran_menu/features/menu/data/datasources/menu_remote_datasource.dart';
 import 'package:restauran_menu/features/menu/data/repositories/menu_repository_impl.dart';
@@ -292,7 +293,7 @@ Future<void> initDependencies() async {
   // ---------------------------
   // Kasir / Kitchen / Waiters
   // ---------------------------
-  sl.registerFactory(() => KasirProvider(sl(), sl(), sl(), sl()));
+  sl.registerFactory(() => KasirProvider(sl(), sl(), sl(), sl(), sl()));
   sl.registerFactory(() => KitchenProvider(sl(), sl(), sl()));
   sl.registerLazySingleton(() => WaiterProvider(sl(), sl(), sl(), sl()));
   // ---------------------------
@@ -377,6 +378,9 @@ Future<void> initDependencies() async {
   );
   sl.registerLazySingleton<DeleteMemberUsecase>(
     () => DeleteMemberUsecase(sl()),
+  );
+  sl.registerLazySingleton<ValidateMemberByPhoneUsecase>(
+    () => ValidateMemberByPhoneUsecase(sl()),
   );
   // Member provider
   sl.registerFactory<MemberProvider>(

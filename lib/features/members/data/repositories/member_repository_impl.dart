@@ -1,4 +1,5 @@
 import 'package:restauran_menu/features/members/data/models/member_payload.dart';
+import 'package:restauran_menu/features/members/data/models/validate_member_response.dart';
 
 import '../../domain/entities/member_entity.dart';
 import '../../domain/repositories/member_repository.dart';
@@ -32,5 +33,11 @@ class MemberRepositoryImpl implements MemberRepository {
   @override
   Future<void> deleteMember(int id) async {
     await remoteDataSource.deleteMember(id);
+  }
+
+  @override
+  Future<ValidateMemberResponse> validateMemberByPhone(String phone) async {
+    final res = await remoteDataSource.validateMemberByPhone(phone);
+    return res;
   }
 }

@@ -1,11 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:restauran_menu/core/services/app_log.dart';
-import 'package:restauran_menu/core/services/shared_pref_services.dart';
 import 'package:restauran_menu/core/common/common_utils.dart';
+import 'package:restauran_menu/core/services/app_log.dart';
 import 'package:restauran_menu/features/admin/domain/entities/tenant_entity.dart';
 import 'package:restauran_menu/features/admin/domain/usecases/get_my_tenant_usecase.dart';
-import 'package:restauran_menu/features/admin/presentation/pages/admin_pengaturan_screen.dart';
 import 'package:restauran_menu/features/auth/data/models/login_payload.dart';
 import 'package:restauran_menu/features/auth/domain/entities/user_entities.dart';
 import 'package:restauran_menu/features/auth/domain/usecases/auth_login_usecase.dart';
@@ -179,6 +177,7 @@ class AuthProvider extends ChangeNotifier {
           _setError('Login berhasil tapi data restoran tidak ditemukan.');
           return;
         }
+        debugPrint("authProvider : $tenant");
         await initLocalMyTenant(tenant);
         authStatus = AuthStatus.loggedIn;
         status = AuthStatus.loggedIn;

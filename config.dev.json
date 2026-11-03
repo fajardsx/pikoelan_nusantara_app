@@ -1,11 +1,11 @@
 {
-  "BASE_URL": "http://localhost:3000/",
+  "BASE_URL": "http://192.168.1.7:3000/",
   "BASE_URL_ONRENDER": "https://menu-maju-backend.onrender.com/",
   "BASE_URL_REPLIT": "https://my-first-backend--fajardsx.replit.app/",
   "BASE_URL_LOCAL": "http://10.31.142.163:3000/",
   "BASE_URL_EMU_MOBILE": "http://10.0.2.2:3000/",
-  "BASE_URL_MOBILE": "http://10.10.2.16:3000/",
+  "BASE_URL_MOBILE": "http://192.168.1.7:3000/",
   "BASE_URL_LOCALHOST": "http://localhost:3000/",
-  "BASE_SLUG": "pikoelan-nusantara",
-  "BASE_TITLE": "Pikoelan Nusantara"
+  "BASE_SLUG": "warung-nasi-uduk",
+  "BASE_TITLE": "warung-nasi-uduk"
 }

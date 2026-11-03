@@ -1,0 +1,11 @@
+{
+    "schema_version": 2,
+    "commit": "cb5fe128a65285df5add2287770008b84b7cd5a8",
+    "indexed_at": "2026-11-01T10:34:36Z",
+    "project": "pikoelan_nusantara_app",
+    "nodes": 3252,
+    "edges": 9937,
+    "original_size": 9306112,
+    "compressed_size": 1573394,
+    "compression_level": 9
+}

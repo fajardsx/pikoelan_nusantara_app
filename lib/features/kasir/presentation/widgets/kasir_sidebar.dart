@@ -31,6 +31,7 @@ class KasirSidebar extends StatelessWidget {
     (icon: Icons.receipt, label: 'Buat Pesanan'),
     (icon: Icons.receipt_long_rounded, label: 'Daftar Pesanan'),
     (icon: Icons.menu_book_rounded, label: 'Menu'),
+    //(icon: Icons.card_membership_rounded, label: 'Member'),
     (icon: Icons.swap_horiz_rounded, label: 'Transaksi'),
     (icon: Icons.bar_chart_rounded, label: 'Laporan'),
     (icon: Icons.settings_rounded, label: 'Pengaturan'),

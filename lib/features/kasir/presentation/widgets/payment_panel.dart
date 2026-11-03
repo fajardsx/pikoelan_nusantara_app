@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:restauran_menu/core/common/common_utils.dart';
+import 'package:restauran_menu/features/admin/presentation/pages/admin_pengaturan_screen.dart';
 
 import '../../../../core/themes/restaurant_colors.dart';
 import '../../../../shared/utils/currency_formatter.dart';
@@ -16,6 +18,9 @@ class PaymentPanel extends StatefulWidget {
 
 class _PaymentPanelState extends State<PaymentPanel> {
   final _cashController = TextEditingController();
+
+  final TextEditingController _memberController = TextEditingController();
+  final TextEditingController _redeemController = TextEditingController();
   String? _prevOrderNumber;
 
   @override
@@ -27,7 +32,7 @@ class _PaymentPanelState extends State<PaymentPanel> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 320,
+      width: 280,
       padding: const EdgeInsets.all(18),
       color: RestaurantColors.background,
       child: Consumer<KasirProvider>(
@@ -107,15 +112,97 @@ class _PaymentPanelState extends State<PaymentPanel> {
                   ),
                 const SizedBox(height: 8),
                 if (!order.isPaid && order.paymentMethod != null)
-                  Text(
-                    order.paymentLabel,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: RestaurantColors.success,
-                    ),
+                  Column(
+                    children: [
+                      Text(
+                        order.paymentLabel,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: RestaurantColors.success,
+                        ),
+                      ),
+                      if (kasir.paymentMethod == OrderEntity.payQrcode) ...[
+                        const SizedBox(height: 12),
+                        const Text(
+                          'Scan QRIS di bawah',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: RestaurantColors.textPrimary,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Image.asset('assets/images/qris.png', height: 150),
+                      ],
+                    ],
                   ),
-                const SizedBox(height: 18),
+                if (!order.isPaid)
+                  Column(
+                    children: [
+                      if (kasir.paymentMethod == OrderEntity.payQrcode) ...[
+                        const SizedBox(height: 12),
+                        ElevatedButton(
+                          onPressed: () async {
+                            await showDialog<bool>(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                content: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.network(
+                                    getSaveSharedPref(
+                                      key: SettingsKeys.restaurantQris,
+                                    ),
+                                    fit: BoxFit.contain,
+                                    errorBuilder: (_, _, _) => const Icon(
+                                      Icons.qr_code,
+                                      color: Colors.grey,
+                                      size: 40,
+                                    ),
+                                  ),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(),
+                                    child: const Text('Close'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: RestaurantColors.success,
+                            foregroundColor: Colors.white,
+                            disabledBackgroundColor:
+                                RestaurantColors.cardBorder,
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 16,
+                              horizontal: 10,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                          ),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            spacing: 5.0,
+                            children: [
+                              Icon(
+                                Icons.qr_code,
+                                color: Colors.white,
+                                size: 18,
+                              ),
+                              Text(
+                                'Show QRIS',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                const SizedBox(height: 10),
                 if (kasir.paymentMethod == OrderEntity.payCash) ...[
                   const Text(
                     'Dibayar',
@@ -186,6 +273,74 @@ class _PaymentPanelState extends State<PaymentPanel> {
                     ],
                   ),
                 ],
+                Consumer<KasirProvider>(
+                  builder: (context, kasirProvider, _) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 15),
+                        if (kasirProvider.member == null) ...[
+                          TextFormField(
+                            controller: _memberController,
+                            decoration: const InputDecoration(
+                              labelText: 'Member',
+                              border: OutlineInputBorder(),
+                            ),
+                            validator: (value) =>
+                                (value == null || value.isEmpty)
+                                ? 'Masukkan member ID / Phone'
+                                : null,
+                          ),
+                          const SizedBox(height: 8),
+                          ElevatedButton(
+                            onPressed:
+                                kasirProvider.status == DashboardStatus.loading
+                                ? null
+                                : () async {
+                                    try {
+                                      final phone = _memberController.text
+                                          .trim();
+                                      await kasirProvider.validateMember(
+                                        phone: phone,
+                                      );
+                                    } finally {}
+                                  },
+                            child: const Text('Validasi'),
+                          ),
+                        ],
+                        if (kasirProvider.member != null) ...[
+                          const SizedBox(height: 8),
+                          Text(
+                            'Member valid\natas nama : ${kasirProvider.member!.name}\nTier : ${kasirProvider.member!.tier}\npoints : ${kasirProvider.member!.points} ',
+                            style: const TextStyle(color: Colors.green),
+                          ),
+                          const SizedBox(height: 8),
+                          TextFormField(
+                            controller: _redeemController,
+                            decoration: const InputDecoration(
+                              labelText: 'Redeem Points',
+                              border: OutlineInputBorder(),
+                            ),
+                            keyboardType: TextInputType.number,
+                          ),
+                          const SizedBox(height: 8),
+                          ElevatedButton(
+                            onPressed:
+                                kasirProvider.status == DashboardStatus.loading
+                                ? null
+                                : () async {
+                                    try {
+                                      _memberController.text = "";
+                                      await kasirProvider.resetMember();
+                                    } finally {}
+                                  },
+                            child: const Text('Reset'),
+                          ),
+                        ],
+                      ],
+                    );
+                  },
+                ),
                 const Spacer(),
                 if (!order.isPaid)
                   ElevatedButton(
@@ -294,11 +449,13 @@ class _PaymentPanelState extends State<PaymentPanel> {
                               ),
                               actions: [
                                 TextButton(
-                                  onPressed: () => Navigator.of(context).pop(false),
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(false),
                                   child: const Text('Batal'),
                                 ),
                                 TextButton(
-                                  onPressed: () => Navigator.of(context).pop(true),
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(true),
                                   child: const Text('Print'),
                                 ),
                               ],
@@ -309,7 +466,9 @@ class _PaymentPanelState extends State<PaymentPanel> {
                             await context.read<KasirProvider>().printReceipt();
                             if (mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Mencetak struk...')),
+                                const SnackBar(
+                                  content: Text('Mencetak struk...'),
+                                ),
                               );
                             }
                           }

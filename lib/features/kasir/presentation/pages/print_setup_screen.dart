@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
-import 'package:restauran_menu/core/di/injector.dart';
 import 'package:restauran_menu/core/services/app_log.dart';
 import 'package:restauran_menu/core/services/shared_pref_services.dart';
 import 'package:restauran_menu/features/admin/presentation/pages/admin_pengaturan_screen.dart';
-import 'package:restauran_menu/features/kasir/presentation/provider/kasir_provider.dart';
+import 'package:restauran_menu/features/kasir/presentation/widgets/kasir_print.dart';
 
 import '../../../../core/themes/restaurant_colors.dart';
 
@@ -107,6 +106,7 @@ class _PrintSetupScreenState extends State<PrintSetupScreen> {
     final prefs = SharedPrefServices.pref;
     await prefs.setString(SettingsKeys.printerMac, _macController.text.trim());
     await prefs.setString(SettingsKeys.paperSize, _paperSize);
+    AppLog.instance.logInfo("Save Print Setting Success!");
   }
 
   Future<void> _checkConnection() async {
@@ -177,9 +177,7 @@ class _PrintSetupScreenState extends State<PrintSetupScreen> {
         await PrintBluetoothThermal.connect(macPrinterAddress: mac);
       }
 
-      final bytes = await sl<KasirProvider>().testTicket(
-        optionprinttype: _paperSize,
-      );
+      final bytes = await KasirPrint().testTicket(optionprinttype: _paperSize);
       await PrintBluetoothThermal.writeBytes(bytes);
       await PrintBluetoothThermal.disconnect;
       AppLog.instance.logInfo('Test print berhasil');
@@ -571,11 +569,11 @@ class _PrintSetupScreenState extends State<PrintSetupScreen> {
                     child: const Text('Cek Koneksi'),
                   ),
                   const SizedBox(width: 16),
-                  ElevatedButton(
-                    onPressed: _testing ? null : _testPrint,
-                    child: const Text('Test Print'),
-                  ),
-                  const SizedBox(width: 16),
+                  // ElevatedButton(
+                  //   onPressed: _testing ? null : _testPrint,
+                  //   child: const Text('Test Print'),
+                  // ),
+                  // const SizedBox(width: 16),
                   ElevatedButton(
                     onPressed: _testing ? null : _saveSettings,
                     child: const Text('Save Settings'),

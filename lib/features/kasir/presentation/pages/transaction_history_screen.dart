@@ -471,7 +471,7 @@ class _HistoryRow extends StatelessWidget {
           ),
           Expanded(
             child: Text(
-              order.isQris ? 'QRIS' : 'Cash',
+              order.paymentMethod ?? "-",
               style: const TextStyle(color: RestaurantColors.textSecondary),
             ),
           ),

@@ -82,6 +82,8 @@ class _KasirShellScreenState extends State<KasirShellScreen> {
               );
       case 2:
         return const KelolaMenuScreen();
+      // case 3:
+      //   return const MemberScreen();
       case 3:
         return const TransactionHistoryScreen();
       case 4:

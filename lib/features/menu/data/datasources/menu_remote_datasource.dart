@@ -52,7 +52,10 @@ class MenuRemoteDataSourceImpl implements MenuRemoteDataSource {
 
   @override
   Future<void> deleteCategory(int id) async {
-    await DioClient.instance.delete(ApiKeys.menuCategory(id));
+    await DioClient.instance.delete(
+      ApiKeys.menuCategory(id),
+      forceRefresh: true,
+    );
   }
 
   @override

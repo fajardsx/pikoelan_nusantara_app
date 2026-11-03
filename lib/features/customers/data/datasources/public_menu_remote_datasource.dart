@@ -21,14 +21,8 @@ abstract class PublicMenuRemoteDataSource {
     String slug,
     CreateOrderPayload payload,
   );
-  Future<OrdersResponse> getPublicOrders(
-    String slug, {
-    String? orderNumber,
-  });
-  Future<OrderResponse> cancelPublicOrder(
-    String slug,
-    String orderNumber,
-  );
+  Future<OrdersResponse> getPublicOrders(String slug, {String? orderNumber});
+  Future<OrderResponse> cancelPublicOrder(String slug, String orderNumber);
 }
 
 class PublicMenuRemoteDataSourceImpl implements PublicMenuRemoteDataSource {
@@ -74,6 +68,7 @@ class PublicMenuRemoteDataSourceImpl implements PublicMenuRemoteDataSource {
     final res = await DioClient.instance.get(
       ApiKeys.menuPublicMyOrder(slug),
       queryParameters: query.isEmpty ? null : query,
+      forceRefresh: true,
     );
     final json = res.data is Map<String, dynamic>
         ? res.data as Map<String, dynamic>
