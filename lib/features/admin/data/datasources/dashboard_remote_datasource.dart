@@ -17,7 +17,10 @@ abstract class DashboardRemoteDataSource {
 class DashboardRemoteDataSourceImpl implements DashboardRemoteDataSource {
   @override
   Future<TenantResponse> getMyTenant() async {
-    final res = await DioClient.instance.get(ApiKeys.tenantMe);
+    final res = await DioClient.instance.get(
+      ApiKeys.tenantMe,
+      forceRefresh: true,
+    );
     return TenantResponse.fromJson(res.data);
   }
 

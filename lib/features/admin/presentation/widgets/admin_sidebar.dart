@@ -26,6 +26,8 @@ class AdminSidebar extends StatelessWidget {
 
   static const _items = [
     (icon: Icons.dashboard_rounded, label: 'Dashboard'),
+    (icon: Icons.receipt, label: 'Buat Pesanan'), // Khusus Kasir
+    (icon: Icons.receipt_long_rounded, label: 'Daftar Pesanan'), // Khusus kasir
     (icon: Icons.menu_book_rounded, label: 'Menu'),
     (icon: Icons.people_alt_rounded, label: 'Staf'),
     (icon: Icons.verified_user_rounded, label: 'Hak Akses'),
@@ -103,18 +105,22 @@ class AdminSidebar extends StatelessWidget {
                 ],
               ),
             ),
-            ...List.generate(_items.length, (index) {
-              final item = _items[index];
-              final selected = index == selectedIndex;
-              return SidebarTile(
-                icon: item.icon,
-                label: item.label,
-                selected: selected,
-                collapsed: collapsed,
-                onTap: () => onSelect(index),
-              );
-            }),
-            const Spacer(),
+            Expanded(
+              child: ListView(
+                children: List.generate(_items.length, (index) {
+                  final item = _items[index];
+                  final selected = index == selectedIndex;
+                  return SidebarTile(
+                    icon: item.icon,
+                    label: item.label,
+                    selected: selected,
+                    collapsed: collapsed,
+                    onTap: () => onSelect(index),
+                  );
+                }),
+              ),
+            ),
+            const SizedBox(height: 8),
             SidebarTile(
               icon: Icons.logout_rounded,
               label: 'Keluar',

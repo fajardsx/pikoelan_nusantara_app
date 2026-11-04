@@ -43,6 +43,8 @@ class _KasirCreateOrderViewState extends State<_KasirCreateOrderView> {
   final TextEditingController _tableController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
 
   bool _isLoading = false; // loading state for create order
   static const _options = [
@@ -70,9 +72,13 @@ class _KasirCreateOrderViewState extends State<_KasirCreateOrderView> {
     return StreamBuilder<List<MenuItemEntity>>(
       stream: sl<MenuRepository>().watchAll(),
       builder: (c, snap) {
-        final items = (snap.data ?? []).byCategory(
-          _categoryId,
-        ); //.search(_query);
+        final allItems = (snap.data ?? []);
+          final filteredByCategory = allItems.byCategory(_categoryId);
+          final items = _searchQuery.isNotEmpty
+              ? filteredByCategory
+                  .where((e) => e.name.toLowerCase().contains(_searchQuery.toLowerCase()))
+                  .toList()
+              : filteredByCategory;
         return Scaffold(
           backgroundColor: RestaurantColors.background,
           appBar: AppBar(
@@ -213,6 +219,17 @@ class _KasirCreateOrderViewState extends State<_KasirCreateOrderView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Search bar for menu items
+            TextField(
+              controller: _searchController,
+              decoration: const InputDecoration(
+                labelText: 'Cari menu',
+                border: OutlineInputBorder(),
+                suffixIcon: Icon(Icons.search),
+              ),
+              onChanged: (val) => setState(() => _searchQuery = val),
+            ),
+            const SizedBox(height: 8),
             CategoryTabs(
               selectedId: _categoryId,
               onSelected: (id) => setState(() => _categoryId = id),

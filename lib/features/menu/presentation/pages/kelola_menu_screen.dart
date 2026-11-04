@@ -313,56 +313,20 @@ class _MenuDashboardState extends State<MenuDashboard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Kelola Menu',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: RestaurantColors.textPrimary,
-              ),
-            ),
             Row(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                const Text(
+                  'Kelola Menu',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: RestaurantColors.textPrimary,
+                  ),
+                ),
                 Row(
                   children: [
-                    OutlinedButton.icon(
-                      onPressed: () async {
-                        final provider = context.read<MenuProvider>();
-                        await exportMenu(context, provider.items);
-                      },
-                      icon: const Icon(Icons.file_download, size: 18),
-                      label: const Text('Export'),
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: RestaurantColors.primaryBrown,
-                        side: const BorderSide(
-                          color: RestaurantColors.cardBorder,
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 12,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    OutlinedButton.icon(
-                      onPressed: () async {
-                        await importMenu(context);
-                      },
-                      icon: const Icon(Icons.file_upload, size: 18),
-                      label: const Text('Import'),
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: RestaurantColors.primaryBrown,
-                        side: const BorderSide(
-                          color: RestaurantColors.cardBorder,
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 12,
-                        ),
-                      ),
-                    ),
                     OutlinedButton.icon(
                       onPressed: () async {
                         await Navigator.push(
@@ -389,6 +353,43 @@ class _MenuDashboardState extends State<MenuDashboard> {
                         ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    OutlinedButton.icon(
+                      onPressed: () async {
+                        final provider = context.read<MenuProvider>();
+                        await exportMenu(context, provider.items);
+                      },
+                      icon: const Icon(Icons.file_download, size: 18),
+                      label: const Text(''),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: RestaurantColors.primaryBrown,
+                        side: const BorderSide(
+                          color: RestaurantColors.cardBorder,
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 12,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    OutlinedButton.icon(
+                      onPressed: () async {
+                        await importMenu(context);
+                      },
+                      icon: const Icon(Icons.file_upload, size: 18),
+                      label: const Text(''),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: RestaurantColors.primaryBrown,
+                        side: const BorderSide(
+                          color: RestaurantColors.cardBorder,
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 12,
                         ),
                       ),
                     ),

@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:restauran_menu/core/common/common_utils.dart';
 import 'package:restauran_menu/core/di/injector.dart';
 import 'package:restauran_menu/features/admin/presentation/pages/admin_pengaturan_screen.dart';
 import 'package:restauran_menu/features/admin/presentation/provider/admin_provider.dart';
 import 'package:restauran_menu/features/admin/presentation/widgets/admin_sidebar.dart';
+import 'package:restauran_menu/features/kasir/presentation/pages/kasir_create_order_screen.dart';
 import 'package:restauran_menu/features/kasir/presentation/pages/kasir_laporan_screen.dart';
 import 'package:restauran_menu/features/kasir/presentation/pages/transaction_history_screen.dart';
 import 'package:restauran_menu/features/kasir/presentation/provider/kasir_provider.dart';
+import 'package:restauran_menu/features/kasir/presentation/widgets/order_detail_panel.dart';
+import 'package:restauran_menu/features/kasir/presentation/widgets/order_list_panel.dart';
+import 'package:restauran_menu/features/kasir/presentation/widgets/payment_panel.dart';
 import 'package:restauran_menu/features/members/presentation/pages/member_screen.dart';
 import 'package:restauran_menu/features/menu/presentation/pages/kelola_menu_screen.dart';
+import 'package:restauran_menu/features/notifications/domain/entities/order_stream_role.dart';
+import 'package:restauran_menu/features/notifications/presentation/provider/order_stream_provider.dart';
 import 'package:restauran_menu/features/permissions/presentation/pages/permission_config_screen.dart';
 import 'package:restauran_menu/features/promos/presentation/pages/promo_screen.dart';
 import 'package:restauran_menu/features/staff/presentation/pages/staff_screen.dart';
@@ -41,22 +48,55 @@ class _AdminShellScreenState extends State<AdminShellScreen> {
   );
 
   Widget _buildContent() {
+    bool useExpanded = isMobileView(context);
     switch (_selectedIndex) {
       case 0:
         return const KasirDashboardView(); // Use as dashboard statistics
       case 1:
-        return const KelolaMenuScreen();
+        return const KasirCreateOrderScreen();
       case 2:
-        return const StaffScreen();
+        //return const OrdersScreen();
+        return useExpanded
+            ? const Row(
+                children: [
+                  OrderListPanel(),
+                  VerticalDivider(width: 1, color: RestaurantColors.cardBorder),
+                  Expanded(child: OrderDetailPanel()),
+                  VerticalDivider(width: 1, color: RestaurantColors.cardBorder),
+                  PaymentPanel(),
+                ],
+              )
+            : const SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    OrderListPanel(),
+                    VerticalDivider(
+                      width: 1,
+                      color: RestaurantColors.cardBorder,
+                    ),
+                    OrderDetailPanel(),
+                    VerticalDivider(
+                      width: 1,
+                      color: RestaurantColors.cardBorder,
+                    ),
+                    PaymentPanel(),
+                  ],
+                ),
+              );
       case 3:
-        return const PermissionConfigScreen();
+        return const KelolaMenuScreen();
       case 4:
-        return const TransactionHistoryScreen();
+        return const StaffScreen();
       case 5:
-        return const PromoScreen();
+        return const PermissionConfigScreen();
       case 6:
-        return const MemberScreen();
+        return const TransactionHistoryScreen();
       case 7:
+        return const PromoScreen();
+      case 8:
+        return const MemberScreen();
+      case 9:
         return const AdminPengaturanScreen();
       default:
         return const SizedBox.shrink();
@@ -65,9 +105,20 @@ class _AdminShellScreenState extends State<AdminShellScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Provide KasirProvider because KasirLaporanScreen needs it to compute reports
-    return ChangeNotifierProvider.value(
-      value: sl<KasirProvider>(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => sl<KasirProvider>()..load(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) =>
+              sl<OrderStreamProvider>()..start(role: OrderStreamRole.kasir),
+        ),
+        // ChangeNotifierProvider(
+        //   create: (context) =>
+        //       sl<PermissionProvider>()..loadMyPermission(forceRefresh: true),
+        // ),
+      ],
       child: Scaffold(
         backgroundColor: RestaurantColors.background,
         body: Row(
