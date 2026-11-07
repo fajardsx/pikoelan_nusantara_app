@@ -97,7 +97,7 @@ class MenuProvider extends ChangeNotifier {
   }
 
   Future<bool> createCategory(CategoryPayload payload) => _runSubmit(() async {
-    final result = await Future.wait([
+    await Future.wait([
       createCategoryUsecase(payload),
       load(refresh: true),
     ]);

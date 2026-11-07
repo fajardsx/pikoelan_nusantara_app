@@ -18,6 +18,12 @@ import 'package:restauran_menu/features/members/presentation/pages/member_screen
 import 'package:restauran_menu/features/onBoarding/presentation/pages/splash_screen.dart';
 import 'package:restauran_menu/features/promos/presentation/pages/promo_screen.dart';
 import 'package:restauran_menu/features/restaurant/presentation/pages/role_selection_screen.dart';
+import 'package:restauran_menu/features/stock/domain/entities/stock_item.dart';
+import 'package:restauran_menu/features/stock/presentation/pages/add_category_page.dart';
+import 'package:restauran_menu/features/stock/presentation/pages/add_unit_page.dart';
+import 'package:restauran_menu/features/stock/presentation/pages/stock_form_page.dart';
+import 'package:restauran_menu/features/stock/presentation/pages/stock_list_page.dart';
+import 'package:restauran_menu/features/stock/presentation/pages/stock_summary_page.dart';
 import 'package:restauran_menu/features/waiters/presentation/pages/waiter_shell_screen.dart';
 import 'package:restauran_menu/features/waiters/presentation/pages/waiter_take_order_screen.dart';
 import 'package:restauran_menu/routes/name_route.dart';
@@ -69,5 +75,13 @@ class AppRoute {
           {};
       return WaiterTakeOrderScreen(tableNumber: args['tableNumber']);
     },
+    NameRoute.stockSummary: (context) => const StockSummaryPage(),
+    NameRoute.stockList: (context) => const StockListPage(),
+    NameRoute.stockAddForm: (context) {
+      final args = ModalRoute.of(context)?.settings.arguments as StockItem;
+      return StockFormPage(item: args);
+    },
+    NameRoute.unitAddForm: (context) => const AddUnitPage(),
+    NameRoute.categoryAddForm: (context) => const AddCategoryPage(),
   };
 }

@@ -19,6 +19,7 @@ import 'package:restauran_menu/features/notifications/presentation/provider/orde
 import 'package:restauran_menu/features/permissions/presentation/pages/permission_config_screen.dart';
 import 'package:restauran_menu/features/promos/presentation/pages/promo_screen.dart';
 import 'package:restauran_menu/features/staff/presentation/pages/staff_screen.dart';
+import 'package:restauran_menu/features/stock/presentation/pages/stock_summary_page.dart';
 import 'package:restauran_menu/shared/utils/logout_helper.dart';
 
 import '../../../../core/themes/restaurant_colors.dart';
@@ -87,16 +88,18 @@ class _AdminShellScreenState extends State<AdminShellScreen> {
       case 3:
         return const KelolaMenuScreen();
       case 4:
-        return const StaffScreen();
+        return const StockSummaryPage();
       case 5:
-        return const PermissionConfigScreen();
+        return const StaffScreen();
       case 6:
-        return const TransactionHistoryScreen();
+        return const PermissionConfigScreen();
       case 7:
-        return const PromoScreen();
+        return const TransactionHistoryScreen();
       case 8:
-        return const MemberScreen();
+        return const PromoScreen();
       case 9:
+        return const MemberScreen();
+      case 10:
         return const AdminPengaturanScreen();
       default:
         return const SizedBox.shrink();

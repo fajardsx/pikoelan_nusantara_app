@@ -71,4 +71,18 @@ class ApiKeys {
   static String memberById(String id) => 'api/members/$id';
   static String memberPointById(String id) => 'api/members/$id/points';
   static String memberHistoryById(String id) => 'api/members/$id/history';
+
+  // STOCK
+  static const String stocks = 'api/stock';
+  static const String stockUnit = 'api/stock/units';
+  static const String stockCategory = 'api/stock/categories';
+  static String stockCategoryById(int id) => 'api/stock/categories/$id';
+  static const String stockSummary = 'api/stock/summary';
+  static const String stockItems = 'api/stock/items';
+  static String stockItemsById(int id) => 'api/stock/items/$id';
+  static const String stockMovements = 'api/stock/movements';
+  static String stockMovementsByItemId(int stockItemId) =>
+      'api/stock/movements/item/$stockItemId';
+  static String stockIngredientsByItemId(int menuItemId) =>
+      'api/stock/menu-items/$menuItemId/ingredients';
 }

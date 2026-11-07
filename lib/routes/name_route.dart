@@ -34,4 +34,9 @@ class NameRoute {
   static const waiterDashboard = "/restaurant/waiter/dashboard";
   static const waiterTakeOrderDashboard =
       "/restaurant/waiter/dashboard/take-order";
+  static const stockList = "/stock/item/list";
+  static const stockAddForm = "/stock/item/form";
+  static const stockSummary = "/stock/summary";
+  static const unitAddForm = "/stock/unit/form";
+  static const categoryAddForm = "/stock/categories/form";
 }

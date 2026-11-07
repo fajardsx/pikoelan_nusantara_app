@@ -99,6 +99,20 @@ import 'package:restauran_menu/features/staff/domain/usecases/get_staff_usecase.
 import 'package:restauran_menu/features/staff/domain/usecases/invite_staff_usecase.dart';
 import 'package:restauran_menu/features/staff/domain/usecases/remove_staff_usecase.dart';
 import 'package:restauran_menu/features/staff/presentation/providers/staff_provider.dart';
+import 'package:restauran_menu/features/stock/data/datasources/remote/stock_remote_data_source.dart';
+import 'package:restauran_menu/features/stock/data/repositories/stock_repository_impl.dart';
+import 'package:restauran_menu/features/stock/domain/repositories/stock_repository.dart';
+import 'package:restauran_menu/features/stock/domain/usecases/create_category.dart';
+import 'package:restauran_menu/features/stock/domain/usecases/create_stock_item.dart';
+import 'package:restauran_menu/features/stock/domain/usecases/create_unit.dart';
+import 'package:restauran_menu/features/stock/domain/usecases/delete_stock_item.dart';
+import 'package:restauran_menu/features/stock/domain/usecases/get_categories.dart';
+import 'package:restauran_menu/features/stock/domain/usecases/get_stock_items.dart';
+import 'package:restauran_menu/features/stock/domain/usecases/get_units.dart';
+import 'package:restauran_menu/features/stock/domain/usecases/update_stock_item.dart';
+import 'package:restauran_menu/features/stock/presentation/provider/category_provider.dart';
+import 'package:restauran_menu/features/stock/presentation/provider/stock_provider.dart';
+import 'package:restauran_menu/features/stock/presentation/provider/unit_provider.dart';
 import 'package:restauran_menu/features/waiters/presentation/provider/waiter_provider.dart';
 
 import '../network/dio_client.dart';
@@ -297,6 +311,28 @@ Future<void> initDependencies() async {
   sl.registerFactory(() => KitchenProvider(sl(), sl(), sl()));
   sl.registerLazySingleton(() => WaiterProvider(sl(), sl(), sl(), sl()));
   // ---------------------------
+
+  // Register Stock Datasource, Repository, UseCases, Provider
+  sl.registerLazySingleton(() => StockRemoteDataSource());
+  sl.registerLazySingleton<StockRepository>(
+    () => StockRepositoryImpl(remote: sl()),
+  );
+  sl.registerLazySingleton(() => GetStockItems(sl()));
+  sl.registerLazySingleton(() => CreateStockItem(sl()));
+  sl.registerLazySingleton(() => UpdateStockItem(sl()));
+  sl.registerLazySingleton(() => DeleteStockItem(sl()));
+  sl.registerFactory(() => StockProvider(sl(), sl(), sl(), sl()));
+
+  // Register Unit UseCases and Provider
+  sl.registerLazySingleton(() => GetUnits(sl()));
+  sl.registerLazySingleton(() => CreateUnit(sl()));
+  sl.registerFactory(() => UnitProvider(sl(), sl()));
+
+  // Register Category UseCases and Provider
+  sl.registerLazySingleton(() => GetCategories(sl()));
+  sl.registerLazySingleton(() => CreateCategory(sl()));
+  sl.registerFactory(() => CategoryProvider(sl(), sl()));
+
   // Notifications (SSE realtime order)
   // ---------------------------
   sl.registerLazySingleton<SseClient>(

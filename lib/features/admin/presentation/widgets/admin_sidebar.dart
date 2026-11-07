@@ -29,6 +29,7 @@ class AdminSidebar extends StatelessWidget {
     (icon: Icons.receipt, label: 'Buat Pesanan'), // Khusus Kasir
     (icon: Icons.receipt_long_rounded, label: 'Daftar Pesanan'), // Khusus kasir
     (icon: Icons.menu_book_rounded, label: 'Menu'),
+    (icon: Icons.store_rounded, label: 'Stock'),
     (icon: Icons.people_alt_rounded, label: 'Staf'),
     (icon: Icons.verified_user_rounded, label: 'Hak Akses'),
     (icon: Icons.swap_horiz_rounded, label: 'Transaksi'),
