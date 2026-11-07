@@ -37,20 +37,28 @@ class _StockSummaryPageState extends State<StockSummaryPage> {
             IconButton(
               icon: const Icon(Icons.list),
               tooltip: 'Stock List',
-              onPressed: () =>
-                  Navigator.pushNamed(context, NameRoute.stockList),
+              onPressed: () async {
+                await Navigator.pushNamed(context, NameRoute.stockList);
+                await sl<StockProvider>().load();
+              },
             ),
             IconButton(
               icon: const Icon(Icons.straighten),
               tooltip: 'Unit List',
-              onPressed: () =>
-                  Navigator.of(context).pushNamed(NameRoute.stockUnitsList),
+              onPressed: () async {
+                await Navigator.of(context).pushNamed(NameRoute.stockUnitsList);
+                await sl<UnitProvider>().load();
+              },
             ),
             IconButton(
               icon: const Icon(Icons.category),
               tooltip: 'Kategori List',
-              onPressed: () =>
-                  Navigator.of(context).pushNamed(NameRoute.stockCategoryList),
+              onPressed: () async {
+                await Navigator.of(
+                  context,
+                ).pushNamed(NameRoute.stockCategoryList);
+                await sl<CategoryProvider>().load();
+              },
             ),
           ],
         ),
@@ -219,61 +227,62 @@ class _StockSummaryPageState extends State<StockSummaryPage> {
                             ),
                           ],
                         ),
-                        ...items.map((i) {
-                          final unitName = uProv.units
-                              .firstWhere(
-                                (u) => u.id == i.unitId,
-                                orElse: () => Unit(id: 0, name: '-'),
-                              )
-                              .name;
-                          final categoryName = cProv.categories
-                              .firstWhere(
-                                (u) => u.id == i.categoryId,
-                                orElse: () => Category(id: 0, name: '-'),
-                              )
-                              .name;
-                          return TableRow(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: Text(i.id?.toString() ?? '-'),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: Text(i.name),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: Text(categoryName),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: Text(unitName),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: Text(
-                                  i.currentStock.toString(),
-                                  style: TextStyle(
-                                    color: i.currentStock > i.minimumStock
-                                        ? Colors.green
-                                        : Colors.red,
+                        if (sProv.status == StockStatus.loaded)
+                          ...items.map((i) {
+                            final unitName = uProv.units.firstWhere(
+                              (u) => u.id == i.unitId,
+                              orElse: () => Unit(id: 0, name: '-'),
+                            );
+                            final categoryName = cProv.categories
+                                .firstWhere(
+                                  (u) => u.id == i.categoryId,
+                                  orElse: () => Category(id: 0, name: '-'),
+                                )
+                                .name;
+                            return TableRow(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Text(i.id?.toString() ?? '-'),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Text(i.name),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Text(categoryName),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Text(unitName.name),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Text(
+                                    i.currentStock.toString(),
+                                    style: TextStyle(
+                                      color: i.currentStock > i.minimumStock
+                                          ? Colors.green
+                                          : Colors.red,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: Icon(
-                                  i.isActive
-                                      ? Icons.check_circle
-                                      : Icons.cancel,
-                                  color: i.isActive ? Colors.green : Colors.red,
-                                  size: 20,
+                                Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Icon(
+                                    i.isActive
+                                        ? Icons.check_circle
+                                        : Icons.cancel,
+                                    color: i.isActive
+                                        ? Colors.green
+                                        : Colors.red,
+                                    size: 20,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          );
-                        }),
+                              ],
+                            );
+                          }),
                       ],
                     ),
                   ),

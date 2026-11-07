@@ -84,4 +84,20 @@ class UnitProvider extends ChangeNotifier {
     );
     return unit;
   }
+
+  Future<bool> toggleActive(int id, bool active) async =>
+      await _runSubmit(() async {
+        final existing = units.firstWhere((i) => i.id == id);
+        final dto = StockUnitDto(
+          name: existing.name,
+          description: existing.description,
+          conversionFactor: existing.conversionFactor,
+          baseUnit: existing.baseUnit,
+          symbol: existing.symbol,
+          isActive: active,
+        );
+        final updated = await updateUnitUsecase.call(id, dto);
+        final index = units.indexWhere((i) => i.id == id);
+        if (index >= 0) units[index] = updated;
+      });
 }

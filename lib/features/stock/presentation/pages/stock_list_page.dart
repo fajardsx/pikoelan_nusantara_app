@@ -39,8 +39,10 @@ class StockListPage extends StatelessWidget {
 
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
-          onPressed: () =>
-              Navigator.of(context).pushNamed(NameRoute.stockAddForm),
+          onPressed: () async {
+            await Navigator.of(context).pushNamed(NameRoute.stockAddForm);
+            await sl<StockProvider>().load();
+          },
         ),
 
         // ---------- BODY ----------
@@ -195,6 +197,17 @@ class StockListPage extends StatelessWidget {
                                       provider.filteredItems[i].id!,
                                     );
                                   }
+                                },
+                              ),
+                              // isActive toggle
+                              Switch(
+                                value: provider.filteredItems[i].isActive,
+                                onChanged: (val) async {
+                                  await provider.toggleActive(
+                                    provider.filteredItems[i].id!,
+                                    val,
+                                  );
+                                  await sl<UnitProvider>().load();
                                 },
                               ),
                             ],

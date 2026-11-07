@@ -1,10 +1,11 @@
 import 'package:flutter/foundation.dart';
-import '../../domain/entities/stock_item.dart';
-import '../../domain/usecases/get_stock_items.dart';
-import '../../domain/usecases/create_stock_item.dart';
-import '../../domain/usecases/update_stock_item.dart';
-import '../../domain/usecases/delete_stock_item.dart';
+
 import '../../data/models/stock_item_dto.dart';
+import '../../domain/entities/stock_item.dart';
+import '../../domain/usecases/create_stock_item.dart';
+import '../../domain/usecases/delete_stock_item.dart';
+import '../../domain/usecases/get_stock_items.dart';
+import '../../domain/usecases/update_stock_item.dart';
 
 enum StockStatus { initial, loading, loaded, error }
 
@@ -14,7 +15,12 @@ class StockProvider extends ChangeNotifier {
   final UpdateStockItem updateStockItem;
   final DeleteStockItem deleteStockItem;
 
-  StockProvider(this.getStockItems, this.createStockItem, this.updateStockItem, this.deleteStockItem);
+  StockProvider(
+    this.getStockItems,
+    this.createStockItem,
+    this.updateStockItem,
+    this.deleteStockItem,
+  );
 
   StockStatus status = StockStatus.initial;
   String? errorMessage;
@@ -62,10 +68,13 @@ class StockProvider extends ChangeNotifier {
 
   void _applyFilters() {
     filteredItems = items.where((item) {
-      final matchesSearch = searchQuery.isEmpty ||
+      final matchesSearch =
+          searchQuery.isEmpty ||
           item.name.toLowerCase().contains(searchQuery.toLowerCase());
-      final matchesCategory = selectedCategoryId == null || item.categoryId == selectedCategoryId;
-      final matchesUnit = selectedUnitId == null || item.unitId == selectedUnitId;
+      final matchesCategory =
+          selectedCategoryId == null || item.categoryId == selectedCategoryId;
+      final matchesUnit =
+          selectedUnitId == null || item.unitId == selectedUnitId;
       return matchesSearch && matchesCategory && matchesUnit;
     }).toList();
   }
@@ -75,11 +84,12 @@ class StockProvider extends ChangeNotifier {
     items.add(item);
   });
 
-  Future<bool> editItem(int id, StockItemDto dto) async => await _runSubmit(() async {
-    final updated = await updateStockItem.call(id, dto);
-    final index = items.indexWhere((i) => i.id == id);
-    if (index >= 0) items[index] = updated;
-  });
+  Future<bool> editItem(int id, StockItemDto dto) async =>
+      await _runSubmit(() async {
+        final updated = await updateStockItem.call(id, dto);
+        final index = items.indexWhere((i) => i.id == id);
+        if (index >= 0) items[index] = updated;
+      });
 
   Future<bool> removeItem(int id) async => await _runSubmit(() async {
     await deleteStockItem.call(id);
@@ -87,6 +97,7 @@ class StockProvider extends ChangeNotifier {
   });
 
   Future<bool> _runSubmit(Future<void> Function() action) async {
+    // toggle active for stock item
     isSubmitting = true;
     submitError = null;
     notifyListeners();
@@ -102,4 +113,27 @@ class StockProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<bool> toggleActive(int id, bool active) async =>
+      await _runSubmit(() async {
+        final existing = items.firstWhere((i) => i.id == id);
+        final dto = StockItemDto(
+          id: existing.id,
+          tenantId: existing.tenantId,
+          categoryId: existing.categoryId,
+          unitId: existing.unitId,
+          sku: existing.sku,
+          name: existing.name,
+          description: existing.description,
+          currentStock: existing.currentStock,
+          minimumStock: existing.minimumStock,
+          costPrice: existing.costPrice,
+          supplier: existing.supplier,
+          notes: existing.notes,
+          isActive: active,
+        );
+        final updated = await updateStockItem.call(id, dto);
+        final index = items.indexWhere((i) => i.id == id);
+        if (index >= 0) items[index] = updated;
+      });
 }

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:restauran_menu/features/stock/data/models/stock_category_dto.dart';
 import 'package:restauran_menu/features/stock/domain/entities/category.dart';
 import 'package:restauran_menu/features/stock/domain/usecases/create_category.dart';
 import 'package:restauran_menu/features/stock/domain/usecases/delete_category.dart';
 import 'package:restauran_menu/features/stock/domain/usecases/get_categories.dart';
 import 'package:restauran_menu/features/stock/domain/usecases/update_category.dart';
+
+import '../../data/models/stock_category_dto.dart';
 
 enum CategoryStatus { initial, loading, loaded, error }
 
@@ -17,6 +18,7 @@ class CategoryProvider extends ChangeNotifier {
   CategoryProvider(
     this.getCategoriesUsecase,
     this.createCategoryUsecase,
+
     this.deleteCategoryUsecase,
     this.updateCategoryUsecase,
   );
@@ -97,4 +99,17 @@ class CategoryProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<bool> toggleActive(int id, bool active) async =>
+      await _runSubmit(() async {
+        final existing = categories.firstWhere((i) => i.id == id);
+        final dto = StockCategoryDto(
+          name: existing.name,
+          description: existing.description,
+          isActive: active,
+        );
+        final updated = await updateCategoryUsecase.call(id, dto);
+        final index = categories.indexWhere((i) => i.id == id);
+        if (index >= 0) categories[index] = updated;
+      });
 }

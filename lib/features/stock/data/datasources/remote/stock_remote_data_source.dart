@@ -30,7 +30,7 @@ class StockRemoteDataSource {
   // New method to fetch units
   Future<List<Unit>> fetchUnits() async {
     final uri = ApiKeys.stockUnit;
-    final response = await DioClient.instance.get(uri);
+    final response = await DioClient.instance.get(uri, forceRefresh: true);
     if (response.statusCode != 200) {
       throw Exception('Failed to load units');
     }
@@ -52,7 +52,7 @@ class StockRemoteDataSource {
   // New methods for categories
   Future<List<Category>> fetchCategories() async {
     final uri = ApiKeys.stockCategory;
-    final response = await DioClient.instance.get(uri);
+    final response = await DioClient.instance.get(uri, forceRefresh: true);
     if (response.statusCode != 200) {
       throw Exception('Failed to load categories');
     }
@@ -70,6 +70,7 @@ class StockRemoteDataSource {
     final e = response.data['data']['category'];
     return Category.fromJson(e);
   }
+
   // Delete Category
   Future<void> deleteCategory(int id) async {
     final uri = ApiKeys.stockCategoryById(id);

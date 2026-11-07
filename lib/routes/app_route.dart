@@ -84,15 +84,21 @@ class AppRoute {
     NameRoute.stockCategoryList: (context) => const StockCategoryListPage(),
     NameRoute.stockUnitsList: (context) => const StockUnitListPage(),
     NameRoute.stockAddForm: (context) {
-      final args = ModalRoute.of(context)?.settings.arguments as StockItem;
+      final args = ModalRoute.of(context)?.settings.arguments != null
+          ? ModalRoute.of(context)!.settings.arguments as StockItem
+          : null;
       return StockFormPage(item: args);
     },
     NameRoute.unitAddForm: (context) {
-      final args = ModalRoute.of(context)?.settings.arguments as Unit;
+      final args = ModalRoute.of(context)?.settings.arguments != null
+          ? ModalRoute.of(context)!.settings.arguments as Unit
+          : null;
       return AddUnitPage(unit: args);
     },
     NameRoute.categoryAddForm: (context) {
-      final args = ModalRoute.of(context)?.settings.arguments as Category;
+      final args = ModalRoute.of(context)?.settings.arguments != null
+          ? ModalRoute.of(context)!.settings.arguments as Category
+          : null;
       return AddCategoryPage(cat: args);
     },
   };

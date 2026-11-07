@@ -121,12 +121,19 @@ class _StockCategoryListPageState extends State<StockCategoryListPage> {
                                         ],
                                       ),
                                     );
-
                                     if (confirm == true) {
                                       await provider.removeCategory(
                                         provider.categories[i].id,
                                       );
                                     }
+                                  },
+                                ),
+                                // isActive toggle
+                                Switch(
+                                  value: cat.isActive,
+                                  onChanged: (val) async {
+                                    await provider.toggleActive(cat.id, val);
+                                    await sl<CategoryProvider>().load();
                                   },
                                 ),
                               ],

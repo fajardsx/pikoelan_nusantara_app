@@ -7,6 +7,7 @@ class Unit {
   final double? conversionFactor;
   final String? baseUnit;
   final String? description;
+  final bool? isActive;
 
   Unit({
     required this.id,
@@ -15,6 +16,7 @@ class Unit {
     this.conversionFactor,
     this.baseUnit,
     this.description,
+    this.isActive,
   });
 
   factory Unit.fromJson(Map<String, dynamic> json) {
@@ -27,12 +29,14 @@ class Unit {
           : null,
       baseUnit: json['baseUnit'] as String?,
       description: json['description'] as String?,
+      isActive: json['isActive'] != null ? json['isActive'] as bool : false,
     );
   }
 
   Map<String, dynamic> toJson() => {
     'id': id,
     'name': name,
+    'isActive': isActive,
     if (symbol != null && symbol!.isNotEmpty) 'symbol': symbol,
     if (conversionFactor != null) 'conversionFactor': conversionFactor,
     if (baseUnit != null && baseUnit!.isNotEmpty) 'baseUnit': baseUnit,

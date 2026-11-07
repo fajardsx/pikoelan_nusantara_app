@@ -126,6 +126,14 @@ class _StockUnitListPageState extends State<StockUnitListPage> {
                                     }
                                   },
                                 ),
+                                // isActive toggle
+                                Switch(
+                                  value: unit.isActive!,
+                                  onChanged: (val) async {
+                                    await provider.toggleActive(unit.id, val);
+                                    await sl<UnitProvider>().load();
+                                  },
+                                ),
                               ],
                             ),
                           );

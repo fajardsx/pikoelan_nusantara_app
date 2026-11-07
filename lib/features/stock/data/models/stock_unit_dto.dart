@@ -4,6 +4,7 @@ class StockUnitDto {
   final double? conversionFactor;
   final String? baseUnit;
   final String? description;
+  final bool? isActive;
 
   StockUnitDto({
     required this.name,
@@ -11,15 +12,16 @@ class StockUnitDto {
     this.conversionFactor,
     this.baseUnit,
     this.description,
+    this.isActive = false,
   });
 
   Map<String, dynamic> toJson() => {
-        'name': name,
-        if (symbol != null && symbol!.isNotEmpty) 'symbol': symbol,
-        if (conversionFactor != null) 'conversionFactor': conversionFactor,
-        if (baseUnit != null && baseUnit!.isNotEmpty) 'baseUnit': baseUnit,
-        if (description != null && description!.isNotEmpty)
-          'description': description,
-      };
+    'name': name,
+    if (symbol != null && symbol!.isNotEmpty) 'symbol': symbol,
+    if (conversionFactor != null) 'conversionFactor': conversionFactor,
+    if (baseUnit != null && baseUnit!.isNotEmpty) 'baseUnit': baseUnit,
+    if (description != null && description!.isNotEmpty)
+      'description': description,
+    'isActive': isActive,
+  };
 }
-
