@@ -18,7 +18,9 @@ import 'package:restauran_menu/features/members/presentation/pages/member_screen
 import 'package:restauran_menu/features/onBoarding/presentation/pages/splash_screen.dart';
 import 'package:restauran_menu/features/promos/presentation/pages/promo_screen.dart';
 import 'package:restauran_menu/features/restaurant/presentation/pages/role_selection_screen.dart';
+import 'package:restauran_menu/features/stock/domain/entities/category.dart';
 import 'package:restauran_menu/features/stock/domain/entities/stock_item.dart';
+import 'package:restauran_menu/features/stock/domain/entities/unit.dart';
 import 'package:restauran_menu/features/stock/presentation/pages/add_category_page.dart';
 import 'package:restauran_menu/features/stock/presentation/pages/add_unit_page.dart';
 import 'package:restauran_menu/features/stock/presentation/pages/stock_category_list_page.dart';
@@ -85,7 +87,13 @@ class AppRoute {
       final args = ModalRoute.of(context)?.settings.arguments as StockItem;
       return StockFormPage(item: args);
     },
-    NameRoute.unitAddForm: (context) => const AddUnitPage(),
-    NameRoute.categoryAddForm: (context) => const AddCategoryPage(),
+    NameRoute.unitAddForm: (context) {
+      final args = ModalRoute.of(context)?.settings.arguments as Unit;
+      return AddUnitPage(unit: args);
+    },
+    NameRoute.categoryAddForm: (context) {
+      final args = ModalRoute.of(context)?.settings.arguments as Category;
+      return AddCategoryPage(cat: args);
+    },
   };
 }

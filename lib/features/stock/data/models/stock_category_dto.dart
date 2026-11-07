@@ -5,9 +5,8 @@ class StockCategoryDto {
   StockCategoryDto({required this.name, this.description});
 
   Map<String, dynamic> toJson() => {
-        'name': name,
-        if (description != null && description!.isNotEmpty)
-          'description': description,
-      };
+    'name': name,
+    if (description != null && description!.isNotEmpty)
+      'description': description,
+  };
 }
-

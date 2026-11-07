@@ -67,6 +67,7 @@ class _StockUnitListPageState extends State<StockUnitListPage> {
                         onChanged: (v) => setState(() => _search = v),
                       ),
                     ),
+
                     Expanded(
                       child: ListView.builder(
                         itemCount: filtered.length,
@@ -81,12 +82,51 @@ class _StockUnitListPageState extends State<StockUnitListPage> {
                               'UOM: ${unit.symbol}',
                               style: appFonts.ts,
                             ),
-                            trailing: IconButton(
-                              icon: const Icon(Icons.edit),
-                              onPressed: () => Navigator.of(context).pushNamed(
-                                NameRoute.unitAddForm,
-                                arguments: unit,
-                              ),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.edit),
+                                  onPressed: () =>
+                                      Navigator.of(context).pushNamed(
+                                        NameRoute.unitAddForm,
+                                        arguments: unit,
+                                      ),
+                                ),
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                  ),
+                                  onPressed: () async {
+                                    final confirm = await showDialog<bool>(
+                                      context: context,
+                                      builder: (c) => AlertDialog(
+                                        title: const Text('Hapus Unit'),
+                                        content: Text(
+                                          'Yakin ingin menghapus ${unit.name}?',
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.pop(c, false),
+                                            child: const Text('Batal'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.pop(c, true),
+                                            child: const Text('Hapus'),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                    if (confirm == true) {
+                                      await provider.removeUnit(unit.id);
+                                      await sl<UnitProvider>().load();
+                                    }
+                                  },
+                                ),
+                              ],
                             ),
                           );
                         },

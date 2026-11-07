@@ -105,11 +105,15 @@ import 'package:restauran_menu/features/stock/domain/repositories/stock_reposito
 import 'package:restauran_menu/features/stock/domain/usecases/create_category.dart';
 import 'package:restauran_menu/features/stock/domain/usecases/create_stock_item.dart';
 import 'package:restauran_menu/features/stock/domain/usecases/create_unit.dart';
+import 'package:restauran_menu/features/stock/domain/usecases/delete_category.dart';
 import 'package:restauran_menu/features/stock/domain/usecases/delete_stock_item.dart';
+import 'package:restauran_menu/features/stock/domain/usecases/delete_unit.dart';
 import 'package:restauran_menu/features/stock/domain/usecases/get_categories.dart';
 import 'package:restauran_menu/features/stock/domain/usecases/get_stock_items.dart';
 import 'package:restauran_menu/features/stock/domain/usecases/get_units.dart';
+import 'package:restauran_menu/features/stock/domain/usecases/update_category.dart';
 import 'package:restauran_menu/features/stock/domain/usecases/update_stock_item.dart';
+import 'package:restauran_menu/features/stock/domain/usecases/update_unit.dart';
 import 'package:restauran_menu/features/stock/presentation/provider/category_provider.dart';
 import 'package:restauran_menu/features/stock/presentation/provider/stock_provider.dart';
 import 'package:restauran_menu/features/stock/presentation/provider/unit_provider.dart';
@@ -326,12 +330,16 @@ Future<void> initDependencies() async {
   // Register Unit UseCases and Provider
   sl.registerLazySingleton(() => GetUnits(sl()));
   sl.registerLazySingleton(() => CreateUnit(sl()));
-  sl.registerFactory(() => UnitProvider(sl(), sl()));
+  sl.registerLazySingleton(() => UpdateUnit(sl()));
+  sl.registerLazySingleton(() => DeleteUnit(sl()));
+  sl.registerFactory(() => UnitProvider(sl(), sl(), sl(), sl()));
 
   // Register Category UseCases and Provider
   sl.registerLazySingleton(() => GetCategories(sl()));
   sl.registerLazySingleton(() => CreateCategory(sl()));
-  sl.registerFactory(() => CategoryProvider(sl(), sl()));
+  sl.registerLazySingleton(() => UpdateCategory(sl()));
+  sl.registerLazySingleton(() => DeleteCategory(sl()));
+  sl.registerFactory(() => CategoryProvider(sl(), sl(), sl(), sl()));
 
   // Notifications (SSE realtime order)
   // ---------------------------

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:restauran_menu/core/di/injector.dart';
+import 'package:restauran_menu/features/stock/domain/entities/category.dart';
 
 import '../../data/models/stock_category_dto.dart';
 import '../provider/category_provider.dart';
 
 class AddCategoryPage extends StatefulWidget {
-  const AddCategoryPage({super.key});
+  final Category? cat;
+  const AddCategoryPage({super.key, this.cat});
 
   @override
   State<AddCategoryPage> createState() => _AddCategoryPageState();
@@ -15,6 +17,17 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
   final _formKey = GlobalKey<FormState>();
   String _name = '';
   String? _description;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.cat != null) {
+      _name = widget.cat!.name;
+      _description = widget.cat!.description;
+    } else {
+      _name = '';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +41,14 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
           child: ListView(
             children: [
               TextFormField(
+                initialValue: _name,
                 decoration: const InputDecoration(labelText: 'Nama Kategori'),
                 validator: (v) => v == null || v.isEmpty ? 'Wajib' : null,
                 onSaved: (v) => _name = v!.trim(),
               ),
               const SizedBox(height: 10),
               TextFormField(
+                initialValue: _description,
                 decoration: const InputDecoration(labelText: 'Deskripsi'),
                 onSaved: (v) => _description = v?.trim(),
               ),

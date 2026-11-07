@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:restauran_menu/core/di/injector.dart';
+import 'package:restauran_menu/features/stock/domain/entities/unit.dart';
 
 import '../../data/models/stock_unit_dto.dart';
 import '../provider/unit_provider.dart';
 
 class AddUnitPage extends StatefulWidget {
-  const AddUnitPage({super.key});
+  final Unit? unit;
+  const AddUnitPage({super.key, this.unit});
 
   @override
   State<AddUnitPage> createState() => _AddUnitPageState();
@@ -20,10 +22,26 @@ class _AddUnitPageState extends State<AddUnitPage> {
   String? _description;
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.unit != null) {
+      _name = widget.unit!.name;
+      _symbol = widget.unit!.symbol;
+      _conversionFactor = widget.unit!.conversionFactor;
+      _baseUnit = widget.unit!.baseUnit;
+      _description = widget.unit!.description;
+    } else {
+      _name = '';
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final provider = sl<UnitProvider>();
     return Scaffold(
-      appBar: AppBar(title: const Text('Tambah Unit')),
+      appBar: AppBar(
+        title: Text(widget.unit == null ? 'Tambah Unit' : 'Ubah Unit'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -31,27 +49,40 @@ class _AddUnitPageState extends State<AddUnitPage> {
           child: ListView(
             children: [
               TextFormField(
+                initialValue: _name,
                 decoration: const InputDecoration(labelText: 'Nama Unit'),
                 validator: (v) => v == null || v.isEmpty ? 'Wajib' : null,
                 onSaved: (v) => _name = v!.trim(),
               ),
+              const SizedBox(height: 10),
               TextFormField(
+                initialValue: _symbol,
                 decoration: const InputDecoration(labelText: 'Simbol'),
                 onSaved: (v) => _symbol = v?.trim(),
               ),
+              const SizedBox(height: 10),
               TextFormField(
+                initialValue: _conversionFactor.toString(),
                 decoration: const InputDecoration(labelText: 'Faktor Konversi'),
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                onSaved: (v) => _conversionFactor = v != null ? double.tryParse(v) : null,
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                onSaved: (v) =>
+                    _conversionFactor = v != null ? double.tryParse(v) : null,
               ),
+              const SizedBox(height: 10),
               TextFormField(
+                initialValue: _baseUnit,
                 decoration: const InputDecoration(labelText: 'Unit Dasar'),
                 onSaved: (v) => _baseUnit = v?.trim(),
               ),
+              const SizedBox(height: 10),
               TextFormField(
+                initialValue: _description,
                 decoration: const InputDecoration(labelText: 'Deskripsi'),
                 onSaved: (v) => _description = v?.trim(),
               ),
+
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: provider.isSubmitting ? null : _submit,
@@ -84,4 +115,3 @@ class _AddUnitPageState extends State<AddUnitPage> {
     if (success && mounted) Navigator.of(context).pop();
   }
 }
-

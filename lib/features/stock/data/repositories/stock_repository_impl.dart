@@ -56,4 +56,16 @@ class StockRepositoryImpl implements StockRepository {
 
   @override
   Future<List<Category>> getCategories() async => await remote.fetchCategories();
+
+  @override
+  Future<void> deleteCategory(int id) async => await remote.deleteCategory(id);
+
+  @override
+  Future<Category> updateCategory(int id, StockCategoryDto dto) async => await remote.updateCategory(id, dto);
+
+  @override
+  Future<void> deleteUnit(int id) async => await remote.deleteUnit(id);
+
+  @override
+  Future<Unit> updateUnit(int id, StockUnitDto dto) async => await remote.updateUnit(id, dto);
 }

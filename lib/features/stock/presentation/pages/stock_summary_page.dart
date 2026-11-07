@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restauran_menu/core/di/injector.dart';
 import 'package:restauran_menu/core/themes/app_fonts.dart';
+import 'package:restauran_menu/core/themes/restaurant_colors.dart';
 import 'package:restauran_menu/features/stock/domain/entities/category.dart';
 import 'package:restauran_menu/features/stock/domain/entities/unit.dart';
 import 'package:restauran_menu/routes/name_route.dart';
@@ -152,48 +153,68 @@ class _StockSummaryPageState extends State<StockSummaryPage> {
                       },
                       children: [
                         const TableRow(
-                          decoration: BoxDecoration(color: Colors.grey),
+                          decoration: BoxDecoration(
+                            color: RestaurantColors.primaryBrown,
+                          ),
                           children: [
                             Padding(
                               padding: EdgeInsets.all(8),
                               child: Text(
                                 'ID',
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                             Padding(
                               padding: EdgeInsets.all(8),
                               child: Text(
                                 'Nama',
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                             Padding(
                               padding: EdgeInsets.all(8),
                               child: Text(
                                 'Kategori',
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                             Padding(
                               padding: EdgeInsets.all(8),
                               child: Text(
                                 'UOM',
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                             Padding(
                               padding: EdgeInsets.all(8),
                               child: Text(
                                 'Stok',
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                             Padding(
                               padding: EdgeInsets.all(8),
                               child: Text(
                                 'Active',
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ],

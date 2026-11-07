@@ -70,6 +70,43 @@ class StockRemoteDataSource {
     final e = response.data['data']['category'];
     return Category.fromJson(e);
   }
+  // Delete Category
+  Future<void> deleteCategory(int id) async {
+    final uri = ApiKeys.stockCategoryById(id);
+    final response = await DioClient.instance.delete(uri.toString());
+    if (response.statusCode != 200) throw Exception('Delete category failed');
+  }
+
+  // Update Category
+  Future<Category> updateCategory(int id, StockCategoryDto dto) async {
+    final uri = ApiKeys.stockCategoryById(id);
+    final response = await DioClient.instance.put(
+      uri,
+      data: json.encode(dto.toJson()),
+    );
+    if (response.statusCode != 200) throw Exception('Update category failed');
+    final e = response.data['data']['category'];
+    return Category.fromJson(e);
+  }
+
+  // Delete Unit
+  Future<void> deleteUnit(int id) async {
+    final uri = '${ApiKeys.stockUnit}/$id';
+    final response = await DioClient.instance.delete(uri);
+    if (response.statusCode != 200) throw Exception('Delete unit failed');
+  }
+
+  // Update Unit
+  Future<Unit> updateUnit(int id, StockUnitDto dto) async {
+    final uri = '${ApiKeys.stockUnit}/$id';
+    final response = await DioClient.instance.put(
+      uri,
+      data: json.encode(dto.toJson()),
+    );
+    if (response.statusCode != 200) throw Exception('Update unit failed');
+    final e = response.data['data']['unit'];
+    return Unit.fromJson(e);
+  }
 
   Future<StockItem> createStockItem(StockItemDto dto) async {
     final uri = ApiKeys.stockItems;

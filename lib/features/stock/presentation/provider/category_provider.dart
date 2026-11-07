@@ -2,15 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:restauran_menu/features/stock/data/models/stock_category_dto.dart';
 import 'package:restauran_menu/features/stock/domain/entities/category.dart';
 import 'package:restauran_menu/features/stock/domain/usecases/create_category.dart';
+import 'package:restauran_menu/features/stock/domain/usecases/delete_category.dart';
 import 'package:restauran_menu/features/stock/domain/usecases/get_categories.dart';
+import 'package:restauran_menu/features/stock/domain/usecases/update_category.dart';
 
 enum CategoryStatus { initial, loading, loaded, error }
 
 class CategoryProvider extends ChangeNotifier {
-  final GetCategories getCategories;
-  final CreateCategory createCategory;
+  final GetCategories getCategoriesUsecase;
+  final CreateCategory createCategoryUsecase;
+  final DeleteCategory deleteCategoryUsecase;
+  final UpdateCategory updateCategoryUsecase;
 
-  CategoryProvider(this.getCategories, this.createCategory);
+  CategoryProvider(
+    this.getCategoriesUsecase,
+    this.createCategoryUsecase,
+    this.deleteCategoryUsecase,
+    this.updateCategoryUsecase,
+  );
 
   CategoryStatus status = CategoryStatus.initial;
   String? errorMessage;
@@ -22,7 +31,7 @@ class CategoryProvider extends ChangeNotifier {
     status = CategoryStatus.loading;
     notifyListeners();
     try {
-      categories = await getCategories.call();
+      categories = await getCategoriesUsecase.call();
       status = CategoryStatus.loaded;
     } catch (e) {
       errorMessage = e.toString();
@@ -33,10 +42,11 @@ class CategoryProvider extends ChangeNotifier {
 
   Future<bool> addCategory(StockCategoryDto dto) async {
     isSubmitting = true;
+
     submitError = null;
     notifyListeners();
     try {
-      final category = await createCategory.call(dto);
+      final category = await createCategoryUsecase.call(dto);
       categories.add(category);
       isSubmitting = false;
       notifyListeners();
@@ -49,10 +59,19 @@ class CategoryProvider extends ChangeNotifier {
     }
   }
 
+  // Delete Category
   Future<bool> removeCategory(int id) async => await _runSubmit(() async {
-    //await deleteStockItem.call(id);
-    categories.removeWhere((i) => i.id == id);
+    await deleteCategoryUsecase.call(id);
+    categories.removeWhere((c) => c.id == id);
   });
+
+  // Update Category
+  Future<bool> updateCategory(int id, StockCategoryDto dto) async =>
+      await _runSubmit(() async {
+        final upd = await updateCategoryUsecase.call(id, dto);
+        final idx = categories.indexWhere((c) => c.id == id);
+        if (idx != -1) categories[idx] = upd;
+      });
 
   Category? getCategoriById(int id) {
     final category = categories.firstWhere(

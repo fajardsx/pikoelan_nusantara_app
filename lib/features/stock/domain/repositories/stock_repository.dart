@@ -18,10 +18,12 @@ abstract class StockRepository {
   Future<StockItem> createStockItem(StockItemDto dto);
   Future<StockItem> updateStockItem(int id, StockItemDto dto);
   Future<void> deleteStockItem(int id);
-  // New unit methods
-  Future<List<Unit>> getUnits();
   Future<Unit> createUnit(StockUnitDto dto);
-  // New category methods
+  Future<List<Unit>> getUnits();
   Future<List<Category>> getCategories();
   Future<Category> createCategory(StockCategoryDto dto);
+  Future<void> deleteCategory(int id);
+  Future<Category> updateCategory(int id, StockCategoryDto dto);
+  Future<void> deleteUnit(int id);
+  Future<Unit> updateUnit(int id, StockUnitDto dto);
 }
