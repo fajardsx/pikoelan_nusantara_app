@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restauran_menu/core/di/injector.dart';
+import 'package:restauran_menu/core/themes/app_fonts.dart';
+import 'package:restauran_menu/features/stock/domain/entities/category.dart';
+import 'package:restauran_menu/features/stock/domain/entities/unit.dart';
 import 'package:restauran_menu/routes/name_route.dart';
 
 import '../provider/category_provider.dart';
@@ -32,8 +35,21 @@ class _StockSummaryPageState extends State<StockSummaryPage> {
           actions: [
             IconButton(
               icon: const Icon(Icons.list),
+              tooltip: 'Stock List',
               onPressed: () =>
                   Navigator.pushNamed(context, NameRoute.stockList),
+            ),
+            IconButton(
+              icon: const Icon(Icons.straighten),
+              tooltip: 'Unit List',
+              onPressed: () =>
+                  Navigator.of(context).pushNamed(NameRoute.stockUnitsList),
+            ),
+            IconButton(
+              icon: const Icon(Icons.category),
+              tooltip: 'Kategori List',
+              onPressed: () =>
+                  Navigator.of(context).pushNamed(NameRoute.stockCategoryList),
             ),
           ],
         ),
@@ -51,33 +67,30 @@ class _StockSummaryPageState extends State<StockSummaryPage> {
             return ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                Row(
-                  children: [
-                    _card('Total', '${items.length}', Colors.blue),
-                    const SizedBox(width: 8),
-                    _card(
-                      'Rendah',
-                      '${items.where((i) => i.currentStock <= i.minimumStock).length}',
-                      Colors.orange,
+                // Row(
+                //   children: [
+                //     _card('Total', '${items.length}', Colors.blue),
+                //     const SizedBox(width: 8),
+                //     _card(
+                //       'Rendah',
+                //       '${items.where((i) => i.currentStock <= i.minimumStock).length}',
+                //       Colors.orange,
+                //     ),
+                //   ],
+                // ),
+                const SizedBox(height: 10),
+                Expanded(
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      labelText: 'Cari..',
+                      border: OutlineInputBorder(),
                     ),
-                  ],
+                    onChanged: (v) => setState(() => _q = v),
+                  ),
                 ),
-                const SizedBox(height: 10),
-
-                const SizedBox(height: 10),
+                const SizedBox(height: 8),
                 Row(
                   children: [
-                    Expanded(
-                      flex: 2,
-                      child: TextField(
-                        decoration: const InputDecoration(
-                          labelText: 'Cari..',
-                          border: OutlineInputBorder(),
-                        ),
-                        onChanged: (v) => setState(() => _q = v),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
                     Expanded(
                       flex: 1,
                       child: DropdownButtonFormField<int?>(
@@ -120,21 +133,127 @@ class _StockSummaryPageState extends State<StockSummaryPage> {
                   ],
                 ),
                 const SizedBox(height: 10),
-                const Text('List Stok:'),
+                Text('Daftar Stok :', style: appFonts.bodyLarge.bold.ts),
                 const SizedBox(height: 10),
-                ...items.map(
-                  (i) => Card(
-                    child: ListTile(
-                      title: Text(i.name),
-                      subtitle: Text('Stok: ${i.currentStock}'),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.edit),
-                        onPressed: () => Navigator.pushNamed(
-                          context,
-                          NameRoute.stockAddForm,
-                          arguments: i,
+                SizedBox(
+                  width: double.infinity,
+                  child: SingleChildScrollView(
+                    child: Table(
+                      border: TableBorder.all(),
+                      defaultVerticalAlignment:
+                          TableCellVerticalAlignment.middle,
+                      columnWidths: const {
+                        0: IntrinsicColumnWidth(),
+                        1: FlexColumnWidth(),
+                        2: FlexColumnWidth(),
+                        3: FlexColumnWidth(),
+                        4: FlexColumnWidth(),
+                        5: FlexColumnWidth(),
+                      },
+                      children: [
+                        const TableRow(
+                          decoration: BoxDecoration(color: Colors.grey),
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Text(
+                                'ID',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Text(
+                                'Nama',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Text(
+                                'Kategori',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Text(
+                                'UOM',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Text(
+                                'Stok',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Text(
+                                'Active',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
+                        ...items.map((i) {
+                          final unitName = uProv.units
+                              .firstWhere(
+                                (u) => u.id == i.unitId,
+                                orElse: () => Unit(id: 0, name: '-'),
+                              )
+                              .name;
+                          final categoryName = cProv.categories
+                              .firstWhere(
+                                (u) => u.id == i.categoryId,
+                                orElse: () => Category(id: 0, name: '-'),
+                              )
+                              .name;
+                          return TableRow(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Text(i.id?.toString() ?? '-'),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Text(i.name),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Text(categoryName),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Text(unitName),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Text(
+                                  i.currentStock.toString(),
+                                  style: TextStyle(
+                                    color: i.currentStock > i.minimumStock
+                                        ? Colors.green
+                                        : Colors.red,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Icon(
+                                  i.isActive
+                                      ? Icons.check_circle
+                                      : Icons.cancel,
+                                  color: i.isActive ? Colors.green : Colors.red,
+                                  size: 20,
+                                ),
+                              ),
+                            ],
+                          );
+                        }),
+                      ],
                     ),
                   ),
                 ),

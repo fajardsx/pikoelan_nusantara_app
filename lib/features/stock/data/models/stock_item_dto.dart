@@ -1,3 +1,5 @@
+import 'package:restauran_menu/core/common/common_utils.dart';
+
 class StockItemDto {
   final int? id;
   final int tenantId;
@@ -30,34 +32,34 @@ class StockItemDto {
   });
 
   factory StockItemDto.fromJson(Map<String, dynamic> json) => StockItemDto(
-        id: json['id'] as int?,
-        tenantId: json['tenantId'] as int,
-        categoryId: json['categoryId'] as int?,
-        unitId: json['unitId'] as int,
-        sku: json['sku'] as String?,
-        name: json['name'] as String,
-        description: json['description'] as String?,
-        currentStock: (json['currentStock'] as num).toDouble(),
-        minimumStock: (json['minimumStock'] as num).toDouble(),
-        costPrice: json['costPrice'] != null ? (json['costPrice'] as num).toDouble() : null,
-        supplier: json['supplier'] as String?,
-        notes: json['notes'] as String?,
-        isActive: json['isActive'] as bool,
-      );
+    id: json['id'] as int?,
+    tenantId: json['tenantId'] as int,
+    categoryId: json['categoryId'] as int?,
+    unitId: json['unitId'] as int,
+    sku: json['sku'] as String?,
+    name: json['name'] as String,
+    description: json['description'] as String?,
+    currentStock: toDouble(json['currentStock']),
+    minimumStock: toDouble(json['minimumStock']),
+    costPrice: json['costPrice'] != null ? toDouble(json['costPrice']) : null,
+    supplier: json['supplier'] as String?,
+    notes: json['notes'] as String?,
+    isActive: json['isActive'] as bool,
+  );
 
   Map<String, dynamic> toJson() => {
-        if (id != null) 'id': id,
-        'tenantId': tenantId,
-        if (categoryId != null) 'categoryId': categoryId,
-        'unitId': unitId,
-        if (sku != null) 'sku': sku,
-        'name': name,
-        if (description != null) 'description': description,
-        'currentStock': currentStock,
-        'minimumStock': minimumStock,
-        if (costPrice != null) 'costPrice': costPrice,
-        if (supplier != null) 'supplier': supplier,
-        if (notes != null) 'notes': notes,
-        'isActive': isActive,
-      };
+    if (id != null) 'id': id,
+    'tenantId': tenantId,
+    if (categoryId != null) 'categoryId': categoryId,
+    'unitId': unitId,
+    if (sku != null) 'sku': sku,
+    'name': name,
+    if (description != null) 'description': description,
+    'currentStock': currentStock,
+    'minimumStock': minimumStock,
+    if (costPrice != null) 'costPrice': costPrice,
+    if (supplier != null) 'supplier': supplier,
+    if (notes != null) 'notes': notes,
+    'isActive': isActive,
+  };
 }

@@ -1,8 +1,9 @@
 import 'package:flutter/foundation.dart';
-import '../../domain/usecases/get_units.dart';
-import '../../domain/usecases/create_unit.dart';
+
 import '../../data/models/stock_unit_dto.dart';
 import '../../domain/entities/unit.dart';
+import '../../domain/usecases/create_unit.dart';
+import '../../domain/usecases/get_units.dart';
 
 enum UnitStatus { initial, loading, loaded, error }
 
@@ -51,5 +52,13 @@ class UnitProvider extends ChangeNotifier {
     } finally {
       notifyListeners();
     }
+  }
+
+  Unit? getUnitById(int id) {
+    final unit = units.firstWhere(
+      (u) => u.id == id,
+      orElse: () => Unit(id: 0, name: '-'),
+    );
+    return unit;
   }
 }

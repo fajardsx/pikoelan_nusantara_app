@@ -48,4 +48,34 @@ class CategoryProvider extends ChangeNotifier {
       return false;
     }
   }
+
+  Future<bool> removeCategory(int id) async => await _runSubmit(() async {
+    //await deleteStockItem.call(id);
+    categories.removeWhere((i) => i.id == id);
+  });
+
+  Category? getCategoriById(int id) {
+    final category = categories.firstWhere(
+      (u) => u.id == id,
+      orElse: () => Category(id: 0, name: '-'),
+    );
+    return category;
+  }
+
+  Future<bool> _runSubmit(Future<void> Function() action) async {
+    isSubmitting = true;
+    submitError = null;
+    notifyListeners();
+    try {
+      await action();
+      isSubmitting = false;
+      return true;
+    } catch (e) {
+      isSubmitting = false;
+      submitError = e.toString();
+      return false;
+    } finally {
+      notifyListeners();
+    }
+  }
 }

@@ -19,20 +19,55 @@ class StockProvider extends ChangeNotifier {
   StockStatus status = StockStatus.initial;
   String? errorMessage;
   List<StockItem> items = [];
+  List<StockItem> filteredItems = [];
   bool isSubmitting = false;
   String? submitError;
+
+  // filter fields
+  String searchQuery = '';
+  int? selectedCategoryId;
+  int? selectedUnitId;
 
   Future<void> load() async {
     status = StockStatus.loading;
     notifyListeners();
     try {
       items = await getStockItems.call();
+      _applyFilters();
       status = StockStatus.loaded;
     } catch (e) {
       errorMessage = e.toString();
       status = StockStatus.error;
     }
     notifyListeners();
+  }
+
+  void setSearch(String query) {
+    searchQuery = query;
+    _applyFilters();
+    notifyListeners();
+  }
+
+  void setCategory(int? id) {
+    selectedCategoryId = id;
+    _applyFilters();
+    notifyListeners();
+  }
+
+  void setUnit(int? id) {
+    selectedUnitId = id;
+    _applyFilters();
+    notifyListeners();
+  }
+
+  void _applyFilters() {
+    filteredItems = items.where((item) {
+      final matchesSearch = searchQuery.isEmpty ||
+          item.name.toLowerCase().contains(searchQuery.toLowerCase());
+      final matchesCategory = selectedCategoryId == null || item.categoryId == selectedCategoryId;
+      final matchesUnit = selectedUnitId == null || item.unitId == selectedUnitId;
+      return matchesSearch && matchesCategory && matchesUnit;
+    }).toList();
   }
 
   Future<bool> addItem(StockItemDto dto) async => await _runSubmit(() async {
