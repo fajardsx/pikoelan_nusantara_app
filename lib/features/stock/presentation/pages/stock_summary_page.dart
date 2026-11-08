@@ -54,7 +54,7 @@ class _StockSummaryPageState extends State<StockSummaryPage> {
       ],
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Stock'),
+          title: const Text('Ringkasan Stock'),
           automaticallyImplyLeading: false,
           actions: [
             IconButton(
@@ -65,10 +65,11 @@ class _StockSummaryPageState extends State<StockSummaryPage> {
                 await sl<StockProvider>().load();
                 await sl<CategoryProvider>().load();
                 await sl<UnitProvider>().load();
+                await sl<StockMovementProvider>().load();
               },
             ),
             IconButton(
-              icon: const Icon(Icons.moving),
+              icon: const Icon(Icons.move_up),
               tooltip: 'Stock Movement',
               onPressed: () async {
                 await Navigator.pushNamed(context, NameRoute.stockMovementList);
@@ -193,6 +194,9 @@ class _StockSummaryPageState extends State<StockSummaryPage> {
                     const SizedBox(height: 10),
                     buildStockTable(sProv, items, uProv, cProv),
                     const SizedBox(height: 20),
+                    const Divider(height: 1),
+
+                    const SizedBox(height: 20),
                     Text(
                       'Pergerakan Stok :',
                       style: appFonts.bodyLarge.bold.ts,
@@ -222,12 +226,11 @@ class _StockSummaryPageState extends State<StockSummaryPage> {
           columnWidths: const {
             0: IntrinsicColumnWidth(),
             1: FlexColumnWidth(),
-            2: FlexColumnWidth(),
+            2: IntrinsicColumnWidth(),
             3: IntrinsicColumnWidth(),
             4: IntrinsicColumnWidth(),
-            5: IntrinsicColumnWidth(),
-            6: FlexColumnWidth(),
-            7: IntrinsicColumnWidth(),
+            5: FlexColumnWidth(),
+            6: IntrinsicColumnWidth(),
           },
           children: [
             const TableRow(
@@ -279,17 +282,6 @@ class _StockSummaryPageState extends State<StockSummaryPage> {
                   padding: EdgeInsets.all(8),
                   child: Text(
                     'Stok',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(8),
-                  child: Text(
-                    'Min Stok',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -356,19 +348,11 @@ class _StockSummaryPageState extends State<StockSummaryPage> {
                         '${i.currentStock.toString()} (${unitName.symbol})',
                         textAlign: TextAlign.center,
                         style: TextStyle(
+                          fontWeight: FontWeight.bold,
                           color: i.currentStock > i.minimumStock
                               ? Colors.green
                               : Colors.red,
                         ),
-                      ),
-                    ),
-
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Text(
-                        '${i.minimumStock.toString()} (${unitName.symbol})',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(color: Colors.red),
                       ),
                     ),
                     Padding(
@@ -414,11 +398,15 @@ class _StockSummaryPageState extends State<StockSummaryPage> {
             2: IntrinsicColumnWidth(),
             3: IntrinsicColumnWidth(),
             4: IntrinsicColumnWidth(),
-            5: FlexColumnWidth(),
+            5: IntrinsicColumnWidth(),
+            6: IntrinsicColumnWidth(),
+            7: FlexColumnWidth(),
           },
           children: [
             const TableRow(
-              decoration: BoxDecoration(color: RestaurantColors.primaryBrown),
+              decoration: BoxDecoration(
+                color: RestaurantColors.cardImageBackground,
+              ),
               children: [
                 Padding(
                   padding: EdgeInsets.all(8),
@@ -476,6 +464,28 @@ class _StockSummaryPageState extends State<StockSummaryPage> {
                 Padding(
                   padding: EdgeInsets.all(8),
                   child: Text(
+                    'Stock Before',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Text(
+                    'Stock After',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Text(
                     'Tanggal',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -523,6 +533,25 @@ class _StockSummaryPageState extends State<StockSummaryPage> {
                     padding: const EdgeInsets.all(8),
                     child: Text(
                       '${isIn ? '+' : (isOut ? '-' : '')}${m.quantity}',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: color,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Text(
+                      '${m.stockBefore}',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Text(
+                      '${m.stockAfter}',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,

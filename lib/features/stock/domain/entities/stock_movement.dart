@@ -48,6 +48,8 @@ class StockMovement {
   final String? notes;
   final DateTime movementDate;
   final DateTime? createdAt;
+  final double? stockBefore;
+  final double? stockAfter;
 
   StockMovement({
     this.id,
@@ -61,6 +63,8 @@ class StockMovement {
     this.notes,
     required this.movementDate,
     this.createdAt,
+    this.stockBefore,
+    this.stockAfter,
   });
 
   factory StockMovement.fromJson(Map<String, dynamic> json) {
@@ -84,6 +88,12 @@ class StockMovement {
       createdAt: json['createdAt'] != null
           ? DateTime.parse(json['createdAt'] as String)
           : null,
+      stockBefore: json['stockBefore'] != null
+          ? toDouble(json['stockBefore'])
+          : (json['stock_before'] != null ? toDouble(json['stock_before']) : null),
+      stockAfter: json['stockAfter'] != null
+          ? toDouble(json['stockAfter'])
+          : (json['stock_after'] != null ? toDouble(json['stock_after']) : null),
     );
   }
 }
