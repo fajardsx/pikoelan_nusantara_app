@@ -30,6 +30,10 @@ class _StockFormPageState extends State<StockFormPage> {
   String? _supplier;
   String? _notes;
 
+  final stockProvider = sl<StockProvider>();
+  final categoryProvider = sl<CategoryProvider>();
+  final unitProvider = sl<UnitProvider>();
+
   @override
   void initState() {
     super.initState();
@@ -52,10 +56,6 @@ class _StockFormPageState extends State<StockFormPage> {
 
   @override
   Widget build(BuildContext context) {
-    final stockProvider = sl<StockProvider>();
-    final categoryProvider = sl<CategoryProvider>();
-    final unitProvider = sl<UnitProvider>();
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.item == null ? 'Tambah Stok' : 'Ubah Stok'),

@@ -99,22 +99,29 @@ import 'package:restauran_menu/features/staff/domain/usecases/get_staff_usecase.
 import 'package:restauran_menu/features/staff/domain/usecases/invite_staff_usecase.dart';
 import 'package:restauran_menu/features/staff/domain/usecases/remove_staff_usecase.dart';
 import 'package:restauran_menu/features/staff/presentation/providers/staff_provider.dart';
+import 'package:restauran_menu/features/stock/data/datasources/remote/stock_movement_remote_data_source.dart';
 import 'package:restauran_menu/features/stock/data/datasources/remote/stock_remote_data_source.dart';
+import 'package:restauran_menu/features/stock/data/repositories/stock_movement_repository_impl.dart';
 import 'package:restauran_menu/features/stock/data/repositories/stock_repository_impl.dart';
+import 'package:restauran_menu/features/stock/domain/repositories/stock_movement_repository.dart';
 import 'package:restauran_menu/features/stock/domain/repositories/stock_repository.dart';
 import 'package:restauran_menu/features/stock/domain/usecases/create_category.dart';
 import 'package:restauran_menu/features/stock/domain/usecases/create_stock_item.dart';
+import 'package:restauran_menu/features/stock/domain/usecases/create_stock_movement.dart';
 import 'package:restauran_menu/features/stock/domain/usecases/create_unit.dart';
 import 'package:restauran_menu/features/stock/domain/usecases/delete_category.dart';
 import 'package:restauran_menu/features/stock/domain/usecases/delete_stock_item.dart';
+import 'package:restauran_menu/features/stock/domain/usecases/delete_stock_movement.dart';
 import 'package:restauran_menu/features/stock/domain/usecases/delete_unit.dart';
 import 'package:restauran_menu/features/stock/domain/usecases/get_categories.dart';
 import 'package:restauran_menu/features/stock/domain/usecases/get_stock_items.dart';
+import 'package:restauran_menu/features/stock/domain/usecases/get_stock_movements.dart';
 import 'package:restauran_menu/features/stock/domain/usecases/get_units.dart';
 import 'package:restauran_menu/features/stock/domain/usecases/update_category.dart';
 import 'package:restauran_menu/features/stock/domain/usecases/update_stock_item.dart';
 import 'package:restauran_menu/features/stock/domain/usecases/update_unit.dart';
 import 'package:restauran_menu/features/stock/presentation/provider/category_provider.dart';
+import 'package:restauran_menu/features/stock/presentation/provider/stock_movement_provider.dart';
 import 'package:restauran_menu/features/stock/presentation/provider/stock_provider.dart';
 import 'package:restauran_menu/features/stock/presentation/provider/unit_provider.dart';
 import 'package:restauran_menu/features/waiters/presentation/provider/waiter_provider.dart';
@@ -240,6 +247,15 @@ Future<void> initDependencies() async {
   );
   // ------------ repository ---------------
   sl.registerLazySingleton<MenuDataRepository>(() => MenuRepositoryImpl(sl()));
+  // Stock Movements
+  sl.registerLazySingleton(() => StockMovementRemoteDataSource());
+  sl.registerLazySingleton<StockMovementRepository>(
+    () => StockMovementRepositoryImpl(remote: sl()),
+  );
+  sl.registerLazySingleton(() => GetStockMovements(sl()));
+  sl.registerLazySingleton(() => CreateStockMovement(sl()));
+  sl.registerLazySingleton(() => DeleteStockMovement(sl()));
+  sl.registerFactory(() => StockMovementProvider(sl(), sl(), sl()));
   // ------------ usecase ---------------
   sl.registerLazySingleton(() => GetCategoriesUsecase(sl()));
   sl.registerLazySingleton(() => CreateCategoryUsecase(sl()));

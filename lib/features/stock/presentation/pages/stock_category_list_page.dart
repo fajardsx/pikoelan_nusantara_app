@@ -18,8 +18,8 @@ class _StockCategoryListPageState extends State<StockCategoryListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => sl<CategoryProvider>()..load(),
+    return ChangeNotifierProvider.value(
+      value: sl<CategoryProvider>()..load(),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Daftar Kategori'),
@@ -71,8 +71,11 @@ class _StockCategoryListPageState extends State<StockCategoryListPage> {
                         onChanged: (v) => setState(() => _search = v),
                       ),
                     ),
+                    const SizedBox(height: 8),
+                    const Divider(height: 1),
                     Expanded(
-                      child: ListView.builder(
+                      child: ListView.separated(
+                        separatorBuilder: (_, _) => const Divider(height: 1),
                         itemCount: filtered.length,
                         itemBuilder: (c, i) {
                           final cat = filtered[i];
@@ -133,7 +136,7 @@ class _StockCategoryListPageState extends State<StockCategoryListPage> {
                                   value: cat.isActive,
                                   onChanged: (val) async {
                                     await provider.toggleActive(cat.id, val);
-                                    await sl<CategoryProvider>().load();
+                                    await provider.load();
                                   },
                                 ),
                               ],

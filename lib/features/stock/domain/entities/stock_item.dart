@@ -14,6 +14,8 @@ class StockItem {
   final String? supplier;
   final String? notes;
   final bool isActive;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   StockItem({
     this.id,
@@ -29,6 +31,8 @@ class StockItem {
     this.supplier,
     this.notes,
     required this.isActive,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory StockItem.fromJson(Map<String, dynamic> json) {
@@ -46,6 +50,16 @@ class StockItem {
       supplier: json['supplier'] as String?,
       notes: json['notes'] as String?,
       isActive: json['isActive'] as bool,
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'] as String)
+          : (json['created_at'] != null
+              ? DateTime.parse(json['created_at'] as String)
+              : null),
+      updatedAt: json['updatedAt'] != null
+          ? DateTime.parse(json['updatedAt'] as String)
+          : (json['updated_at'] != null
+              ? DateTime.parse(json['updated_at'] as String)
+              : null),
     );
   }
 
@@ -64,5 +78,7 @@ class StockItem {
     if (supplier != null && supplier!.isNotEmpty) 'supplier': supplier,
     if (notes != null && notes!.isNotEmpty) 'notes': notes,
     'isActive': isActive,
+    if (createdAt != null) 'createdAt': createdAt!.toIso8601String(),
+    if (updatedAt != null) 'updatedAt': updatedAt!.toIso8601String(),
   };
 }

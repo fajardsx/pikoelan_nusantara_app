@@ -14,9 +14,9 @@ class StockListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => sl<StockProvider>()..load()),
-        ChangeNotifierProvider(create: (_) => sl<CategoryProvider>()..load()),
-        ChangeNotifierProvider(create: (_) => sl<UnitProvider>()..load()),
+        ChangeNotifierProvider.value(value: sl<StockProvider>()..load()),
+        ChangeNotifierProvider.value(value: sl<CategoryProvider>()..load()),
+        ChangeNotifierProvider.value(value: sl<UnitProvider>()..load()),
       ],
       child: Scaffold(
         appBar: AppBar(
@@ -135,10 +135,12 @@ class StockListPage extends StatelessWidget {
                         ],
                       ),
                     ),
-
+                    const SizedBox(height: 8),
+                    const Divider(height: 1),
                     // ----- LIST OF STOCKS -----
                     Expanded(
-                      child: ListView.builder(
+                      child: ListView.separated(
+                        separatorBuilder: (_, _) => const Divider(height: 1),
                         itemCount: provider.filteredItems.length,
                         itemBuilder: (c, i) => ListTile(
                           title: Text(
@@ -207,7 +209,7 @@ class StockListPage extends StatelessWidget {
                                     provider.filteredItems[i].id!,
                                     val,
                                   );
-                                  await sl<UnitProvider>().load();
+                                  await provider.load();
                                 },
                               ),
                             ],

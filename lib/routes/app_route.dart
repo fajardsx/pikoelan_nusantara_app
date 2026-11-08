@@ -26,6 +26,8 @@ import 'package:restauran_menu/features/stock/presentation/pages/add_unit_page.d
 import 'package:restauran_menu/features/stock/presentation/pages/stock_category_list_page.dart';
 import 'package:restauran_menu/features/stock/presentation/pages/stock_form_page.dart';
 import 'package:restauran_menu/features/stock/presentation/pages/stock_list_page.dart';
+import 'package:restauran_menu/features/stock/presentation/pages/stock_movement_form_page.dart';
+import 'package:restauran_menu/features/stock/presentation/pages/stock_movement_list_page.dart';
 import 'package:restauran_menu/features/stock/presentation/pages/stock_summary_page.dart';
 import 'package:restauran_menu/features/stock/presentation/pages/stock_unit_list_page.dart';
 import 'package:restauran_menu/features/waiters/presentation/pages/waiter_shell_screen.dart';
@@ -100,6 +102,14 @@ class AppRoute {
           ? ModalRoute.of(context)!.settings.arguments as Category
           : null;
       return AddCategoryPage(cat: args);
+    },
+    NameRoute.stockMovementList: (context) {
+      final args = ModalRoute.of(context)?.settings.arguments as StockItem?;
+      return StockMovementListPage(stockItem: args);
+    },
+    NameRoute.stockMovementAddForm: (context) {
+      final args = ModalRoute.of(context)?.settings.arguments as StockItem?;
+      return StockMovementFormPage(stockItem: args);
     },
   };
 }

@@ -58,6 +58,7 @@ class AppTheme {
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 10.0),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+          disabledBackgroundColor: AppColors.inkSoft,
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(

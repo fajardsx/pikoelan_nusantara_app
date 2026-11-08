@@ -18,8 +18,8 @@ class _StockUnitListPageState extends State<StockUnitListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => sl<UnitProvider>()..load(),
+    return ChangeNotifierProvider.value(
+      value: sl<UnitProvider>()..load(),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Daftar Unit'),
@@ -67,15 +67,17 @@ class _StockUnitListPageState extends State<StockUnitListPage> {
                         onChanged: (v) => setState(() => _search = v),
                       ),
                     ),
-
+                    const SizedBox(height: 8),
+                    const Divider(height: 1),
                     Expanded(
-                      child: ListView.builder(
+                      child: ListView.separated(
+                        separatorBuilder: (_, _) => const Divider(height: 1),
                         itemCount: filtered.length,
                         itemBuilder: (c, i) {
                           final unit = filtered[i];
                           return ListTile(
                             title: Text(
-                              'Name Unit: ${unit.name}',
+                              unit.name,
                               style: appFonts.medium.bodyLarge.ts,
                             ),
                             subtitle: Text(
@@ -131,7 +133,7 @@ class _StockUnitListPageState extends State<StockUnitListPage> {
                                   value: unit.isActive!,
                                   onChanged: (val) async {
                                     await provider.toggleActive(unit.id, val);
-                                    await sl<UnitProvider>().load();
+                                    await provider.load();
                                   },
                                 ),
                               ],

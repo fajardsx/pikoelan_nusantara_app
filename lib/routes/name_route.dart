@@ -40,5 +40,7 @@ class NameRoute {
   static const stockAddForm = "/stock/item/form";
   static const stockSummary = "/stock/summary";
   static const unitAddForm = "/stock/unit/form";
+  static const stockMovementList = "/stock/movements/list";
+  static const stockMovementAddForm = "/stock/movements/form";
   static const categoryAddForm = "/stock/categories/form";
 }
