@@ -196,6 +196,26 @@ class _PrintSetupScreenState extends State<PrintSetupScreen> {
     setState(() => _testing = false);
   }
 
+  Future<void> _testPrintDapur() async {
+    setState(() => _testing = true);
+    bool conexStatus = await PrintBluetoothThermal.connectionStatus;
+    await _saveSettings();
+    final mac = _macDapurController.text.trim();
+    try {
+      if (!conexStatus && mac.isNotEmpty) {
+        await PrintBluetoothThermal.connect(macPrinterAddress: mac);
+      }
+
+      final bytes = await KasirPrint().testTicket(optionprinttype: _paperSize);
+      await PrintBluetoothThermal.writeBytes(bytes);
+      await PrintBluetoothThermal.disconnect;
+      AppLog.instance.logInfo('Test print berhasil');
+    } catch (e, s) {
+      AppLog.instance.logError('Test print gagal: $e', e, s);
+    }
+    setState(() => _testing = false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -596,15 +616,22 @@ class _PrintSetupScreenState extends State<PrintSetupScreen> {
                     child: const Text('Cek Koneksi'),
                   ),
                   const SizedBox(width: 16),
-                  // ElevatedButton(
-                  //   onPressed: _testing ? null : _testPrint,
-                  //   child: const Text('Test Print'),
-                  // ),
-                  // const SizedBox(width: 16),
                   ElevatedButton(
                     onPressed: _testing ? null : _saveSettings,
                     child: const Text('Save Settings'),
                   ),
+                  const SizedBox(width: 16),
+                  if (_macController.text.isNotEmpty)
+                    ElevatedButton(
+                      onPressed: _testing ? null : _testPrint,
+                      child: const Text('Test Print'),
+                    ),
+                  const SizedBox(width: 16),
+                  if (_macDapurController.text.isNotEmpty)
+                    ElevatedButton(
+                      onPressed: _testing ? null : _testPrintDapur,
+                      child: const Text('Test Print Dapur'),
+                    ),
                 ],
               ),
             ],

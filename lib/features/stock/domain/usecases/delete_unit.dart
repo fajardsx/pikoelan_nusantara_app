@@ -1,5 +1,4 @@
 import '../repositories/stock_repository.dart';
-import '../../data/models/stock_unit_dto.dart';
 
 class DeleteUnit {
   final StockRepository repository;

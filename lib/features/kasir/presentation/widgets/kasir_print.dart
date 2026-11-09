@@ -212,6 +212,9 @@ class KasirPrint {
       final prefs = SharedPrefServices.pref;
       final paperSize = prefs.getString(SettingsKeys.paperSize) ?? '58';
       String printerMac = prefs.getString(SettingsKeys.printerMacDapur) ?? '';
+      if (printerMac.isEmpty) {
+        printerMac = prefs.getString(SettingsKeys.printerMac) ?? '';
+      }
 
       // Connect
       final result = await PrintBluetoothThermal.connect(
