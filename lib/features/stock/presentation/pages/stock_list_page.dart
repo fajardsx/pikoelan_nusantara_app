@@ -4,8 +4,10 @@ import 'package:restauran_menu/core/di/injector.dart';
 import 'package:restauran_menu/features/stock/presentation/provider/category_provider.dart';
 import 'package:restauran_menu/features/stock/presentation/provider/unit_provider.dart';
 import 'package:restauran_menu/routes/name_route.dart';
+import 'package:restauran_menu/shared/utils/date_time_formatter.dart';
 
 import '../provider/stock_provider.dart';
+import 'export_stock_csv.dart';
 
 class StockListPage extends StatelessWidget {
   const StockListPage({super.key});
@@ -22,18 +24,18 @@ class StockListPage extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Daftar Stok'),
           actions: [
-            //   IconButton(
-            //     icon: const Icon(Icons.straighten),
-            //     tooltip: 'Tambah Unit',
-            //     onPressed: () =>
-            //         Navigator.of(context).pushNamed(NameRoute.unitAddForm),
-            //   ),
-            //   IconButton(
-            //     icon: const Icon(Icons.category),
-            //     tooltip: 'Tambah Kategori',
-            //     onPressed: () =>
-            //         Navigator.of(context).pushNamed(NameRoute.categoryAddForm),
-            //   ),
+            Consumer3<StockProvider, CategoryProvider, UnitProvider>(
+              builder: (context, stockProv, cProv, uProv, _) => IconButton(
+                icon: const Icon(Icons.file_download),
+                tooltip: 'Export CSV',
+                onPressed: () => exportStockCsv(
+                  context,
+                  stockProv.filteredItems,
+                  cProv,
+                  uProv,
+                ),
+              ),
+            ),
             IconButton(
               icon: const Icon(Icons.straighten),
               tooltip: 'Unit List',
@@ -169,7 +171,8 @@ class StockListPage extends StatelessWidget {
                             'Category: ${cProv.getCategoriById(provider.filteredItems[i].categoryId!)!.name}, '
                             'UOM: ${uProv.getUnitById(provider.filteredItems[i].unitId)!.name}, '
                             'Stok: ${provider.filteredItems[i].currentStock} '
-                            '(Min: ${provider.filteredItems[i].minimumStock})',
+                            '(Min: ${provider.filteredItems[i].minimumStock}),'
+                            'Create At : ${formatDateTime(provider.filteredItems[i].createdAt!.toLocal())}',
                           ),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,

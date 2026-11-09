@@ -35,7 +35,8 @@ class _StockSummaryPageState extends State<StockSummaryPage> {
         context.read<CategoryProvider>().load();
         context.read<UnitProvider>().load();
         context.read<StockMovementProvider>().load();
-      } else {
+      }
+      if (!isFirst) {
         setState(() => isFirst = true);
       }
     });

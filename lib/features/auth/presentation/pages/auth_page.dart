@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:restauran_menu/core/common/common_constant.dart';
-import 'package:restauran_menu/features/customers/presentation/pages/customer_home_screen.dart';
 import 'package:restauran_menu/flavors.dart';
 import 'package:restauran_menu/main.dart';
 import 'package:restauran_menu/startup_gate.dart';
@@ -25,7 +24,7 @@ class _AuthPageState extends State<AuthPage> {
     // Di Android/iOS kIsWeb=false -> webSlug tetap null -> tampilkan Login.
     // Jangan pakai package:web di sini karena crash di Mobile
     // dan `webSlug!` crash saat null.
-    
+
     try {
       webSlug = Uri.base.queryParameters['slug'];
       //debugPrint("slug : $webSlug");
@@ -51,10 +50,10 @@ class _AuthPageState extends State<AuthPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (kIsWeb) {
-      final slug = (webSlug ?? '').trim();
-      if (slug.isNotEmpty) return CustomerHomeScreen(slug: slug);
-    }
+    // if (kIsWeb) {
+    //   final slug = (webSlug ?? '').trim();
+    //   if (slug.isNotEmpty) return CustomerHomeScreen(slug: slug);
+    // }
     return const StartupGate();
   }
 }

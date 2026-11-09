@@ -8,6 +8,7 @@ import '../../domain/entities/stock_item.dart';
 import '../../domain/entities/stock_movement.dart';
 import '../provider/stock_movement_provider.dart';
 import '../provider/stock_provider.dart';
+import 'export_stock_movement_csv.dart';
 
 class StockMovementListPage extends StatelessWidget {
   final StockItem? stockItem;
@@ -30,6 +31,18 @@ class StockMovementListPage extends StatelessWidget {
                 ? 'Pergerakan Stok: ${stockItem!.name}'
                 : 'Daftar Pergerakan Stok',
           ),
+          actions: [
+            Consumer<StockMovementProvider>(
+              builder: (ctx, provider, _) => IconButton(
+                icon: const Icon(Icons.file_download),
+                tooltip: 'Export CSV',
+                onPressed: () => exportStockMovementCsv(
+                  ctx,
+                  provider.filteredMovements,
+                ),
+              ),
+            ),
+          ],
         ),
         floatingActionButton: Builder(
           builder: (ctx) => FloatingActionButton.extended(

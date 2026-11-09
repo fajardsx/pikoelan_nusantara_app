@@ -538,7 +538,7 @@ class _PrintSetupScreenState extends State<PrintSetupScreen> {
                                           _macController.text = item.macAdress;
                                         } else if (_macDapurController
                                             .text
-                                            .isNotEmpty) {
+                                            .isEmpty) {
                                           _macDapurController.text =
                                               item.macAdress;
                                         }
