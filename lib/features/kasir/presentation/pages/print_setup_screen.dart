@@ -17,6 +17,7 @@ class PrintSetupScreen extends StatefulWidget {
 
 class _PrintSetupScreenState extends State<PrintSetupScreen> {
   late TextEditingController _macController;
+  late TextEditingController _macDapurController;
   String _paperSize = '58';
   bool _testing = false;
 
@@ -42,6 +43,9 @@ class _PrintSetupScreenState extends State<PrintSetupScreen> {
     _macController = TextEditingController(
       text: prefs.getString(SettingsKeys.printerMac) ?? '',
     );
+    _macDapurController = TextEditingController(
+      text: prefs.getString(SettingsKeys.printerMacDapur) ?? '',
+    );
     _paperSize = prefs.getString(SettingsKeys.paperSize) ?? '58';
 
     initPlatformState();
@@ -50,6 +54,7 @@ class _PrintSetupScreenState extends State<PrintSetupScreen> {
   @override
   void dispose() {
     _macController.dispose();
+    _macDapurController.dispose();
     super.dispose();
   }
 
@@ -105,6 +110,10 @@ class _PrintSetupScreenState extends State<PrintSetupScreen> {
   Future<void> _saveSettings() async {
     final prefs = SharedPrefServices.pref;
     await prefs.setString(SettingsKeys.printerMac, _macController.text.trim());
+    await prefs.setString(
+      SettingsKeys.printerMacDapur,
+      _macDapurController.text.trim(),
+    );
     await prefs.setString(SettingsKeys.paperSize, _paperSize);
     AppLog.instance.logInfo("Save Print Setting Success!");
   }
@@ -505,7 +514,14 @@ class _PrintSetupScreenState extends State<PrintSetupScreen> {
                                         size: 18,
                                       ),
                                       onTap: () {
-                                        _macController.text = item.macAdress;
+                                        if (_macController.text.isEmpty) {
+                                          _macController.text = item.macAdress;
+                                        } else if (_macDapurController
+                                            .text
+                                            .isNotEmpty) {
+                                          _macDapurController.text =
+                                              item.macAdress;
+                                        }
                                         connect(item.macAdress);
                                       },
                                     );
@@ -557,6 +573,17 @@ class _PrintSetupScreenState extends State<PrintSetupScreen> {
               ),
               TextField(
                 controller: _macController,
+                decoration: const InputDecoration(
+                  hintText: 'e.g. 00:11:22:33:44:55',
+                ),
+              ),
+              const SizedBox(height: 12),
+              const Text(
+                'MAC Address Printer Dapur',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              TextField(
+                controller: _macDapurController,
                 decoration: const InputDecoration(
                   hintText: 'e.g. 00:11:22:33:44:55',
                 ),

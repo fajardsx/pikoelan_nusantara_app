@@ -7,6 +7,7 @@ import 'package:restauran_menu/features/admin/presentation/provider/admin_provid
 import 'package:restauran_menu/features/admin/presentation/widgets/admin_sidebar.dart';
 import 'package:restauran_menu/features/kasir/presentation/pages/kasir_create_order_screen.dart';
 import 'package:restauran_menu/features/kasir/presentation/pages/kasir_laporan_screen.dart';
+import 'package:restauran_menu/features/kasir/presentation/pages/print_setup_screen.dart';
 import 'package:restauran_menu/features/kasir/presentation/pages/transaction_history_screen.dart';
 import 'package:restauran_menu/features/kasir/presentation/provider/kasir_provider.dart';
 import 'package:restauran_menu/features/kasir/presentation/widgets/order_detail_panel.dart';
@@ -100,6 +101,8 @@ class _AdminShellScreenState extends State<AdminShellScreen> {
       case 9:
         return const MemberScreen();
       case 10:
+        return const PrintSetupScreen();
+      case 11:
         return const AdminPengaturanScreen();
       default:
         return const SizedBox.shrink();
@@ -135,7 +138,7 @@ class _AdminShellScreenState extends State<AdminShellScreen> {
               onToggleCollapse: () =>
                   setState(() => _sidebarCollapsed = !_sidebarCollapsed),
             ),
-            Expanded(child: _buildContent()),
+            Expanded(child: SafeArea(child: _buildContent())),
           ],
         ),
       ),

@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:restauran_menu/features/admin/presentation/pages/admin_shell_screen.dart';
 import 'package:restauran_menu/features/auth/presentation/pages/login_screen.dart';
 import 'package:restauran_menu/features/auth/presentation/provider/auth_provider.dart';
-import 'package:restauran_menu/features/kitchen/presentation/pages/kitchen_display_screen.dart';
 import 'package:restauran_menu/features/sidemenu/presentation/pages/kasir_menu_shell_screen.dart';
+import 'package:restauran_menu/features/sidemenu/presentation/pages/kitchen_menu_shell_screen.dart';
 import 'package:restauran_menu/features/waiters/presentation/pages/waiter_shell_screen.dart';
 
 class StartupGate extends StatelessWidget {
@@ -29,8 +29,8 @@ class StartupGate extends StatelessWidget {
                 return const WaiterShellScreen();
               }
               if (auth.user!.role == "kitchen") {
-                return const KitchenDisplayScreen();
-                //return const KitchenMenuShellScreen();
+                //return const KitchenDisplayScreen();
+                return const KitchenMenuShellScreen();
               }
             }
             return const LoginScreen();

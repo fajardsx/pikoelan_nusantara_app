@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restauran_menu/core/di/injector.dart';
 import 'package:restauran_menu/features/auth/presentation/provider/auth_provider.dart';
+import 'package:restauran_menu/features/kasir/presentation/provider/kasir_provider.dart';
 import 'package:restauran_menu/features/menu/presentation/provider/menu_provider.dart';
+import 'package:restauran_menu/features/notifications/domain/entities/order_stream_role.dart';
+import 'package:restauran_menu/features/notifications/presentation/provider/order_stream_provider.dart';
 import 'package:restauran_menu/features/permissions/presentation/provider/permission_provider.dart';
 import 'package:restauran_menu/features/sidemenu/presentation/widgets/menu_key.dart';
 import 'package:restauran_menu/features/sidemenu/presentation/widgets/menu_pages.dart';
@@ -41,6 +44,13 @@ class _KitchenMenuShellScreenState extends State<KitchenMenuShellScreen> {
     // semuanya membaca instance + activeOrders yang sama.
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(
+          create: (context) => sl<KasirProvider>()..load(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) =>
+              sl<OrderStreamProvider>()..start(role: OrderStreamRole.kitchen),
+        ),
         ChangeNotifierProvider(
           create: (context) =>
               sl<PermissionProvider>()..loadMyPermission(forceRefresh: true),

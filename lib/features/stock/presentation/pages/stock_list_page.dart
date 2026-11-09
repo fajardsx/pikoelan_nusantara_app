@@ -21,24 +21,43 @@ class StockListPage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Daftar Stok'),
-          // actions: [
-          //   IconButton(
-          //     icon: const Icon(Icons.straighten),
-          //     tooltip: 'Tambah Unit',
-          //     onPressed: () =>
-          //         Navigator.of(context).pushNamed(NameRoute.unitAddForm),
-          //   ),
-          //   IconButton(
-          //     icon: const Icon(Icons.category),
-          //     tooltip: 'Tambah Kategori',
-          //     onPressed: () =>
-          //         Navigator.of(context).pushNamed(NameRoute.categoryAddForm),
-          //   ),
-          // ],
+          actions: [
+            //   IconButton(
+            //     icon: const Icon(Icons.straighten),
+            //     tooltip: 'Tambah Unit',
+            //     onPressed: () =>
+            //         Navigator.of(context).pushNamed(NameRoute.unitAddForm),
+            //   ),
+            //   IconButton(
+            //     icon: const Icon(Icons.category),
+            //     tooltip: 'Tambah Kategori',
+            //     onPressed: () =>
+            //         Navigator.of(context).pushNamed(NameRoute.categoryAddForm),
+            //   ),
+            IconButton(
+              icon: const Icon(Icons.straighten),
+              tooltip: 'Unit List',
+              onPressed: () async {
+                await Navigator.of(context).pushNamed(NameRoute.stockUnitsList);
+                //await sl<UnitProvider>().load();
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.category),
+              tooltip: 'Kategori List',
+              onPressed: () async {
+                await Navigator.of(
+                  context,
+                ).pushNamed(NameRoute.stockCategoryList);
+                //await sl<CategoryProvider>().load();
+              },
+            ),
+          ],
         ),
 
-        floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.add),
+        floatingActionButton: FloatingActionButton.extended(
+          icon: const Icon(Icons.add),
+          label: const Text('Tambah Item'),
           onPressed: () async {
             await Navigator.of(context).pushNamed(NameRoute.stockAddForm);
             await sl<StockProvider>().load();

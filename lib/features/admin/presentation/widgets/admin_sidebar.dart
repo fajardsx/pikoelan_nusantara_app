@@ -35,6 +35,7 @@ class AdminSidebar extends StatelessWidget {
     (icon: Icons.swap_horiz_rounded, label: 'Transaksi'),
     (icon: Icons.local_offer_rounded, label: 'Promosi'),
     (icon: Icons.card_membership_rounded, label: 'Member'),
+    (icon: Icons.print, label: 'Print Setup'),
     (icon: Icons.settings_rounded, label: 'Pengaturan'),
   ];
 

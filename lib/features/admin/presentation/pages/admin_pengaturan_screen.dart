@@ -39,6 +39,8 @@ class SettingsKeys {
       'settings_restaurant_rekening'; // Tambahkan key untuk No Rekening
   static const printerMac =
       'settings_printer_mac'; // MAC address of Bluetooth printer
+  static const printerMacDapur =
+      'settings_printer_mac_dapur'; // MAC address of Bluetooth printer dapur
   static const paperSize = 'settings_printer_papersize'; // "58" or "80"
 }
 

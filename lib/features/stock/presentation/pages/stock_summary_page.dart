@@ -24,20 +24,20 @@ class StockSummaryPage extends StatefulWidget {
 class _StockSummaryPageState extends State<StockSummaryPage> {
   String _q = '';
   int? _catId, _unitId;
-
-  // late StockProvider _sProvider;
-  // late CategoryProvider _cProvider;
-  // late UnitProvider _uProvider;
-
+  bool isFirst = false;
   @override
   void initState() {
     super.initState();
     // initial load handled by providers in MultiProvider
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<StockProvider>().load();
-      context.read<CategoryProvider>().load();
-      context.read<UnitProvider>().load();
-      context.read<StockMovementProvider>().load();
+      if (isFirst) {
+        context.read<StockProvider>().load();
+        context.read<CategoryProvider>().load();
+        context.read<UnitProvider>().load();
+        context.read<StockMovementProvider>().load();
+      } else {
+        setState(() => isFirst = true);
+      }
     });
   }
 
@@ -66,40 +66,6 @@ class _StockSummaryPageState extends State<StockSummaryPage> {
                 await sl<CategoryProvider>().load();
                 await sl<UnitProvider>().load();
                 await sl<StockMovementProvider>().load();
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.move_up),
-              tooltip: 'Stock Movement',
-              onPressed: () async {
-                await Navigator.pushNamed(context, NameRoute.stockMovementList);
-                //await context.read<StockProvider>().load();
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.list),
-              tooltip: 'Stock List',
-              onPressed: () async {
-                await Navigator.pushNamed(context, NameRoute.stockList);
-                //await sl<StockProvider>().load();
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.straighten),
-              tooltip: 'Unit List',
-              onPressed: () async {
-                await Navigator.of(context).pushNamed(NameRoute.stockUnitsList);
-                //await sl<UnitProvider>().load();
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.category),
-              tooltip: 'Kategori List',
-              onPressed: () async {
-                await Navigator.of(
-                  context,
-                ).pushNamed(NameRoute.stockCategoryList);
-                //await sl<CategoryProvider>().load();
               },
             ),
           ],
@@ -136,14 +102,12 @@ class _StockSummaryPageState extends State<StockSummaryPage> {
                     //   ],
                     // ),
                     const SizedBox(height: 10),
-                    Expanded(
-                      child: TextField(
-                        decoration: const InputDecoration(
-                          labelText: 'Cari..',
-                          border: OutlineInputBorder(),
-                        ),
-                        onChanged: (v) => setState(() => _q = v),
+                    TextField(
+                      decoration: const InputDecoration(
+                        labelText: 'Cari..',
+                        border: OutlineInputBorder(),
                       ),
+                      onChanged: (v) => setState(() => _q = v),
                     ),
                     const SizedBox(height: 8),
                     Row(
@@ -190,19 +154,46 @@ class _StockSummaryPageState extends State<StockSummaryPage> {
                       ],
                     ),
                     const SizedBox(height: 10),
-                    Text('Stok :', style: appFonts.bodyLarge.bold.ts),
+                    Row(
+                      children: [
+                        Text('Stok :', style: appFonts.bodyLarge.bold.ts),
+                        const Spacer(),
+                        TextButton(
+                          onPressed: () async {
+                            await Navigator.of(
+                              context,
+                            ).pushNamed(NameRoute.stockList);
+                          },
+                          child: const Text('Lihat Semua'),
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 10),
                     buildStockTable(sProv, items, uProv, cProv),
                     const SizedBox(height: 20),
                     const Divider(height: 1),
 
                     const SizedBox(height: 20),
-                    Text(
-                      'Pergerakan Stok :',
-                      style: appFonts.bodyLarge.bold.ts,
+                    Row(
+                      children: [
+                        Text(
+                          'Pergerakan Stok :',
+                          style: appFonts.bodyLarge.bold.ts,
+                        ),
+                        const Spacer(),
+                        TextButton(
+                          onPressed: () async {
+                            await Navigator.of(
+                              context,
+                            ).pushNamed(NameRoute.stockMovementList);
+                          },
+                          child: const Text('Lihat Semua'),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 10),
                     buildStockMovementTable(smProv),
+                    const SizedBox(height: 10),
                   ],
                 );
               },
@@ -221,7 +212,7 @@ class _StockSummaryPageState extends State<StockSummaryPage> {
       width: double.infinity,
       child: SingleChildScrollView(
         child: Table(
-          border: TableBorder.all(),
+          //border: TableBorder.all(),
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           columnWidths: const {
             0: IntrinsicColumnWidth(),
@@ -234,7 +225,13 @@ class _StockSummaryPageState extends State<StockSummaryPage> {
           },
           children: [
             const TableRow(
-              decoration: BoxDecoration(color: RestaurantColors.primaryBrown),
+              decoration: BoxDecoration(
+                color: RestaurantColors.primaryBrown,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                ),
+              ),
               children: [
                 Padding(
                   padding: EdgeInsets.all(8),
@@ -390,7 +387,7 @@ class _StockSummaryPageState extends State<StockSummaryPage> {
       width: double.infinity,
       child: SingleChildScrollView(
         child: Table(
-          border: TableBorder.all(),
+          //border: TableBorder.all(),
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           columnWidths: const {
             0: IntrinsicColumnWidth(),
@@ -406,6 +403,10 @@ class _StockSummaryPageState extends State<StockSummaryPage> {
             const TableRow(
               decoration: BoxDecoration(
                 color: RestaurantColors.cardImageBackground,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                ),
               ),
               children: [
                 Padding(

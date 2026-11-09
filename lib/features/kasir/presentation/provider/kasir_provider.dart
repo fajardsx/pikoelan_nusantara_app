@@ -377,4 +377,13 @@ class KasirProvider extends ChangeNotifier {
       AppLog.instance.logError("Print Receipt error", e, s);
     } finally {}
   }
+
+  Future<void> printDapurReceipt() async {
+    try {
+      await KasirPrint().printDapurReceipt(selectedOrder);
+    } catch (e, s) {
+      member = null;
+      AppLog.instance.logError("Print Receipt error", e, s);
+    } finally {}
+  }
 }

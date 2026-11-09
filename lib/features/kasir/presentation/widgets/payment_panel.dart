@@ -273,74 +273,77 @@ class _PaymentPanelState extends State<PaymentPanel> {
                     ],
                   ),
                 ],
-                Consumer<KasirProvider>(
-                  builder: (context, kasirProvider, _) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 15),
-                        if (kasirProvider.member == null) ...[
-                          TextFormField(
-                            controller: _memberController,
-                            decoration: const InputDecoration(
-                              labelText: 'Member',
-                              border: OutlineInputBorder(),
+                if (!order.isPaid)
+                  Consumer<KasirProvider>(
+                    builder: (context, kasirProvider, _) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 15),
+                          if (kasirProvider.member == null) ...[
+                            TextFormField(
+                              controller: _memberController,
+                              decoration: const InputDecoration(
+                                labelText: 'Member',
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value) =>
+                                  (value == null || value.isEmpty)
+                                  ? 'Masukkan member ID / Phone'
+                                  : null,
                             ),
-                            validator: (value) =>
-                                (value == null || value.isEmpty)
-                                ? 'Masukkan member ID / Phone'
-                                : null,
-                          ),
-                          const SizedBox(height: 8),
-                          ElevatedButton(
-                            onPressed:
-                                kasirProvider.status == DashboardStatus.loading
-                                ? null
-                                : () async {
-                                    try {
-                                      final phone = _memberController.text
-                                          .trim();
-                                      await kasirProvider.validateMember(
-                                        phone: phone,
-                                      );
-                                    } finally {}
-                                  },
-                            child: const Text('Validasi'),
-                          ),
-                        ],
-                        if (kasirProvider.member != null) ...[
-                          const SizedBox(height: 8),
-                          Text(
-                            'Member valid\natas nama : ${kasirProvider.member!.name}\nTier : ${kasirProvider.member!.tier}\npoints : ${kasirProvider.member!.points} ',
-                            style: const TextStyle(color: Colors.green),
-                          ),
-                          const SizedBox(height: 8),
-                          TextFormField(
-                            controller: _redeemController,
-                            decoration: const InputDecoration(
-                              labelText: 'Redeem Points',
-                              border: OutlineInputBorder(),
+                            const SizedBox(height: 8),
+                            ElevatedButton(
+                              onPressed:
+                                  kasirProvider.status ==
+                                      DashboardStatus.loading
+                                  ? null
+                                  : () async {
+                                      try {
+                                        final phone = _memberController.text
+                                            .trim();
+                                        await kasirProvider.validateMember(
+                                          phone: phone,
+                                        );
+                                      } finally {}
+                                    },
+                              child: const Text('Validasi'),
                             ),
-                            keyboardType: TextInputType.number,
-                          ),
-                          const SizedBox(height: 8),
-                          ElevatedButton(
-                            onPressed:
-                                kasirProvider.status == DashboardStatus.loading
-                                ? null
-                                : () async {
-                                    try {
-                                      _memberController.text = "";
-                                      await kasirProvider.resetMember();
-                                    } finally {}
-                                  },
-                            child: const Text('Reset'),
-                          ),
+                          ],
+                          if (kasirProvider.member != null) ...[
+                            const SizedBox(height: 8),
+                            Text(
+                              'Member valid\natas nama : ${kasirProvider.member!.name}\nTier : ${kasirProvider.member!.tier}\npoints : ${kasirProvider.member!.points} ',
+                              style: const TextStyle(color: Colors.green),
+                            ),
+                            const SizedBox(height: 8),
+                            TextFormField(
+                              controller: _redeemController,
+                              decoration: const InputDecoration(
+                                labelText: 'Redeem Points',
+                                border: OutlineInputBorder(),
+                              ),
+                              keyboardType: TextInputType.number,
+                            ),
+                            const SizedBox(height: 8),
+                            ElevatedButton(
+                              onPressed:
+                                  kasirProvider.status ==
+                                      DashboardStatus.loading
+                                  ? null
+                                  : () async {
+                                      try {
+                                        _memberController.text = "";
+                                        await kasirProvider.resetMember();
+                                      } finally {}
+                                    },
+                              child: const Text('Reset'),
+                            ),
+                          ],
                         ],
-                      ],
-                    );
-                  },
-                ),
+                      );
+                    },
+                  ),
                 const Spacer(),
                 if (!order.isPaid)
                   ElevatedButton(
@@ -400,6 +403,144 @@ class _PaymentPanelState extends State<PaymentPanel> {
                 if (order.isPaid)
                   Column(
                     children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () async {
+                              final confirmed = await showDialog<bool>(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: const Text('Review Print'),
+                                  content: SingleChildScrollView(
+                                    child: ListBody(
+                                      children: [
+                                        Text('Order: ${order.orderNumber}'),
+                                        ...order.items.map(
+                                          (item) => Text(
+                                            '- ${item.itemName}, x${item.quantity}',
+                                          ),
+                                        ),
+                                        Text(
+                                          'Total: ${formatRupiah(order.total)}',
+                                        ),
+                                        Text('Metode: ${order.paymentLabel}'),
+                                        // Add more details as needed
+                                      ],
+                                    ),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(false),
+                                      child: const Text('Batal'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(true),
+                                      child: const Text('Print'),
+                                    ),
+                                  ],
+                                ),
+                              );
+                              if (confirmed == true) {
+                                await context
+                                    .read<KasirProvider>()
+                                    .printReceipt();
+                                if (mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Mencetak struk...'),
+                                    ),
+                                  );
+                                }
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: RestaurantColors.primaryBrown,
+                              foregroundColor: Colors.white,
+                              disabledBackgroundColor:
+                                  RestaurantColors.cardBorder,
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 16,
+                                horizontal: 10,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                            ),
+                            child: const Text(
+                              'Print Struk',
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          ElevatedButton(
+                            onPressed: () async {
+                              final confirmed = await showDialog<bool>(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: const Text('Review Print'),
+                                  content: SingleChildScrollView(
+                                    child: ListBody(
+                                      children: [
+                                        Text('Order: ${order.orderNumber}'),
+                                        ...order.items.map(
+                                          (item) => Text(
+                                            '- ${item.itemName}, x${item.quantity}',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(false),
+                                      child: const Text('Batal'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(true),
+                                      child: const Text('Print'),
+                                    ),
+                                  ],
+                                ),
+                              );
+                              if (confirmed == true) {
+                                await context
+                                    .read<KasirProvider>()
+                                    .printDapurReceipt();
+                                if (mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Mencetak struk dapur...'),
+                                    ),
+                                  );
+                                }
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: RestaurantColors.primaryBrown,
+                              foregroundColor: Colors.white,
+                              disabledBackgroundColor:
+                                  RestaurantColors.cardBorder,
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 16,
+                                horizontal: 10,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                            ),
+                            child: const Text(
+                              'Print Ke Dapur',
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 18),
                       ElevatedButton(
                         onPressed: () async {
                           await context.read<KasirProvider>().processComplete();
@@ -427,66 +568,6 @@ class _PaymentPanelState extends State<PaymentPanel> {
                         ),
                         child: const Text(
                           'Tandai Selesai',
-                          style: TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      ElevatedButton(
-                        onPressed: () async {
-                          final confirmed = await showDialog<bool>(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: const Text('Review Print'),
-                              content: SingleChildScrollView(
-                                child: ListBody(
-                                  children: [
-                                    Text('Order: ${order.orderNumber}'),
-                                    Text('Total: ${formatRupiah(order.total)}'),
-                                    Text('Metode: ${order.paymentLabel}'),
-                                    // Add more details as needed
-                                  ],
-                                ),
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () =>
-                                      Navigator.of(context).pop(false),
-                                  child: const Text('Batal'),
-                                ),
-                                TextButton(
-                                  onPressed: () =>
-                                      Navigator.of(context).pop(true),
-                                  child: const Text('Print'),
-                                ),
-                              ],
-                            ),
-                          );
-                          if (confirmed == true) {
-                            // TODO: implement actual printing logic in KasirProvider
-                            await context.read<KasirProvider>().printReceipt();
-                            if (mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Mencetak struk...'),
-                                ),
-                              );
-                            }
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: RestaurantColors.primaryBrown,
-                          foregroundColor: Colors.white,
-                          disabledBackgroundColor: RestaurantColors.cardBorder,
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 16,
-                            horizontal: 10,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                        ),
-                        child: const Text(
-                          'Print Struk',
                           style: TextStyle(fontWeight: FontWeight.w600),
                         ),
                       ),

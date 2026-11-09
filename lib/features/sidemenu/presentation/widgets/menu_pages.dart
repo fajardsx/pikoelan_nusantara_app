@@ -16,6 +16,7 @@ import 'package:restauran_menu/features/menu/presentation/pages/kelola_menu_scre
 import 'package:restauran_menu/features/promos/presentation/pages/promo_screen.dart';
 import 'package:restauran_menu/features/sidemenu/presentation/widgets/menu_key.dart';
 import 'package:restauran_menu/features/staff/presentation/pages/staff_screen.dart';
+import 'package:restauran_menu/features/stock/presentation/pages/stock_summary_page.dart';
 import 'package:restauran_menu/features/waiters/presentation/pages/waiter_shell_screen.dart';
 
 class MenuPages extends StatelessWidget {
@@ -73,6 +74,8 @@ class MenuPages extends StatelessWidget {
         return const KelolaMenuScreen();
       case MenuKeys.transaksi:
         return const TransactionHistoryScreen();
+      case MenuKeys.stock:
+        return const StockSummaryPage();
       case MenuKeys.laporan:
         return const KasirLaporanScreen();
       case MenuKeys.pengaturanKasir:

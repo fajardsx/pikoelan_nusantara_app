@@ -8,6 +8,7 @@ class MenuKeys {
   static const String laporan = 'reports';
   static const String dashboard = 'dashboard';
   static const String transaksi = 'transactions';
+  static const String stock = 'stock';
   static const String promosi = 'promos';
   static const String membership = 'memberships';
   static const String kelolaMenu = 'menu';
@@ -38,7 +39,7 @@ class MenuTree {
       menuKey: MenuKeys.daftarPesanan,
     ), // Khusus kasir
     (
-      icon: Icons.kitchen,
+      icon: Icons.soup_kitchen_outlined,
       label: 'Kitchen',
       menuKey: MenuKeys.kitchenDisplay,
     ), // Khusus kitchen
@@ -53,6 +54,7 @@ class MenuTree {
       label: 'Transaksi',
       menuKey: MenuKeys.transaksi,
     ),
+    (icon: Icons.store_rounded, label: 'Stock', menuKey: MenuKeys.stock),
     (
       icon: Icons.local_offer_rounded,
       label: 'Promosi',

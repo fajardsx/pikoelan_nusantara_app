@@ -9,8 +9,6 @@ import 'package:restauran_menu/shared/utils/logout_helper.dart';
 
 import '../../../../core/themes/restaurant_colors.dart';
 import '../../../../shared/utils/date_time_formatter.dart';
-import '../../../notifications/domain/entities/order_stream_role.dart';
-import '../../../notifications/presentation/provider/order_stream_provider.dart';
 import '../../../notifications/presentation/widgets/order_stream_status_badge.dart';
 import '../provider/kitchen_provider.dart';
 import '../widgets/kitchen_column.dart';
@@ -55,10 +53,6 @@ class _KitchenDisplayScreenState extends State<KitchenDisplayScreen> {
       providers: [
         ChangeNotifierProvider(
           create: (context) => sl<KitchenProvider>()..load(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) =>
-              sl<OrderStreamProvider>()..start(role: OrderStreamRole.kitchen),
         ),
       ],
       child: Scaffold(
