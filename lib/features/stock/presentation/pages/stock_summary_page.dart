@@ -209,6 +209,12 @@ class _StockSummaryPageState extends State<StockSummaryPage> {
     UnitProvider uProv,
     CategoryProvider cProv,
   ) {
+    if (items.isEmpty) {
+      return const Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Text('Belum ada data stok'),
+      );
+    }
     return SizedBox(
       width: double.infinity,
       child: SingleChildScrollView(

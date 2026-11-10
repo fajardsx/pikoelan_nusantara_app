@@ -52,12 +52,14 @@ class OrderStreamMessageModel {
   static Map<String, dynamic>? _decodePayload(String? data) {
     final raw = data?.trim();
     if (raw == null || raw.isEmpty) return null;
+    // Jika bukan JSON (mis. heartbeat) langsung null.
+    if (!raw.startsWith('{') && !raw.startsWith('[')) return null;
     try {
       final decoded = jsonDecode(raw);
       if (decoded is Map) return Map<String, dynamic>.from(decoded);
       return <String, dynamic>{'data': decoded};
     } on FormatException {
-      // Payload bukan JSON (mis. heartbeat teks) -> biarkan null, raw tetap ada.
+      // Payload bukan JSON valid.
       return null;
     }
   }

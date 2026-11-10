@@ -57,8 +57,8 @@ class DioClient {
     final dioInstance = Dio(
       BaseOptions(
         baseUrl: base, // contoh API
-        connectTimeout: const Duration(seconds: 45),
-        receiveTimeout: const Duration(seconds: 45),
+        connectTimeout: const Duration(seconds: 60),
+        receiveTimeout: const Duration(seconds: 60),
         headers: {'Content-Type': 'application/json;charset=utf-8'},
       ),
     );
@@ -78,6 +78,7 @@ class DioClient {
                 jsonEncode(filter.data).length > 3000) {
               AppLog.instance.logInfo(
                 'Response data too long, truncated for logging.',
+                popShow: false,
               );
               return false;
             }

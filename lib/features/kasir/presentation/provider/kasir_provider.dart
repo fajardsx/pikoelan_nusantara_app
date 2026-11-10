@@ -178,10 +178,10 @@ class KasirProvider extends ChangeNotifier {
           .length;
 
       final todayOrders = allOrders.where((o) => isToday(o.createdAt)).toList();
-      debugPrint(
-        'KasirProvider.load #$hashCode: today=${todayOrders.length} '
-        'statuses=${allOrders.map((o) => o.status).toSet()}',
-      );
+      // debugPrint(
+      //   'KasirProvider.load #$hashCode: today=${todayOrders.length} '
+      //   'statuses=${allOrders.map((o) => o.status).toSet()}',
+      // );
       ordersToday = todayOrders.length;
 
       revenueToday = todayOrders
@@ -373,7 +373,6 @@ class KasirProvider extends ChangeNotifier {
     try {
       await KasirPrint().printReceipt(selectedOrder);
     } catch (e, s) {
-      member = null;
       AppLog.instance.logError("Print Receipt error", e, s);
     } finally {}
   }
@@ -382,7 +381,6 @@ class KasirProvider extends ChangeNotifier {
     try {
       await KasirPrint().printDapurReceipt(selectedOrder);
     } catch (e, s) {
-      member = null;
       AppLog.instance.logError("Print Receipt error", e, s);
     } finally {}
   }

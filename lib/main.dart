@@ -14,12 +14,10 @@ import 'package:restauran_menu/core/services/shared_pref_services.dart';
 import 'package:restauran_menu/core/themes/app_theme.dart';
 import 'package:restauran_menu/features/auth/presentation/pages/auth_page.dart';
 import 'package:restauran_menu/features/auth/presentation/provider/auth_provider.dart';
-import 'package:restauran_menu/features/customers/presentation/pages/customer_home_screen.dart';
 import 'package:restauran_menu/features/customers/presentation/provider/cart_provider.dart';
 import 'package:restauran_menu/features/customers/presentation/provider/public_menu_provider.dart';
 import 'package:restauran_menu/flavors.dart';
 import 'package:restauran_menu/routes/app_route.dart';
-import 'package:restauran_menu/routes/name_route.dart';
 
 const bool isProduction = bool.fromEnvironment('dart.vm.product');
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
@@ -102,21 +100,21 @@ class MyApp extends StatelessWidget {
             navigatorKey: navigatorKey,
             routes: AppRoute().routes,
             navigatorObservers: [routeObserver],
-            onGenerateRoute: (settings) {
-              if (settings.name != null) {
-                final Uri uri = Uri.parse(settings.name!);
-                final String path = uri.path;
+            // onGenerateRoute: (settings) {
+            //   if (settings.name != null) {
+            //     final Uri uri = Uri.parse(settings.name!);
+            //     final String path = uri.path;
 
-                if (path == NameRoute.customerHome) {
-                  final String? slug = uri.queryParameters['slug'];
-                  return MaterialPageRoute(
-                    builder: (context) => CustomerHomeScreen(slug: slug),
-                    settings: settings,
-                  );
-                }
-              }
-              return null;
-            },
+            //     if (path == NameRoute.customerHome) {
+            //       final String? slug = uri.queryParameters['slug'];
+            //       return MaterialPageRoute(
+            //         builder: (context) => CustomerHomeScreen(slug: slug),
+            //         settings: settings,
+            //       );
+            //     }
+            //   }
+            //   return null;
+            // },
             //initialRoute: NameRoute.rootView,
           ),
         );

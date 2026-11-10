@@ -71,7 +71,6 @@ class _PrintSetupScreenState extends State<PrintSetupScreen> {
     if (!mounted) return;
 
     final bool result = await PrintBluetoothThermal.bluetoothEnabled;
-    debugPrint("bluetooth enabled: $result");
     if (result) {
       _msj = "Bluetooth enabled, search for devices to connect.";
     } else {
@@ -127,9 +126,12 @@ class _PrintSetupScreenState extends State<PrintSetupScreen> {
       return;
     }
     try {
-      await PrintBluetoothThermal.connect(macPrinterAddress: mac);
+      bool conexStatus = await PrintBluetoothThermal.connectionStatus;
+      if (!conexStatus) {
+        await PrintBluetoothThermal.connect(macPrinterAddress: mac);
+      }
       AppLog.instance.logInfo('Koneksi berhasil');
-      await PrintBluetoothThermal.disconnect;
+      //await PrintBluetoothThermal.disconnect;
     } catch (e, s) {
       AppLog.instance.logError('Gagal koneksi: $e', e, s);
     }
@@ -198,17 +200,17 @@ class _PrintSetupScreenState extends State<PrintSetupScreen> {
 
   Future<void> _testPrintDapur() async {
     setState(() => _testing = true);
-    bool conexStatus = await PrintBluetoothThermal.connectionStatus;
     await _saveSettings();
+    bool conexStatus = await PrintBluetoothThermal.connectionStatus;
     final mac = _macDapurController.text.trim();
     try {
+      debugPrint("conex $conexStatus");
       if (!conexStatus && mac.isNotEmpty) {
         await PrintBluetoothThermal.connect(macPrinterAddress: mac);
       }
-
       final bytes = await KasirPrint().testTicket(optionprinttype: _paperSize);
       await PrintBluetoothThermal.writeBytes(bytes);
-      await PrintBluetoothThermal.disconnect;
+      //await PrintBluetoothThermal.disconnect;
       AppLog.instance.logInfo('Test print berhasil');
     } catch (e, s) {
       AppLog.instance.logError('Test print gagal: $e', e, s);

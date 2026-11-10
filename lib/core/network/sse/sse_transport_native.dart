@@ -15,7 +15,7 @@ SseTransport createSseTransport({Dio? dio, String? baseUrl}) =>
 
 /// Transport SSE berbasis stream Dio untuk platform native.
 class DioSseTransport implements SseTransport {
-  DioSseTransport({Dio? dio, String? baseUrl})
+  DioSseTransport({Dio? dio, String? baseUrl, bool insecure = false})
     : _dio = dio ?? Dio(BaseOptions(baseUrl: baseUrl ?? ''));
 
   final Dio _dio;
