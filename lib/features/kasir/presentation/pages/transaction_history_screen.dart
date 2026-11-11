@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restauran_menu/core/common/common_utils.dart';
+import 'package:restauran_menu/core/themes/app_fonts.dart';
 
 import '../../../../core/themes/restaurant_colors.dart';
 import '../../../../shared/utils/currency_formatter.dart';
@@ -20,7 +21,7 @@ export 'export_csv_stub.dart'
 // Fixed column widths used only in the mobile horizontal-scroll layout.
 const double _kColOrder = 130;
 const double _kColDate = 110;
-const double _kColTime = 70;
+//const double _kColTime = 70;
 const double _kColType = 100;
 const double _kColMethod = 80;
 const double _kColTotal = 110;
@@ -28,7 +29,7 @@ const double _kColStatus = 100;
 const double _kTableContentWidth =
     _kColOrder +
     _kColDate +
-    _kColTime +
+    //_kColTime +
     _kColType +
     _kColMethod +
     _kColTotal +
@@ -374,7 +375,7 @@ class _HistoryHeaderRow extends StatelessWidget {
         children: [
           Expanded(flex: 2, child: Text('No. Pesanan', style: _headerStyle)),
           Expanded(flex: 2, child: Text('Tanggal', style: _headerStyle)),
-          Expanded(child: Text('Waktu', style: _headerStyle)),
+          //Expanded(child: Text('Waktu', style: _headerStyle)),
           Expanded(child: Text('Tipe', style: _headerStyle)),
           Expanded(child: Text('Metode', style: _headerStyle)),
           Expanded(child: Text('Total', style: _headerStyle)),
@@ -402,10 +403,10 @@ class _HistoryHeaderRowFixed extends StatelessWidget {
             width: _kColDate,
             child: Text('Tanggal', style: _headerStyle),
           ),
-          SizedBox(
-            width: _kColTime,
-            child: Text('Waktu', style: _headerStyle),
-          ),
+          // SizedBox(
+          //   width: _kColTime,
+          //   child: Text('Waktu', style: _headerStyle),
+          // ),
           SizedBox(
             width: _kColType,
             child: Text('Tipe', style: _headerStyle),
@@ -432,60 +433,123 @@ class _HistoryRow extends StatelessWidget {
   final OrderEntity order;
   const _HistoryRow({required this.order});
 
+  void _showDetail(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        icon: const Icon(Icons.swap_horiz_rounded),
+        title: Text(
+          'Detail Transaksi\n${order.orderNumber}',
+          textAlign: TextAlign.center,
+        ),
+        titleTextStyle: appFonts.subtitle.bold.ts,
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Tanggal: ${formatDateTime(order.createdAt.toLocal())}',
+                style: appFonts.ts,
+              ),
+              const SizedBox(height: 2),
+              const Divider(height: 1),
+              const SizedBox(height: 8),
+              Text('Customer: ${order.customerName}', style: appFonts.ts),
+              const SizedBox(height: 2),
+              Text('Tipe: ${order.orderTypeLabel}', style: appFonts.ts),
+              Text('Metode: ${order.paymentMethod ?? "-"}', style: appFonts.ts),
+              const SizedBox(height: 8),
+              Text('Item:', style: appFonts.ts),
+              ...order.items.map(
+                (item) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 2),
+                  child: Text(
+                    '- ${item.itemName} x ${item.quantity} = ${formatRupiah(item.subtotal)}',
+                    style: appFonts.ts,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text('Note: ${order.notes ?? "-"}', style: appFonts.ts),
+              const SizedBox(height: 5),
+              const Divider(height: 1),
+              const SizedBox(height: 5),
+              Text(
+                'Total: ${formatRupiah(order.totalAmount)}, (${order.isPaid ? "Lunas" : "Belum Bayar"})',
+                textAlign: TextAlign.right,
+                style: appFonts.medium.ts,
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Tutup'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 2,
-            child: Text(
-              order.orderNumber,
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-                color: RestaurantColors.textPrimary,
+    return InkWell(
+      onTap: () => _showDetail(context),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: Text(
+                order.orderNumber,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: RestaurantColors.textPrimary,
+                ),
               ),
             ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Text(
-              formatDate(order.createdAt),
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(color: RestaurantColors.textSecondary),
-            ),
-          ),
-          Expanded(
-            child: Text(
-              formatTime(order.createdAt),
-              style: const TextStyle(color: RestaurantColors.textSecondary),
-            ),
-          ),
-          Expanded(
-            child: Text(
-              order.orderTypeLabel,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(color: RestaurantColors.textSecondary),
-            ),
-          ),
-          Expanded(
-            child: Text(
-              order.paymentMethod ?? "-",
-              style: const TextStyle(color: RestaurantColors.textSecondary),
-            ),
-          ),
-          Expanded(
-            child: Text(
-              formatRupiah(order.totalAmount),
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-                color: RestaurantColors.textPrimary,
+            Expanded(
+              flex: 2,
+              child: Text(
+                formatDateTime(order.createdAt.toLocal()),
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(color: RestaurantColors.textSecondary),
               ),
             ),
-          ),
-          Expanded(child: OrderStatusBadge(status: order.status)),
-        ],
+            // Expanded(
+            //   child: Text(
+            //     formatTime(order.createdAt),
+            //     style: const TextStyle(color: RestaurantColors.textSecondary),
+            //   ),
+            // ),
+            Expanded(
+              child: Text(
+                order.orderTypeLabel,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(color: RestaurantColors.textSecondary),
+              ),
+            ),
+            Expanded(
+              child: Text(
+                order.paymentMethod ?? "-",
+                style: const TextStyle(color: RestaurantColors.textSecondary),
+              ),
+            ),
+            Expanded(
+              child: Text(
+                formatRupiah(order.totalAmount),
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: RestaurantColors.textPrimary,
+                ),
+              ),
+            ),
+            Expanded(child: OrderStatusBadge(status: order.status)),
+          ],
+        ),
       ),
     );
   }
@@ -495,69 +559,111 @@ class _HistoryRowFixed extends StatelessWidget {
   final OrderEntity order;
   const _HistoryRowFixed({required this.order});
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-      child: Row(
-        children: [
-          SizedBox(
-            width: _kColOrder,
-            child: Text(
-              order.orderNumber,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-                color: RestaurantColors.textPrimary,
+  void _showDetail(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text('Detail Transaksi ${order.orderNumber}'),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Tanggal: ${formatDate(order.createdAt)} ${formatTime(order.createdAt)}',
               ),
-            ),
-          ),
-          SizedBox(
-            width: _kColDate,
-            child: Text(
-              formatDate(order.createdAt),
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(color: RestaurantColors.textSecondary),
-            ),
-          ),
-          SizedBox(
-            width: _kColTime,
-            child: Text(
-              formatTime(order.createdAt),
-              style: const TextStyle(color: RestaurantColors.textSecondary),
-            ),
-          ),
-          SizedBox(
-            width: _kColType,
-            child: Text(
-              order.orderTypeLabel,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(color: RestaurantColors.textSecondary),
-            ),
-          ),
-          SizedBox(
-            width: _kColMethod,
-            child: Text(
-              order.isQris ? 'QRIS' : 'Cash',
-              style: const TextStyle(color: RestaurantColors.textSecondary),
-            ),
-          ),
-          SizedBox(
-            width: _kColTotal,
-            child: Text(
-              formatRupiah(order.totalAmount),
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-                color: RestaurantColors.textPrimary,
+              const SizedBox(height: 8),
+              Text('Tipe: ${order.orderTypeLabel}'),
+              Text('Metode: ${order.paymentMethod ?? "-"}'),
+              Text('Total: ${formatRupiah(order.totalAmount)}'),
+              const SizedBox(height: 8),
+              const Text('Item:'),
+              ...order.items.map(
+                (item) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 2),
+                  child: Text(
+                    '- ${item.itemName} x${item.quantity} = ${formatRupiah(item.subtotal)}',
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-          SizedBox(
-            width: _kColStatus,
-            child: OrderStatusBadge(status: order.status),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Tutup'),
           ),
         ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () => _showDetail(context),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+        child: Row(
+          children: [
+            SizedBox(
+              width: _kColOrder,
+              child: Text(
+                order.orderNumber,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: RestaurantColors.textPrimary,
+                ),
+              ),
+            ),
+            SizedBox(
+              width: _kColDate,
+              child: Text(
+                formatDateTime(order.createdAt.toLocal()),
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(color: RestaurantColors.textSecondary),
+              ),
+            ),
+            // SizedBox(
+            //   width: _kColTime,
+            //   child: Text(
+            //     formatTime(order.createdAt),
+            //     style: const TextStyle(color: RestaurantColors.textSecondary),
+            //   ),
+            // ),
+            SizedBox(
+              width: _kColType,
+              child: Text(
+                order.orderTypeLabel,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(color: RestaurantColors.textSecondary),
+              ),
+            ),
+            SizedBox(
+              width: _kColMethod,
+              child: Text(
+                order.isQris ? 'QRIS' : 'Cash',
+                style: const TextStyle(color: RestaurantColors.textSecondary),
+              ),
+            ),
+            SizedBox(
+              width: _kColTotal,
+              child: Text(
+                formatRupiah(order.totalAmount),
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: RestaurantColors.textPrimary,
+                ),
+              ),
+            ),
+            SizedBox(
+              width: _kColStatus,
+              child: OrderStatusBadge(status: order.status),
+            ),
+          ],
+        ),
       ),
     );
   }

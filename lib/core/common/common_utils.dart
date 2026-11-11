@@ -163,6 +163,15 @@ bool isToday(DateTime date) {
       local.day == now.day;
 }
 
+bool isSameDate(DateTime date, DateTime targetDate) {
+  final now = targetDate;
+  final local = date;
+  //debugPrint("now $now , order date $local");
+  return local.year == now.year &&
+      local.month == now.month &&
+      local.day == now.day;
+}
+
 Future<void> initLocalMyTenant(TenantEntity tenant) async {
   debugPrint("tenant : $tenant");
   final prefs = SharedPrefServices.pref;

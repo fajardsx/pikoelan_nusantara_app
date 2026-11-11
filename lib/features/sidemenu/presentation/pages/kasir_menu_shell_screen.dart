@@ -33,7 +33,7 @@ class _KasirMenuShellScreenState extends State<KasirMenuShellScreen> {
 
   Future<void> _confirmLogout() => confirmAndLogout(
     context,
-    title: 'Keluar Dari POS?',
+    title: 'Keluar dari Mode Kasir?',
     message: 'Sesi login akan dihapus dan kamu kembali ke halaman login.',
   );
 

@@ -179,7 +179,7 @@ class _TopBar extends StatelessWidget {
               Text(
                 getSaveSharedPref(
                   key: SettingsKeys.restaurantName,
-                  defaultValue: "MenuMaju",
+                  defaultValue: "Nama Restaurant",
                 ),
                 style: const TextStyle(
                   fontSize: 11.5,

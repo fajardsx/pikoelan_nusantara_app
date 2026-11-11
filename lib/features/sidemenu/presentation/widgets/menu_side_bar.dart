@@ -77,7 +77,7 @@ class MenuSideBar extends StatelessWidget {
                           Text(
                             getSaveSharedPref(
                               key: SettingsKeys.restaurantName,
-                              defaultValue: "MenuMaju",
+                              defaultValue: "Nama Restauran",
                             ),
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
@@ -125,6 +125,8 @@ class MenuSideBar extends StatelessWidget {
                         (role == "kasir" && menuKey == MenuKeys.print)) {
                     } else if ((role == "kitchen" &&
                         menuKey == MenuKeys.kitchenDisplay)) {
+                    } else if ((role == "waiter" &&
+                        menuKey == MenuKeys.waitersDisplay)) {
                     } else {
                       return const SizedBox.shrink();
                     }

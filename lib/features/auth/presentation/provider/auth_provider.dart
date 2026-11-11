@@ -134,7 +134,7 @@ class AuthProvider extends ChangeNotifier {
   /// supaya error dari [checkLogin] tidak di-overwrite jadi loggedOut.
   Future<User?> checkLoginSilently() async {
     final result = await checkAuthUsecase();
-    AppLog.instance.logInfo("login ${result?.name}");
+    AppLog.instance.logInfo("login ${result?.name}", popShow: false);
     return result;
   }
 
@@ -142,7 +142,7 @@ class AuthProvider extends ChangeNotifier {
     try {
       _setLoading();
       final result = await checkAuthUsecase();
-      AppLog.instance.logInfo("login ${result?.name}");
+      AppLog.instance.logInfo("login ${result?.name}", popShow: false);
       return result;
     } on DioException catch (e, s) {
       AppLog.instance.logError('Check Login failed', e, s);
@@ -158,7 +158,9 @@ class AuthProvider extends ChangeNotifier {
     try {
       _setLoading();
       final result = await logincase(payload);
-      AppLog.instance.logInfo("login ${result.success}");
+      AppLog.instance.logInfo(
+        "Login ${result.success! ? "Success" : "Failed"}",
+      );
       if (result.success != true || result.data?.user == null) {
         _setError(
           "Login gagal : ${result.message?.trim().isNotEmpty == true ? result.message : "Email atau kata sandi salah"}",

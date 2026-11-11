@@ -116,10 +116,19 @@ class KasirProvider extends ChangeNotifier {
       activeOrders.where((o) => isToday(o.createdAt)).toList();
 
   List<OrderEntity> get filteredOrders {
-    final today = todayActiveOrders;
-    final type = filter.orderType;
-    if (type == null) return today;
-    return today.where((o) => o.orderType == type).toList();
+    if (startDateFilter == null) {
+      final today = todayActiveOrders;
+      final type = filter.orderType;
+      if (type == null) return today;
+      return today.where((o) => o.orderType == type).toList();
+    } else {
+      final today = activeOrders
+          .where((o) => isSameDate(o.createdAt.toLocal(), startDateFilter!))
+          .toList();
+      final type = filter.orderType;
+      if (type == null) return today;
+      return today.where((o) => o.orderType == type).toList();
+    }
   }
 
   OrderEntity? get selectedOrder {
@@ -156,6 +165,7 @@ class KasirProvider extends ChangeNotifier {
     DateTime? startDate,
     DateTime? endDate,
   }) async {
+    initDate();
     if (filter != null) currentFilter = filter;
     // Simpan filter aktif (null = semua data), pola sama seperti AdminProvider.
     startDateFilter = startDate;
@@ -329,7 +339,6 @@ class KasirProvider extends ChangeNotifier {
   Future<void> setDateFilter(DateTime? start, DateTime? end) =>
       load(startDate: start, endDate: end);
 
-  /// Hapus filter tanggal (kembali ke semua data).
   Future<void> clearDateFilter() => load(startDate: null, endDate: null);
 
   @override
@@ -382,6 +391,25 @@ class KasirProvider extends ChangeNotifier {
       await KasirPrint().printDapurReceipt(selectedOrder);
     } catch (e, s) {
       AppLog.instance.logError("Print Receipt error", e, s);
+    } finally {}
+  }
+
+  void initDate() {
+    if (!hasDateFilter) {
+      final now = DateTime.now();
+      startDateFilter = DateTime(now.year, now.month, now.day);
+      endDateFilter = DateTime(now.year, now.month, now.day, 23, 59, 59);
+      notifyListeners();
+    }
+  }
+
+  Future<void> applyDate({DateTime? startDate, DateTime? endDate}) async {
+    try {
+      startDateFilter = startDate;
+      endDateFilter = endDate;
+      notifyListeners();
+    } catch (e, s) {
+      AppLog.instance.logError("Filter Date error", e, s);
     } finally {}
   }
 }

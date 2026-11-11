@@ -73,8 +73,6 @@ class MyApp extends StatelessWidget {
             ChangeNotifierProvider(
               create: (context) => sl<AuthProvider>()..init(),
             ),
-            // Cart lives above the Navigator so it survives pushNamed
-            // navigation across the whole Self-Order flow.
             ChangeNotifierProvider(create: (context) => CartProvider(sl())),
             // Public menu (GET api/menu/:slug) juga global supaya
             // Beranda, Semua Menu, dan Pembayaran pakai slug/data sama.

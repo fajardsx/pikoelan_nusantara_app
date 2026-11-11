@@ -33,15 +33,12 @@ class _KitchenMenuShellScreenState extends State<KitchenMenuShellScreen> {
 
   Future<void> _confirmLogout() => confirmAndLogout(
     context,
-    title: 'Keluar Dari POS?',
+    title: 'Keluar dari Kitchen Display?',
     message: 'Sesi login akan dihapus dan kamu kembali ke halaman login.',
   );
 
   @override
   Widget build(BuildContext context) {
-    // Satu-satunya KasirProvider di seluruh Shell. Langsung load() di sini
-    // supaya OrderListPanel / Detail / Payment / Laporan / Riwayat
-    // semuanya membaca instance + activeOrders yang sama.
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(

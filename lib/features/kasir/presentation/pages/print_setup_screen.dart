@@ -190,7 +190,7 @@ class _PrintSetupScreenState extends State<PrintSetupScreen> {
 
       final bytes = await KasirPrint().testTicket(optionprinttype: _paperSize);
       await PrintBluetoothThermal.writeBytes(bytes);
-      await PrintBluetoothThermal.disconnect;
+      //await PrintBluetoothThermal.disconnect;
       AppLog.instance.logInfo('Test print berhasil');
     } catch (e, s) {
       AppLog.instance.logError('Test print gagal: $e', e, s);

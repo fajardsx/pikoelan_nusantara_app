@@ -172,7 +172,7 @@ class _StockSummaryPageState extends State<StockSummaryPage> {
                     const SizedBox(height: 10),
                     buildStockTable(sProv, items, uProv, cProv),
                     const SizedBox(height: 20),
-                    const Divider(height: 1),
+                    //const Divider(height: 1),
 
                     const SizedBox(height: 20),
                     Row(
@@ -329,6 +329,14 @@ class _StockSummaryPageState extends State<StockSummaryPage> {
                     )
                     .name;
                 return TableRow(
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        width: 1,
+                        color: RestaurantColors.primaryBrown,
+                      ),
+                    ),
+                  ),
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(8),
@@ -510,6 +518,14 @@ class _StockSummaryPageState extends State<StockSummaryPage> {
                   ? Colors.green
                   : (isOut ? Colors.red : Colors.orange);
               return TableRow(
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      width: 1,
+                      color: RestaurantColors.cardImageBackground,
+                    ),
+                  ),
+                ),
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8),

@@ -38,39 +38,108 @@ class OrderListPanel extends StatelessWidget {
                       ),
                     ),
                     OrderStreamStatusBadge(),
-                    // InkWell(
-                    //   borderRadius: BorderRadius.circular(20),
-                    //   onTap: () => Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (_) => const KasirTakeOrderScreen(),
-                    //     ),
-                    //   ),
-                    //   child: Container(
-                    //     height: 32,
-                    //     padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    //     decoration: const BoxDecoration(
-                    //       color: RestaurantColors.primaryBrown,
-                    //       shape: BoxShape.rectangle,
-                    //       borderRadius: BorderRadius.all(Radius.circular(20)),
-                    //     ),
-                    //     child: const Row(
-                    //       children: [
-                    //         Icon(Icons.add, color: Colors.white, size: 18),
-                    //         Text(
-                    //           'Buat Pesanan',
-                    //           style: TextStyle(color: Colors.white),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
                   ],
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18),
                 child: _FilterTabs(kasir: kasir),
+              ),
+              const SizedBox(height: 8),
+
+              // Filter Tanggal
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: Row(
+                  children: [
+                    const Text(
+                      'Tanggal:',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: RestaurantColors.textPrimary,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: InkWell(
+                        onTap: () async {
+                          final selected = await showDatePicker(
+                            context: context,
+                            initialDate:
+                                kasir.startDateFilter ?? DateTime.now(),
+                            firstDate: DateTime(2020),
+                            lastDate: DateTime(2100),
+                          );
+                          if (selected != null) {
+                            var startDateFilter = DateTime(
+                              selected.year,
+                              selected.month,
+                              selected.day,
+                            );
+                            var endDateFilter = DateTime(
+                              selected.year,
+                              selected.month,
+                              selected.day,
+                              23,
+                              59,
+                              59,
+                            );
+                            await kasir.applyDate(
+                              startDate: startDateFilter,
+                              endDate: endDateFilter,
+                            );
+                          }
+                        },
+                        borderRadius: BorderRadius.circular(8),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 6,
+                            horizontal: 10,
+                          ),
+                          decoration: BoxDecoration(
+                            color: RestaurantColors.surface,
+                            border: Border.all(
+                              color: RestaurantColors.cardBorder,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                kasir.startDateFilter != null
+                                    ? formatDate(kasir.startDateFilter!)
+                                    : formatDate(DateTime.now()),
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: RestaurantColors.textPrimary,
+                                ),
+                              ),
+                              const Icon(
+                                Icons.calendar_today_outlined,
+                                size: 14,
+                                color: RestaurantColors.textSecondary,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    if (kasir.hasDateFilter) ...[
+                      const SizedBox(width: 4),
+                      IconButton(
+                        icon: const Icon(Icons.clear, size: 16),
+                        splashRadius: 16,
+                        constraints: const BoxConstraints(),
+                        padding: const EdgeInsets.all(4),
+                        onPressed: () async {
+                          await kasir.applyDate(startDate: null, endDate: null);
+                        },
+                      ),
+                    ],
+                  ],
+                ),
               ),
               const SizedBox(height: 12),
               Expanded(
@@ -232,7 +301,7 @@ class _FilterTabs extends StatelessWidget {
           final filter = OrderFilter.values[index];
           final isSelected = filter == kasir.filter;
           // Badge mengikuti daftar hari ini supaya konsisten dengan list.
-          final today = kasir.todayActiveOrders;
+          final today = kasir.filteredOrders;
           final count = filter == OrderFilter.semua
               ? today.length
               : today.where((o) => o.orderType == filter.orderType).length;

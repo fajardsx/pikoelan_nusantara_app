@@ -10,8 +10,6 @@ import 'package:restauran_menu/shared/utils/logout_helper.dart';
 
 import '../../../../core/themes/restaurant_colors.dart';
 import '../../../customers/presentation/widgets/order_status_badge.dart';
-import '../../../notifications/domain/entities/order_stream_role.dart';
-import '../../../notifications/presentation/provider/order_stream_provider.dart';
 import '../../../notifications/presentation/widgets/order_stream_status_badge.dart';
 import '../../../orders/domain/entities/order_entity.dart';
 import '../../domain/entities/table.dart';
@@ -57,10 +55,6 @@ class _WaiterShellScreenState extends State<WaiterShellScreen> {
       providers: [
         ChangeNotifierProvider.value(
           value: sl<WaiterProvider>()..load(refresh: true),
-        ),
-        ChangeNotifierProvider(
-          create: (context) =>
-              sl<OrderStreamProvider>()..start(role: OrderStreamRole.waiter),
         ),
       ],
       child: Scaffold(
