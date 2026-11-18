@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restauran_menu/core/di/injector.dart';
+import 'package:restauran_menu/features/permissions/domain/entities/permission_status_entity.dart';
 import 'package:restauran_menu/features/stock/presentation/provider/category_provider.dart';
 import 'package:restauran_menu/features/stock/presentation/provider/unit_provider.dart';
 import 'package:restauran_menu/routes/name_route.dart';
@@ -10,7 +11,8 @@ import '../provider/stock_provider.dart';
 import 'export_stock_csv.dart';
 
 class StockListPage extends StatelessWidget {
-  const StockListPage({super.key});
+  final PermissionStatusEntity permission;
+  const StockListPage({super.key, required this.permission});
 
   @override
   Widget build(BuildContext context) {
@@ -57,14 +59,16 @@ class StockListPage extends StatelessWidget {
           ],
         ),
 
-        floatingActionButton: FloatingActionButton.extended(
-          icon: const Icon(Icons.add),
-          label: const Text('Tambah Item'),
-          onPressed: () async {
-            await Navigator.of(context).pushNamed(NameRoute.stockAddForm);
-            await sl<StockProvider>().load();
-          },
-        ),
+        floatingActionButton: permission.canAdd
+            ? FloatingActionButton.extended(
+                icon: const Icon(Icons.add),
+                label: const Text('Tambah Item'),
+                onPressed: () async {
+                  await Navigator.of(context).pushNamed(NameRoute.stockAddForm);
+                  await sl<StockProvider>().load();
+                },
+              )
+            : null,
 
         // ---------- BODY ----------
         body: Consumer3<StockProvider, CategoryProvider, UnitProvider>(
@@ -178,51 +182,53 @@ class StockListPage extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               // EDIT
-                              IconButton(
-                                icon: const Icon(Icons.edit),
-                                onPressed: () =>
-                                    Navigator.of(context).pushNamed(
-                                      NameRoute.stockAddForm,
-                                      arguments: provider.filteredItems[i],
-                                    ),
-                              ),
-                              // DELETE
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.delete,
-                                  color: Colors.red,
-                                ),
-                                onPressed: () async {
-                                  final confirm = await showDialog<bool>(
-                                    context: context,
-                                    builder: (c) => AlertDialog(
-                                      title: const Text('Hapus Stok'),
-                                      content: Text(
-                                        'Yakin ingin menghapus ${provider.filteredItems[i].name}?',
+                              if (permission.canEdit)
+                                IconButton(
+                                  icon: const Icon(Icons.edit),
+                                  onPressed: () =>
+                                      Navigator.of(context).pushNamed(
+                                        NameRoute.stockAddForm,
+                                        arguments: provider.filteredItems[i],
                                       ),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.pop(c, false),
-                                          child: const Text('Batal'),
+                                ),
+                              // DELETE
+                              if (permission.canDel)
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                  ),
+                                  onPressed: () async {
+                                    final confirm = await showDialog<bool>(
+                                      context: context,
+                                      builder: (c) => AlertDialog(
+                                        title: const Text('Hapus Stok'),
+                                        content: Text(
+                                          'Yakin ingin menghapus ${provider.filteredItems[i].name}?',
                                         ),
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.pop(c, true),
-                                          child: const Text('Hapus'),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-
-                                  if (confirm == true &&
-                                      provider.filteredItems[i].id != null) {
-                                    await provider.removeItem(
-                                      provider.filteredItems[i].id!,
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.pop(c, false),
+                                            child: const Text('Batal'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.pop(c, true),
+                                            child: const Text('Hapus'),
+                                          ),
+                                        ],
+                                      ),
                                     );
-                                  }
-                                },
-                              ),
+
+                                    if (confirm == true &&
+                                        provider.filteredItems[i].id != null) {
+                                      await provider.removeItem(
+                                        provider.filteredItems[i].id!,
+                                      );
+                                    }
+                                  },
+                                ),
                               // isActive toggle
                               Switch(
                                 value: provider.filteredItems[i].isActive,

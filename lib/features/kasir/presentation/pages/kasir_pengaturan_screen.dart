@@ -26,7 +26,7 @@ class _KasirPengaturanScreenState extends State<KasirPengaturanScreen> {
   _ppnController; // Tambahkan controller untuk PPN
 
   late bool _autoPrint;
-  late bool _newOrderNotif;
+  //late bool _newOrderNotif;
   late bool _confirmCancel;
   //late bool _enablePPN;
   late double _ppnValue; // Tambahkan variabel untuk nilai PPN
@@ -51,7 +51,7 @@ class _KasirPengaturanScreenState extends State<KasirPengaturanScreen> {
     );
     _ppnController = TextEditingController(); // Inisialisasi controller PPN
     _autoPrint = prefs.getBool(SettingsKeys.autoPrint) ?? true;
-    _newOrderNotif = prefs.getBool(SettingsKeys.newOrderNotif) ?? true;
+    //_newOrderNotif = prefs.getBool(SettingsKeys.newOrderNotif) ?? true;
     _confirmCancel = prefs.getBool(SettingsKeys.confirmCancel) ?? true;
     //_enablePPN = prefs.getBool(SettingsKeys.enablePPN) ?? false;
     _ppnValue =

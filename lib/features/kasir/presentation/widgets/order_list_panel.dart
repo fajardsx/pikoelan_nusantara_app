@@ -134,7 +134,7 @@ class OrderListPanel extends StatelessWidget {
                         constraints: const BoxConstraints(),
                         padding: const EdgeInsets.all(4),
                         onPressed: () async {
-                          await kasir.applyDate(startDate: null, endDate: null);
+                          await kasir.resetDate();
                         },
                       ),
                     ],

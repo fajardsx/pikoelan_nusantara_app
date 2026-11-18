@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:restauran_menu/core/di/injector.dart';
 import 'package:restauran_menu/core/themes/app_fonts.dart';
 import 'package:restauran_menu/core/themes/restaurant_colors.dart';
+import 'package:restauran_menu/features/permissions/domain/entities/permission_status_entity.dart';
 import 'package:restauran_menu/features/stock/domain/entities/category.dart';
 import 'package:restauran_menu/features/stock/domain/entities/stock_item.dart';
 import 'package:restauran_menu/features/stock/domain/entities/stock_movement.dart';
@@ -16,7 +17,8 @@ import '../provider/stock_provider.dart';
 import '../provider/unit_provider.dart';
 
 class StockSummaryPage extends StatefulWidget {
-  const StockSummaryPage({super.key});
+  final PermissionStatusEntity permission;
+  const StockSummaryPage({super.key, required this.permission});
   @override
   State<StockSummaryPage> createState() => _StockSummaryPageState();
 }
@@ -161,9 +163,10 @@ class _StockSummaryPageState extends State<StockSummaryPage> {
                         const Spacer(),
                         TextButton(
                           onPressed: () async {
-                            await Navigator.of(
-                              context,
-                            ).pushNamed(NameRoute.stockList);
+                            await Navigator.of(context).pushNamed(
+                              NameRoute.stockList,
+                              arguments: {'permission': widget.permission},
+                            );
                           },
                           child: const Text('Lihat Semua'),
                         ),
@@ -184,9 +187,10 @@ class _StockSummaryPageState extends State<StockSummaryPage> {
                         const Spacer(),
                         TextButton(
                           onPressed: () async {
-                            await Navigator.of(
-                              context,
-                            ).pushNamed(NameRoute.stockMovementList);
+                            await Navigator.of(context).pushNamed(
+                              NameRoute.stockMovementList,
+                              arguments: {'permission': widget.permission},
+                            );
                           },
                           child: const Text('Lihat Semua'),
                         ),

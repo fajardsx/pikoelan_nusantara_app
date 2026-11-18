@@ -122,18 +122,6 @@ class _PaymentPanelState extends State<PaymentPanel> {
                           color: RestaurantColors.success,
                         ),
                       ),
-                      if (kasir.paymentMethod == OrderEntity.payQrcode) ...[
-                        const SizedBox(height: 12),
-                        const Text(
-                          'Scan QRIS di bawah',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: RestaurantColors.textPrimary,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Image.asset('assets/images/qris.png', height: 150),
-                      ],
                     ],
                   ),
                 if (!order.isPaid)

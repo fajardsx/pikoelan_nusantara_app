@@ -26,7 +26,7 @@ class KasirPrint {
           macPrinterAddress: printerMac,
         );
         if (!result) {
-          throw Exception('Failed to connect: $result');
+          AppLog.instance.logWarning('Failed to connect: $result');
           return;
         }
       }
@@ -122,6 +122,17 @@ class KasirPrint {
           styles: const PosStyles(align: PosAlign.right, bold: true),
         ),
       ]);
+      if (order.orderType == OrderEntity.typeDineIn) {
+        bytes += generator.text(
+          'No Meja :',
+          styles: const PosStyles(align: PosAlign.left),
+        );
+        bytes += generator.text(
+          order.tableNumber ?? "",
+          styles: const PosStyles(align: PosAlign.left, bold: true),
+        );
+      }
+
       bytes += generator.feed(2);
       bytes += generator.hr();
 
@@ -227,7 +238,7 @@ class KasirPrint {
           macPrinterAddress: printerMac,
         );
         if (!result) {
-          throw Exception('Failed to connect: $result');
+          AppLog.instance.logWarning('Failed to connect: $result');
         }
       }
       List<int> bytes = [];
@@ -318,6 +329,16 @@ class KasirPrint {
           styles: const PosStyles(align: PosAlign.right, bold: true),
         ),
       ]);
+      if (order.orderType == OrderEntity.typeDineIn) {
+        bytes += generator.text(
+          'No Meja :',
+          styles: const PosStyles(align: PosAlign.left),
+        );
+        bytes += generator.text(
+          order.tableNumber ?? "",
+          styles: const PosStyles(align: PosAlign.left, bold: true),
+        );
+      }
 
       bytes += generator.feed(2);
       bytes += generator.hr();

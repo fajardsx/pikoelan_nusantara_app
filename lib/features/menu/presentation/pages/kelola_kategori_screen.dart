@@ -3,6 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:restauran_menu/features/menu/data/models/category_payload.dart';
 import 'package:restauran_menu/features/menu/domain/entities/menu_category_entity.dart';
 import 'package:restauran_menu/features/menu/presentation/provider/menu_provider.dart';
+import 'package:restauran_menu/features/permissions/domain/entities/permission_status_entity.dart';
 import 'package:restauran_menu/shared/widgets/app_image_loader.dart';
 import 'package:restauran_menu/shared/widgets/photo_picker_widget.dart';
 
@@ -12,7 +13,12 @@ import '../../../../core/themes/restaurant_colors.dart';
 
 class KelolaKategoriScreen extends StatelessWidget {
   final MenuCategoryEntity? category;
-  const KelolaKategoriScreen({super.key, this.category});
+  final PermissionStatusEntity permission;
+  const KelolaKategoriScreen({
+    super.key,
+    this.category,
+    required this.permission,
+  });
 
   Future<void> _openForm(BuildContext context, {MenuCategoryEntity? category}) {
     return showDialog(
@@ -69,19 +75,21 @@ class KelolaKategoriScreen extends StatelessWidget {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 12),
-            child: ElevatedButton.icon(
-              onPressed: () => _openForm(context),
-              icon: const Icon(Icons.add_rounded, size: 18),
-              label: const Text('Tambah '),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: RestaurantColors.primaryBrown,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-              ),
-            ),
+            child: permission.canAdd
+                ? ElevatedButton.icon(
+                    onPressed: () => _openForm(context),
+                    icon: const Icon(Icons.add_rounded, size: 18),
+                    label: const Text('Tambah '),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: RestaurantColors.primaryBrown,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                    ),
+                  )
+                : null,
           ),
         ],
       ),
@@ -156,22 +164,24 @@ class KelolaKategoriScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    IconButton(
-                      tooltip: 'Edit',
-                      onPressed: () => _openForm(context, category: category),
-                      icon: const Icon(
-                        Icons.edit_outlined,
-                        color: RestaurantColors.textSecondary,
+                    if (permission.canEdit)
+                      IconButton(
+                        tooltip: 'Edit',
+                        onPressed: () => _openForm(context, category: category),
+                        icon: const Icon(
+                          Icons.edit_outlined,
+                          color: RestaurantColors.textSecondary,
+                        ),
                       ),
-                    ),
-                    IconButton(
-                      tooltip: 'Hapus',
-                      onPressed: () => _confirmDelete(context, category),
-                      icon: const Icon(
-                        Icons.delete_outline_rounded,
-                        color: RestaurantColors.danger,
+                    if (permission.canDel)
+                      IconButton(
+                        tooltip: 'Hapus',
+                        onPressed: () => _confirmDelete(context, category),
+                        icon: const Icon(
+                          Icons.delete_outline_rounded,
+                          color: RestaurantColors.danger,
+                        ),
                       ),
-                    ),
                   ],
                 ),
               );
@@ -230,7 +240,7 @@ class _CategoryFormDialogState extends State<_CategoryFormDialog> {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _saving = true);
 
-    final repo = sl<CategoryRepository>();
+    //final repo = sl<CategoryRepository>();
     final name = _nameController.text.trim();
     //final categoriesPicture = _pickedImage?.path ?? _iconController.text.trim();
 

@@ -1,5 +1,5 @@
 {
-  "BASE_URL": "https://menu-maju-backend.onrender.com/",
+  "BASE_URL": "http://localhost:3000/",
   "BASE_URL_ONRENDER": "https://menu-maju-backend.onrender.com/",
   "BASE_URL_REPLIT": "https://my-first-backend--fajardsx.replit.app/",
   "BASE_URL_LOCAL": "http://10.31.142.163:3000/",

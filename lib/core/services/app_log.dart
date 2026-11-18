@@ -25,10 +25,10 @@ class AppLog {
   }
 
   void logError(String message, Object e, StackTrace s, {bool popShow = true}) {
-    late final String endpoint;
-    late final String request;
-    late final String requestHeader;
-    late final String response;
+    // late final String endpoint;
+    // late final String request;
+    // late final String requestHeader;
+    // late final String response;
     if (e is DioException) {
       if (e.requestOptions.data is Map) {
         final containPassword = (e.requestOptions.data as Map).containsKey(
@@ -38,25 +38,25 @@ class AppLog {
         if (containPassword) {
           data['password'] = '******';
         }
-        request = data.toString();
+        //request = data.toString();
       } else {
-        request = e.requestOptions.data.toString();
+        //request = e.requestOptions.data.toString();
       }
-      endpoint = e.requestOptions.uri.toString();
-      requestHeader = e.requestOptions.headers.toString();
-      response = e.response?.data.toString() ?? '';
+      // endpoint = e.requestOptions.uri.toString();
+      // requestHeader = e.requestOptions.headers.toString();
+      // response = e.response?.data.toString() ?? '';
     } else {
-      endpoint = '';
-      request = '';
-      requestHeader = '';
-      response = '';
+      // endpoint = '';
+      // request = '';
+      // requestHeader = '';
+      // response = '';
     }
-    final Map<String, dynamic> info = {
-      'endpoint': endpoint,
-      'request.payload': request,
-      'request.headers': requestHeader,
-      'response.payload': response,
-    };
+    // final Map<String, dynamic> info = {
+    //   'endpoint': endpoint,
+    //   'request.payload': request,
+    //   'request.headers': requestHeader,
+    //   'response.payload': response,
+    // };
 
     // unawaited(
     //   FirebaseCrashlytics.instance.recordError(

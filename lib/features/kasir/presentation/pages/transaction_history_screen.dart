@@ -437,48 +437,66 @@ class _HistoryRow extends StatelessWidget {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        icon: const Icon(Icons.swap_horiz_rounded),
         title: Text(
           'Detail Transaksi\n${order.orderNumber}',
           textAlign: TextAlign.center,
         ),
         titleTextStyle: appFonts.subtitle.bold.ts,
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+        backgroundColor: Colors.white,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         content: SingleChildScrollView(
           child: Column(
-            mainAxisSize: MainAxisSize.max,
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 'Tanggal: ${formatDateTime(order.createdAt.toLocal())}',
-                style: appFonts.ts,
+                style: appFonts.ts.copyWith(fontFamily: 'Courier'),
+              ),
+              const SizedBox(height: 4),
+              const Divider(height: 1, thickness: 0.5),
+              const SizedBox(height: 4),
+              Text(
+                'Customer: ${order.customerName}',
+                style: appFonts.ts.copyWith(fontFamily: 'Courier'),
               ),
               const SizedBox(height: 2),
-              const Divider(height: 1),
-              const SizedBox(height: 8),
-              Text('Customer: ${order.customerName}', style: appFonts.ts),
-              const SizedBox(height: 2),
-              Text('Tipe: ${order.orderTypeLabel}', style: appFonts.ts),
-              Text('Metode: ${order.paymentMethod ?? "-"}', style: appFonts.ts),
-              const SizedBox(height: 8),
-              Text('Item:', style: appFonts.ts),
+              Text(
+                'Order Tipe: ${order.orderTypeLabel}',
+                style: appFonts.ts.copyWith(fontFamily: 'Courier'),
+              ),
+              Text(
+                'Metode: ${order.paymentMethod ?? "-"}',
+                style: appFonts.ts.copyWith(fontFamily: 'Courier'),
+              ),
+              const SizedBox(height: 4),
+              Text('Item:', style: appFonts.ts.copyWith(fontFamily: 'Courier')),
               ...order.items.map(
                 (item) => Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 2),
+                  padding: const EdgeInsets.symmetric(vertical: 1),
                   child: Text(
                     '- ${item.itemName} x ${item.quantity} = ${formatRupiah(item.subtotal)}',
-                    style: appFonts.ts,
+                    style: appFonts.ts.copyWith(fontFamily: 'Courier'),
                   ),
                 ),
               ),
-              const SizedBox(height: 8),
-              Text('Note: ${order.notes ?? "-"}', style: appFonts.ts),
-              const SizedBox(height: 5),
-              const Divider(height: 1),
-              const SizedBox(height: 5),
+              const SizedBox(height: 4),
               Text(
-                'Total: ${formatRupiah(order.totalAmount)}, (${order.isPaid ? "Lunas" : "Belum Bayar"})',
-                textAlign: TextAlign.right,
-                style: appFonts.medium.ts,
+                'Note: ${order.notes ?? "-"}',
+                style: appFonts.ts.copyWith(fontFamily: 'Courier'),
+              ),
+              const Divider(height: 1, thickness: 0.5),
+              const SizedBox(height: 4),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    'Total: ${formatRupiah(order.totalAmount)}, (${order.isPaid ? "Sudah Bayar" : "Belum Bayar"})',
+                    textAlign: TextAlign.right,
+                    style: appFonts.bold.ts.copyWith(fontFamily: 'Courier'),
+                  ),
+                ],
               ),
             ],
           ),

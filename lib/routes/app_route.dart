@@ -12,7 +12,6 @@ import 'package:restauran_menu/features/customers/presentation/pages/payment_met
 import 'package:restauran_menu/features/customers/presentation/pages/qris_payment_screen.dart';
 import 'package:restauran_menu/features/customers/presentation/pages/transfer_payment_screen.dart';
 import 'package:restauran_menu/features/home/presentation/pages/home_screen.dart';
-import 'package:restauran_menu/features/kasir/presentation/pages/kasir_shell_screen.dart';
 import 'package:restauran_menu/features/kitchen/presentation/pages/kitchen_display_screen.dart';
 import 'package:restauran_menu/features/members/presentation/pages/member_screen.dart';
 import 'package:restauran_menu/features/onBoarding/presentation/pages/splash_screen.dart';
@@ -28,7 +27,6 @@ import 'package:restauran_menu/features/stock/presentation/pages/stock_form_page
 import 'package:restauran_menu/features/stock/presentation/pages/stock_list_page.dart';
 import 'package:restauran_menu/features/stock/presentation/pages/stock_movement_form_page.dart';
 import 'package:restauran_menu/features/stock/presentation/pages/stock_movement_list_page.dart';
-import 'package:restauran_menu/features/stock/presentation/pages/stock_summary_page.dart';
 import 'package:restauran_menu/features/stock/presentation/pages/stock_unit_list_page.dart';
 import 'package:restauran_menu/features/waiters/presentation/pages/waiter_shell_screen.dart';
 import 'package:restauran_menu/features/waiters/presentation/pages/waiter_take_order_screen.dart';
@@ -72,7 +70,6 @@ class AppRoute {
     NameRoute.adminDashboard: (context) => const AdminShellScreen(),
     NameRoute.adminPromos: (context) => const PromoScreen(),
     NameRoute.adminMembers: (context) => const MemberScreen(),
-    NameRoute.kasirDashboard: (context) => const KasirShellScreen(),
     NameRoute.kitchenDisplay: (context) => const KitchenDisplayScreen(),
     NameRoute.waiterDashboard: (context) => const WaiterShellScreen(),
     NameRoute.waiterTakeOrderDashboard: (context) {
@@ -81,10 +78,25 @@ class AppRoute {
           {};
       return WaiterTakeOrderScreen(tableNumber: args['tableNumber']);
     },
-    NameRoute.stockSummary: (context) => const StockSummaryPage(),
-    NameRoute.stockList: (context) => const StockListPage(),
-    NameRoute.stockCategoryList: (context) => const StockCategoryListPage(),
-    NameRoute.stockUnitsList: (context) => const StockUnitListPage(),
+    NameRoute.stockList: (context) {
+      final args = ModalRoute.of(context)?.settings.arguments != null
+          ? ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>
+          : null;
+
+      return StockListPage(permission: args?['permission']);
+    },
+    NameRoute.stockCategoryList: (context) {
+      final args = ModalRoute.of(context)?.settings.arguments != null
+          ? ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>
+          : null;
+      return StockCategoryListPage(permission: args?['permission']);
+    },
+    NameRoute.stockUnitsList: (context) {
+      final args = ModalRoute.of(context)?.settings.arguments != null
+          ? ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>
+          : null;
+      return StockUnitListPage(permission: args?['permission']);
+    },
     NameRoute.stockAddForm: (context) {
       final args = ModalRoute.of(context)?.settings.arguments != null
           ? ModalRoute.of(context)!.settings.arguments as StockItem

@@ -118,7 +118,7 @@ class OrderSuccessScreen extends StatelessWidget {
       //if (kIsWeb) {
       final blob = html.Blob([bytes], 'application/pdf');
       final url = html.Url.createObjectUrlFromBlob(blob);
-      final anchor = html.AnchorElement(href: url)
+      html.AnchorElement(href: url)
         ..setAttribute('download', 'invoice_$orderNumber.pdf')
         ..click();
       html.Url.revokeObjectUrl(url);

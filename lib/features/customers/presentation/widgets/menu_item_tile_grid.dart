@@ -48,7 +48,7 @@ class MenuItemTileGrid extends StatelessWidget {
             child: _Thumbnail(
               name: item!.imageUrl ?? "",
               thumbW: double.infinity,
-                isFavorite: item!.isFavorite,
+              isFavorite: item!.isFavorite,
             ),
           ),
           Padding(
@@ -132,7 +132,12 @@ class _Thumbnail extends StatelessWidget {
   final double? thumbH;
   final bool isFavorite;
 
-  const _Thumbnail({required this.name, this.thumbW, this.thumbH, this.isFavorite = false});
+  const _Thumbnail({
+    required this.name,
+    this.thumbW,
+    this.thumbH,
+    this.isFavorite = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -164,11 +169,7 @@ class _Thumbnail extends StatelessWidget {
           const Positioned(
             top: 4,
             right: 4,
-            child: Icon(
-              Icons.star,
-              color: Colors.amber,
-              size: 20,
-            ),
+            child: Icon(Icons.star, color: Colors.amber, size: 20),
           ),
       ],
     );

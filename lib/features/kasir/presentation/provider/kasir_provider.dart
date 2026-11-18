@@ -123,7 +123,7 @@ class KasirProvider extends ChangeNotifier {
       return today.where((o) => o.orderType == type).toList();
     } else {
       final today = activeOrders
-          .where((o) => isSameDate(o.createdAt.toLocal(), startDateFilter!))
+          .where((o) => isSameDate(o.createdAt, startDateFilter!))
           .toList();
       final type = filter.orderType;
       if (type == null) return today;
@@ -410,6 +410,18 @@ class KasirProvider extends ChangeNotifier {
       notifyListeners();
     } catch (e, s) {
       AppLog.instance.logError("Filter Date error", e, s);
+    } finally {}
+  }
+
+  Future<void> resetDate() async {
+    try {
+      startDateFilter = null;
+      endDateFilter = null;
+      selectedOrderNumber = null;
+      paymentMethod = null;
+      notifyListeners();
+    } catch (e, s) {
+      AppLog.instance.logError("Filter Date reset error", e, s);
     } finally {}
   }
 }

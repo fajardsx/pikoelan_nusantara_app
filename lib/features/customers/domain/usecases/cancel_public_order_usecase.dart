@@ -8,4 +8,3 @@ class CancelPublicOrderUsecase {
   Future<OrderEntity?> call(String slug, String orderNumber) =>
       repository.cancelPublicOrder(slug, orderNumber);
 }
-

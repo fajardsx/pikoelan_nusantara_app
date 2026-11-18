@@ -8,11 +8,7 @@ class MemberFormDialog extends StatefulWidget {
   final MemberEntity? member;
   final Future<bool> Function(MemberPayload payload) onSave;
 
-  const MemberFormDialog({
-    super.key,
-    this.member,
-    required this.onSave,
-  });
+  const MemberFormDialog({super.key, this.member, required this.onSave});
 
   static Future<bool?> show(
     BuildContext context, {
@@ -155,7 +151,9 @@ class _MemberFormDialogState extends State<MemberFormDialog> {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: RestaurantColors.accentOrange.withValues(alpha: 0.12),
+                      color: RestaurantColors.accentOrange.withValues(
+                        alpha: 0.12,
+                      ),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: const Icon(
@@ -305,7 +303,8 @@ class _MemberFormDialogState extends State<MemberFormDialog> {
                                   const Spacer(),
                                   if (_birthDate != null)
                                     InkWell(
-                                      onTap: () => setState(() => _birthDate = null),
+                                      onTap: () =>
+                                          setState(() => _birthDate = null),
                                       child: const Icon(
                                         Icons.clear_rounded,
                                         size: 16,
@@ -351,11 +350,20 @@ class _MemberFormDialogState extends State<MemberFormDialog> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   OutlinedButton(
-                    onPressed: _isLoading ? null : () => Navigator.pop(context, false),
+                    onPressed: _isLoading
+                        ? null
+                        : () => Navigator.pop(context, false),
                     style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                      side: const BorderSide(color: RestaurantColors.cardBorder),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 12,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      side: const BorderSide(
+                        color: RestaurantColors.cardBorder,
+                      ),
                     ),
                     child: const Text('Batal'),
                   ),
@@ -365,8 +373,13 @@ class _MemberFormDialogState extends State<MemberFormDialog> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: RestaurantColors.accentOrange,
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 12,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
                     child: _isLoading
                         ? const SizedBox(
@@ -452,4 +465,3 @@ class _MemberFormDialogState extends State<MemberFormDialog> {
     );
   }
 }
-

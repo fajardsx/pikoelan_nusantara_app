@@ -8,11 +8,7 @@ class PromoFormDialog extends StatefulWidget {
   final PromoEntity? promo;
   final Future<bool> Function(PromoPayload payload) onSave;
 
-  const PromoFormDialog({
-    super.key,
-    this.promo,
-    required this.onSave,
-  });
+  const PromoFormDialog({super.key, this.promo, required this.onSave});
 
   static Future<bool?> show(
     BuildContext context, {
@@ -58,8 +54,8 @@ class _PromoFormDialogState extends State<PromoFormDialog> {
     _discountValController = TextEditingController(
       text: p != null
           ? (p.discountValue.truncateToDouble() == p.discountValue
-              ? p.discountValue.toInt().toString()
-              : p.discountValue.toString())
+                ? p.discountValue.toInt().toString()
+                : p.discountValue.toString())
           : '',
     );
     _minOrderController = TextEditingController(
@@ -142,7 +138,8 @@ class _PromoFormDialogState extends State<PromoFormDialog> {
 
     setState(() => _isLoading = true);
 
-    final discountVal = double.tryParse(_discountValController.text.trim()) ?? 0.0;
+    final discountVal =
+        double.tryParse(_discountValController.text.trim()) ?? 0.0;
     final minOrder = _minOrderController.text.trim().isNotEmpty
         ? double.tryParse(_minOrderController.text.trim())
         : null;
@@ -207,7 +204,9 @@ class _PromoFormDialogState extends State<PromoFormDialog> {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: RestaurantColors.accentOrange.withValues(alpha: 0.12),
+                      color: RestaurantColors.accentOrange.withValues(
+                        alpha: 0.12,
+                      ),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: const Icon(
@@ -325,11 +324,15 @@ class _PromoFormDialogState extends State<PromoFormDialog> {
                                 ),
                                 const SizedBox(height: 6),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                  ),
                                   decoration: BoxDecoration(
                                     color: RestaurantColors.background,
                                     borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(color: RestaurantColors.cardBorder),
+                                    border: Border.all(
+                                      color: RestaurantColors.cardBorder,
+                                    ),
                                   ),
                                   child: DropdownButtonHideUnderline(
                                     child: DropdownButton<String>(
@@ -364,7 +367,9 @@ class _PromoFormDialogState extends State<PromoFormDialog> {
                               label: _discountType == 'percentage'
                                   ? 'Nilai Diskon (%) *'
                                   : 'Nominal Potongan (Rp) *',
-                              hint: _discountType == 'percentage' ? 'cth: 15' : 'cth: 20000',
+                              hint: _discountType == 'percentage'
+                                  ? 'cth: 15'
+                                  : 'cth: 20000',
                               keyboardType: TextInputType.number,
                               validator: (val) {
                                 if (val == null || val.trim().isEmpty) {
@@ -374,7 +379,8 @@ class _PromoFormDialogState extends State<PromoFormDialog> {
                                 if (num == null || num <= 0) {
                                   return 'Harus lebih dari 0';
                                 }
-                                if (_discountType == 'percentage' && num > 100) {
+                                if (_discountType == 'percentage' &&
+                                    num > 100) {
                                   return 'Maksimal 100%';
                                 }
                                 return null;
@@ -440,11 +446,15 @@ class _PromoFormDialogState extends State<PromoFormDialog> {
                                 ),
                                 const SizedBox(height: 6),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                  ),
                                   decoration: BoxDecoration(
                                     color: RestaurantColors.background,
                                     borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(color: RestaurantColors.cardBorder),
+                                    border: Border.all(
+                                      color: RestaurantColors.cardBorder,
+                                    ),
                                   ),
                                   child: DropdownButtonHideUnderline(
                                     child: DropdownButton<String>(
@@ -612,7 +622,9 @@ class _PromoFormDialogState extends State<PromoFormDialog> {
                         decoration: BoxDecoration(
                           color: RestaurantColors.background,
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: RestaurantColors.cardBorder),
+                          border: Border.all(
+                            color: RestaurantColors.cardBorder,
+                          ),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -639,8 +651,9 @@ class _PromoFormDialogState extends State<PromoFormDialog> {
                             ),
                             Switch(
                               value: _isActive,
-                              activeColor: RestaurantColors.accentOrange,
-                              onChanged: (val) => setState(() => _isActive = val),
+                              activeThumbColor: RestaurantColors.accentOrange,
+                              onChanged: (val) =>
+                                  setState(() => _isActive = val),
                             ),
                           ],
                         ),
@@ -660,11 +673,20 @@ class _PromoFormDialogState extends State<PromoFormDialog> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   OutlinedButton(
-                    onPressed: _isLoading ? null : () => Navigator.pop(context, false),
+                    onPressed: _isLoading
+                        ? null
+                        : () => Navigator.pop(context, false),
                     style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                      side: const BorderSide(color: RestaurantColors.cardBorder),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 12,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      side: const BorderSide(
+                        color: RestaurantColors.cardBorder,
+                      ),
                     ),
                     child: const Text('Batal'),
                   ),
@@ -674,8 +696,13 @@ class _PromoFormDialogState extends State<PromoFormDialog> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: RestaurantColors.accentOrange,
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 12,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
                     child: _isLoading
                         ? const SizedBox(
@@ -769,4 +796,3 @@ class _PromoFormDialogState extends State<PromoFormDialog> {
     );
   }
 }
-

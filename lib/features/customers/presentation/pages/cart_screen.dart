@@ -223,8 +223,9 @@ class _CartScreenState extends State<CartScreen> {
           ? int.tryParse(_redeemPointsController.text)
           : null,
     );
-
-    Navigator.pushNamed(context, NameRoute.paymentMethod);
+    if (mounted) {
+      Navigator.pushNamed(context, NameRoute.paymentMethod);
+    }
   }
 
   @override

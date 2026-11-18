@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:restauran_menu/core/common/common_utils.dart';
 import 'package:restauran_menu/core/themes/restaurant_colors.dart';
 import 'package:restauran_menu/features/kasir/presentation/pages/kasir_create_order_screen.dart';
@@ -13,6 +14,8 @@ import 'package:restauran_menu/features/kasir/presentation/widgets/payment_panel
 import 'package:restauran_menu/features/kitchen/presentation/pages/kitchen_display_screen.dart';
 import 'package:restauran_menu/features/members/presentation/pages/member_screen.dart';
 import 'package:restauran_menu/features/menu/presentation/pages/kelola_menu_screen.dart';
+import 'package:restauran_menu/features/permissions/domain/entities/permission_status_entity.dart';
+import 'package:restauran_menu/features/permissions/presentation/provider/permission_provider.dart';
 import 'package:restauran_menu/features/promos/presentation/pages/promo_screen.dart';
 import 'package:restauran_menu/features/sidemenu/presentation/widgets/menu_key.dart';
 import 'package:restauran_menu/features/staff/presentation/pages/staff_screen.dart';
@@ -32,6 +35,17 @@ class MenuPages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool useExpanded = isMobileView(context);
+    final permission = Provider.of<PermissionProvider>(context, listen: true);
+
+    final canAdd = permission.can(_selectedIndex, 'create');
+    final canEdit = permission.can(_selectedIndex, 'update');
+    final canDel = permission.can(_selectedIndex, 'delete');
+    final PermissionStatusEntity permissionStatusEntity =
+        PermissionStatusEntity(
+          canAdd: canAdd,
+          canDel: canDel,
+          canEdit: canEdit,
+        );
 
     switch (_selectedIndex) {
       case MenuKeys.buatPesanan:
@@ -71,11 +85,11 @@ class MenuPages extends StatelessWidget {
       case MenuKeys.waitersDisplay:
         return const WaiterShellScreen();
       case MenuKeys.kelolaMenu:
-        return const KelolaMenuScreen();
+        return KelolaMenuScreen(permission: permissionStatusEntity);
       case MenuKeys.transaksi:
         return const TransactionHistoryScreen();
       case MenuKeys.stock:
-        return const StockSummaryPage();
+        return StockSummaryPage(permission: permissionStatusEntity);
       case MenuKeys.laporan:
         return const KasirLaporanScreen();
       case MenuKeys.pengaturanKasir:

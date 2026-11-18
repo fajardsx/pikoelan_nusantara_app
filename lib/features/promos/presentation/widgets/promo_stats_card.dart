@@ -8,17 +8,15 @@ class PromoStatsCard extends StatelessWidget {
   final PromoStatsResponse? stats;
   final List<PromoEntity> promos;
 
-  const PromoStatsCard({
-    super.key,
-    required this.stats,
-    required this.promos,
-  });
+  const PromoStatsCard({super.key, required this.stats, required this.promos});
 
   @override
   Widget build(BuildContext context) {
     final total = stats?.totalPromos ?? promos.length;
-    final active = stats?.activePromos ?? promos.where((p) => p.isActive).length;
-    final usages = stats?.totalUsages ??
+    final active =
+        stats?.activePromos ?? promos.where((p) => p.isActive).length;
+    final usages =
+        stats?.totalUsages ??
         promos.fold<int>(0, (sum, p) => sum + p.usageCount);
     final discountGiven = stats?.totalDiscountGiven ?? 0.0;
 
@@ -70,12 +68,14 @@ class PromoStatsCard extends StatelessWidget {
 
         return Row(
           children: cards
-              .map((c) => Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: c,
-                    ),
-                  ))
+              .map(
+                (c) => Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    child: c,
+                  ),
+                ),
+              )
               .toList(),
         );
       },
@@ -148,4 +148,3 @@ class PromoStatsCard extends StatelessWidget {
     );
   }
 }
-

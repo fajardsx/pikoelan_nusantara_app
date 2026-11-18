@@ -53,7 +53,8 @@ class PromoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isExpired = promo.endDate != null &&
+    final isExpired =
+        promo.endDate != null &&
         DateTime.now().isAfter(promo.endDate!.add(const Duration(days: 1)));
 
     return Container(
@@ -172,7 +173,7 @@ class PromoCard extends StatelessWidget {
                           scale: 0.75,
                           child: Switch(
                             value: promo.isActive,
-                            activeColor: RestaurantColors.success,
+                            activeThumbColor: RestaurantColors.success,
                             onChanged: onToggleStatus,
                           ),
                         ),
@@ -366,4 +367,3 @@ class PromoCard extends StatelessWidget {
     );
   }
 }
-

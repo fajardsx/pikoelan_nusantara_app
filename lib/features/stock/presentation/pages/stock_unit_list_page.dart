@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restauran_menu/core/di/injector.dart';
 import 'package:restauran_menu/core/themes/app_fonts.dart';
+import 'package:restauran_menu/features/permissions/domain/entities/permission_status_entity.dart';
 import 'package:restauran_menu/routes/name_route.dart';
 
 import '../provider/unit_provider.dart';
 
 class StockUnitListPage extends StatefulWidget {
-  const StockUnitListPage({super.key});
+  final PermissionStatusEntity permission;
+  const StockUnitListPage({super.key, required this.permission});
 
   @override
   _StockUnitListPageState createState() => _StockUnitListPageState();

@@ -12,7 +12,10 @@ class MemberStatsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final total = members.length;
     final totalPoints = members.fold<int>(0, (sum, m) => sum + m.points);
-    final totalSpent = members.fold<double>(0.0, (sum, m) => sum + m.totalSpent);
+    final totalSpent = members.fold<double>(
+      0.0,
+      (sum, m) => sum + m.totalSpent,
+    );
     final totalVisits = members.fold<int>(0, (sum, m) => sum + m.totalVisits);
 
     return LayoutBuilder(
@@ -63,12 +66,14 @@ class MemberStatsCard extends StatelessWidget {
 
         return Row(
           children: cards
-              .map((c) => Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: c,
-                    ),
-                  ))
+              .map(
+                (c) => Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    child: c,
+                  ),
+                ),
+              )
               .toList(),
         );
       },
@@ -141,4 +146,3 @@ class MemberStatsCard extends StatelessWidget {
     );
   }
 }
-
