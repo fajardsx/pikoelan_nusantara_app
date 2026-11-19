@@ -60,22 +60,22 @@ class _AddUnitPageState extends State<AddUnitPage> {
                 decoration: const InputDecoration(labelText: 'Simbol'),
                 onSaved: (v) => _symbol = v?.trim(),
               ),
-              const SizedBox(height: 10),
-              TextFormField(
-                initialValue: _conversionFactor.toString(),
-                decoration: const InputDecoration(labelText: 'Faktor Konversi'),
-                keyboardType: const TextInputType.numberWithOptions(
-                  decimal: true,
-                ),
-                onSaved: (v) =>
-                    _conversionFactor = v != null ? double.tryParse(v) : null,
-              ),
-              const SizedBox(height: 10),
-              TextFormField(
-                initialValue: _baseUnit,
-                decoration: const InputDecoration(labelText: 'Unit Dasar'),
-                onSaved: (v) => _baseUnit = v?.trim(),
-              ),
+              //const SizedBox(height: 10),
+              // TextFormField(
+              //   initialValue: _conversionFactor.toString(),
+              //   decoration: const InputDecoration(labelText: 'Faktor Konversi'),
+              //   keyboardType: const TextInputType.numberWithOptions(
+              //     decimal: true,
+              //   ),
+              //   onSaved: (v) =>
+              //       _conversionFactor = v != null ? double.tryParse(v) : null,
+              // ),
+              // const SizedBox(height: 10),
+              // TextFormField(
+              //   initialValue: _baseUnit,
+              //   decoration: const InputDecoration(labelText: 'Unit Dasar'),
+              //   onSaved: (v) => _baseUnit = v?.trim(),
+              // ),
               const SizedBox(height: 10),
               TextFormField(
                 initialValue: _description,

@@ -39,21 +39,6 @@ class KasirPrint {
       );
 
       bytes += generator.reset();
-
-      // final ByteData data = await rootBundle.load(
-      //   'assets/images/printicon.png',
-      // );
-      // final Uint8List bytesImg = data.buffer.asUint8List();
-      // img.Image? image = img.decodeImage(bytesImg);
-      // final resizedImage = img.copyResize(
-      //   image!,
-      //   width: image.width ~/ 1.3,
-      //   height: image.height ~/ 1.3,
-      //   interpolation: img.Interpolation.nearest,
-      // );
-      // final bytesimg = Uint8List.fromList(img.encodeJpg(resizedImage));
-      // bytes += bytesimg;
-      //bytes += generator.feed(1);
       bytes += generator.text(
         prefs.getString(SettingsKeys.restaurantName) ?? '',
         styles: const PosStyles(
@@ -122,6 +107,14 @@ class KasirPrint {
           styles: const PosStyles(align: PosAlign.right, bold: true),
         ),
       ]);
+      bytes += generator.text(
+        'Type Order :',
+        styles: const PosStyles(align: PosAlign.left),
+      );
+      bytes += generator.text(
+        order.orderType,
+        styles: const PosStyles(align: PosAlign.left, bold: true),
+      );
       if (order.orderType == OrderEntity.typeDineIn) {
         bytes += generator.text(
           'No Meja :',
@@ -190,15 +183,6 @@ class KasirPrint {
           styles: const PosStyles(align: PosAlign.right),
         ),
       ]);
-
-      // bytes += generator.text(
-      //   'Pembayaran dengan :',
-      //   styles: const PosStyles(align: PosAlign.left, bold: true),
-      // );
-      // bytes += generator.text(
-      //   order.paymentLabel,
-      //   styles: const PosStyles(align: PosAlign.left),
-      // );
       bytes += generator.hr();
       bytes += generator.text(
         'Thank you for your order!',
@@ -250,21 +234,6 @@ class KasirPrint {
       );
 
       bytes += generator.reset();
-
-      // final ByteData data = await rootBundle.load(
-      //   'assets/images/printicon.png',
-      // );
-      // final Uint8List bytesImg = data.buffer.asUint8List();
-      // img.Image? image = img.decodeImage(bytesImg);
-      // final resizedImage = img.copyResize(
-      //   image!,
-      //   width: image.width ~/ 1.3,
-      //   height: image.height ~/ 1.3,
-      //   interpolation: img.Interpolation.nearest,
-      // );
-      // final bytesimg = Uint8List.fromList(img.encodeJpg(resizedImage));
-      // bytes += bytesimg;
-      //bytes += generator.feed(1);
       bytes += generator.text(
         prefs.getString(SettingsKeys.restaurantName) ?? '',
         styles: const PosStyles(
@@ -329,6 +298,15 @@ class KasirPrint {
           styles: const PosStyles(align: PosAlign.right, bold: true),
         ),
       ]);
+      bytes += generator.text(
+        'Type Order :',
+        styles: const PosStyles(align: PosAlign.left),
+      );
+      bytes += generator.text(
+        order.orderType ?? "",
+        styles: const PosStyles(align: PosAlign.left, bold: true),
+      );
+
       if (order.orderType == OrderEntity.typeDineIn) {
         bytes += generator.text(
           'No Meja :',

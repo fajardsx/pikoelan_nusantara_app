@@ -42,7 +42,10 @@ class StockListPage extends StatelessWidget {
               icon: const Icon(Icons.straighten),
               tooltip: 'Unit List',
               onPressed: () async {
-                await Navigator.of(context).pushNamed(NameRoute.stockUnitsList);
+                await Navigator.of(context).pushNamed(
+                  NameRoute.stockUnitsList,
+                  arguments: {'permission': permission},
+                );
                 //await sl<UnitProvider>().load();
               },
             ),
@@ -50,9 +53,10 @@ class StockListPage extends StatelessWidget {
               icon: const Icon(Icons.category),
               tooltip: 'Kategori List',
               onPressed: () async {
-                await Navigator.of(
-                  context,
-                ).pushNamed(NameRoute.stockCategoryList);
+                await Navigator.of(context).pushNamed(
+                  NameRoute.stockCategoryList,
+                  arguments: {'permission': permission},
+                );
                 //await sl<CategoryProvider>().load();
               },
             ),

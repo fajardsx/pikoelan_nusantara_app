@@ -451,7 +451,7 @@ class _HistoryRow extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Tanggal: ${formatDateTime(order.createdAt.toLocal())}',
+                'Tanggal: ${formatDateTime(order.createdAt)}',
                 style: appFonts.ts.copyWith(fontFamily: 'Courier'),
               ),
               const SizedBox(height: 4),
@@ -532,7 +532,7 @@ class _HistoryRow extends StatelessWidget {
             Expanded(
               flex: 2,
               child: Text(
-                formatDateTime(order.createdAt.toLocal()),
+                formatDateTime(order.createdAt),
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(color: RestaurantColors.textSecondary),
               ),

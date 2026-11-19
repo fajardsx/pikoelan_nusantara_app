@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 
 class MenuCategoryEntity extends Equatable {
   final int id;
@@ -16,12 +17,13 @@ class MenuCategoryEntity extends Equatable {
   });
 
   factory MenuCategoryEntity.fromJson(Map<String, dynamic> json) {
+    debugPrint("categories : $json");
     return MenuCategoryEntity(
       id: json['id'] as int,
-      name: json['name'] as String? ?? '',
-      categoriesPicture: json['categoriesPicture'] as String?,
-      sortOrder: json['sortOrder'] as int? ?? 0,
-      isActive: json['isActive'] as bool? ?? true,
+      name: json['name'] ?? '',
+      categoriesPicture: json['categoriesPicture'] ?? '',
+      sortOrder: json['sortOrder'] ?? 0,
+      isActive: json['isActive'] ?? true,
     );
   }
 

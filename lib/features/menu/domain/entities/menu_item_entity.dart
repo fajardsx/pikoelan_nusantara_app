@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:restauran_menu/core/common/common_utils.dart';
 
 class MenuItemEntity extends Equatable {
   final int id;
@@ -28,15 +29,14 @@ class MenuItemEntity extends Equatable {
   });
 
   factory MenuItemEntity.fromJson(Map<String, dynamic> json) {
-    final numPrice = (json['price'] is num)
-        ? (json['price'] as num).toDouble()
-        : double.tryParse(json['price'].toString().replaceAll(',', '.')) ?? 0.0;
+    //debugPrint("menu : $json");
+    final numPrice = toDouble(json['price']);
     final numOriPrice = json['originalPrice'] != null
-        ? double.tryParse(json['originalPrice'].toString())
+        ? toDouble(json['originalPrice'])
         : null;
     return MenuItemEntity(
       id: json['id'] as int,
-      categoryId: int.parse(json['categoryId'].toString()),
+      categoryId: json['categoryId'] as int?,
       name: json['name'] as String? ?? '',
       price: numPrice,
       originalPrice: numOriPrice,

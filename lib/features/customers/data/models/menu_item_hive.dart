@@ -15,7 +15,7 @@ class MenuItemHive {
     this.isAvailable = true,
     this.isBanner = false,
     this.description,
-    this.sortOrder = -1,
+    this.sortOrder = 0,
   });
 
   int id;
@@ -36,7 +36,7 @@ class MenuItemHive {
       name: name,
       price: double.tryParse(price.toString()) ?? 0.0,
       originalPrice: double.tryParse(originalPrice.toString()) ?? 0.0,
-      categoryId: categoryId ?? -1,
+      categoryId: categoryId ?? 0,
       imageUrl: imageUrl,
       isFavorite: isFavorite,
       isAvailable: isAvailable,

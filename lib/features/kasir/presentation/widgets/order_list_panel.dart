@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:restauran_menu/core/di/injector.dart';
 import 'package:restauran_menu/features/kasir/presentation/pages/kasir_take_order_screen.dart';
 
 import '../../../../core/themes/restaurant_colors.dart';
@@ -13,6 +14,12 @@ import '../provider/kasir_provider.dart';
 
 class OrderListPanel extends StatelessWidget {
   const OrderListPanel({super.key});
+  Future<void> _handleRefresh() async {
+    // Simulate a network call or database fetch
+    await Future.delayed(const Duration(seconds: 2));
+
+    await sl<KasirProvider>().load();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -152,23 +159,26 @@ class OrderListPanel extends StatelessWidget {
                           ),
                         ),
                       )
-                    : ListView.builder(
-                        padding: const EdgeInsets.fromLTRB(18, 0, 18, 18),
-                        itemCount: kasir.filteredOrders.length,
-                        itemBuilder: (context, index) {
-                          final order = kasir.filteredOrders[index];
-                          final selected =
-                              order.orderNumber == kasir.selectedOrderNumber;
-                          return _OrderCard(
-                            order: order,
-                            selected: selected,
-                            onTap: () =>
-                                context.read<KasirProvider>().selectOrder(
-                                  orderNumber: order.orderNumber,
-                                  orderPaymentMethod: order.paymentMethod,
-                                ),
-                          );
-                        },
+                    : RefreshIndicator(
+                        onRefresh: _handleRefresh,
+                        child: ListView.builder(
+                          padding: const EdgeInsets.fromLTRB(18, 0, 18, 18),
+                          itemCount: kasir.filteredOrders.length,
+                          itemBuilder: (context, index) {
+                            final order = kasir.filteredOrders[index];
+                            final selected =
+                                order.orderNumber == kasir.selectedOrderNumber;
+                            return _OrderCard(
+                              order: order,
+                              selected: selected,
+                              onTap: () =>
+                                  context.read<KasirProvider>().selectOrder(
+                                    orderNumber: order.orderNumber,
+                                    orderPaymentMethod: order.paymentMethod,
+                                  ),
+                            );
+                          },
+                        ),
                       ),
               ),
             ],

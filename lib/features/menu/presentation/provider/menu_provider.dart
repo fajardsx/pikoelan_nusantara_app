@@ -63,24 +63,24 @@ class MenuProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final results = await Future.wait([
-        getCategoriesUsecase(refresh: refresh),
-        getMenuItemsUsecase(refresh: refresh),
-      ]);
-      categories = results[0] as List<MenuCategoryEntity>;
-      items = results[1] as List<MenuItemEntity>;
       if (refresh) {
         await sl<CategoryRepository>().reset();
         await sl<MenuRepository>().reset();
       }
+      final catResults = await getCategoriesUsecase(refresh: refresh);
+      await sl<CategoryRepository>().addAll(catResults);
 
-      await sl<CategoryRepository>().addAll(categories);
-      await sl<MenuRepository>().addAll(items);
+      final menuResults = await getMenuItemsUsecase(refresh: refresh);
+      await sl<MenuRepository>().addAll(menuResults);
 
       status = MenuStatus.loaded;
     } catch (e, s) {
       errorMessage = e.toString();
-      AppLog.instance.logError("load error : $errorMessage", e, s);
+      AppLog.instance.logError(
+        "menu provider load error : $errorMessage",
+        e,
+        s,
+      );
       status = MenuStatus.error;
     } finally {
       notifyListeners();
@@ -97,10 +97,7 @@ class MenuProvider extends ChangeNotifier {
   }
 
   Future<bool> createCategory(CategoryPayload payload) => _runSubmit(() async {
-    await Future.wait([
-      createCategoryUsecase(payload),
-      load(refresh: true),
-    ]);
+    await Future.wait([createCategoryUsecase(payload), load(refresh: true)]);
   });
 
   Future<bool> updateCategory(int id, CategoryPayload payload) =>

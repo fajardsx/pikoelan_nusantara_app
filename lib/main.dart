@@ -91,7 +91,7 @@ class MyApp extends StatelessWidget {
                     textScaler: const TextScaler.linear(Consts.textScaleValue),
                   ),
                   child:
-                      const AuthPage(), //const StartupGate(), // const RoleSelectionScreen(),
+                      const AuthPage(),
                 );
               },
             ),

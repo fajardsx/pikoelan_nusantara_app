@@ -112,7 +112,7 @@ class PublicMenuProvider extends ChangeNotifier {
         s,
         forceRefresh: forceRefresh,
       );
-      debugPrint("silentLoad public menu : ${data.items}");
+      // debugPrint("silentLoad public menu : ${data.items}");
       tenant = data.tenant;
       categories = data.categories;
       items = data.items.where((e) => e.isAvailable).toList();
